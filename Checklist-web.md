@@ -3,6 +3,32 @@
 > **Estándares:** OWASP WSTG · OWASP Top 10 2021 · OWASP API Security Top 10 2023
 > **Nota:** Siempre que sea posible, utilizar al menos 2 cuentas durante las pruebas. Una con privilegios bajos y otra con privilegios de administración, para validar la escalada vertical. Para la escalada horizontal, usar 2 cuentas con el mismo rol.
 
+## 📋 Índice
+
+- [📌 Etapa inicial — Recolección de información](#etapa-inicial-recolección-de-información)
+- [📌 Access Control](#access-control)
+- [📌 API Testing](#api-testing)
+- [📌 Autenticación](#autenticación)
+- [📌 Clickjacking](#clickjacking)
+- [📌 Cabeceras de Seguridad](#cabeceras-de-seguridad)
+- [📌 CSRF](#csrf)
+- [📌 XSS](#xss)
+- [📌 File Upload](#file-upload)
+- [📌 GraphQL](#graphql)
+- [📌 Gestión de Sesiones](#gestión-de-sesiones)
+- [📌 Host Header Attacks](#host-header-attacks)
+- [📌 HTTP Request Smuggling](#http-request-smuggling)
+- [📌 Deserialización Insegura](#deserialización-insegura)
+- [📌 NoSQL Injection](#nosql-injection)
+- [📌 Command Injection](#command-injection)
+- [📌 Path Traversal](#path-traversal)
+- [📌 Prototype Pollution](#prototype-pollution)
+- [📌 SSRF](#ssrf)
+- [📌 SSTI](#ssti)
+- [📌 SQL Injection](#sql-injection)
+- [📌 Transmisión Segura](#transmisión-segura)
+- [📌 XXE](#xxe)
+- [📌 Web Cache Poisoning](#web-cache-poisoning)
 
 
 ## 📌 Etapa inicial — Recolección de información
