@@ -31,7 +31,7 @@
 - [📌 Web Cache Poisoning](#web-cache-poisoning)
 
 
-## 📌 Etapa inicial — Recolección de información
+## 📌 <a id="etapa-inicial-recolección-de-información"></a>Etapa inicial — Recolección de información
 
 ### 1. Reconocimiento pasivo (OSINT)
 
@@ -144,7 +144,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 Access Control
+## 📌 <a id="access-control"></a>Access Control
 
 ### 1. Acceso sin autenticación y tras cierre de sesión
 
@@ -211,7 +211,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 API Testing
+## 📌 <a id="api-testing"></a>API Testing
 
 ### 1. Documentación expuesta públicamente
 
@@ -255,7 +255,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 Autenticación
+## 📌 <a id="autenticación"></a>Autenticación
 
 ### 1. Enumeración de usuarios
 
@@ -335,7 +335,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 Clickjacking
+## 📌 <a id="clickjacking"></a>Clickjacking
 
 ### 1. Verificar si la aplicación es vulnerable a Clickjacking
 
@@ -347,7 +347,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 Cabeceras de Seguridad
+## 📌 <a id="cabeceras-de-seguridad"></a>Cabeceras de Seguridad
 
 ### 1. Análisis general de cabeceras
 
@@ -405,7 +405,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 CSRF
+## 📌 <a id="csrf"></a>CSRF
 
 ### 1. Sin defensa
 
@@ -454,7 +454,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 XSS
+## 📌 <a id="xss"></a>XSS
 
 > **Nota:** La detección de XSS reflejado en parámetros GET/POST está cubierta por **Acunetix**. Esta sección se centra en los casos que requieren verificación manual.
 
@@ -494,7 +494,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 File Upload
+## 📌 <a id="file-upload"></a>File Upload
 
 ### 1. Shell upload sin protección
 
@@ -564,7 +564,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 GraphQL
+## 📌 <a id="graphql"></a>GraphQL
 
 ### 1. Detección del endpoint GraphQL
 
@@ -603,7 +603,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 Gestión de Sesiones
+## 📌 <a id="gestión-de-sesiones"></a>Gestión de Sesiones
 
 ### 1. Identificación del mecanismo de sesión
 
@@ -658,7 +658,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 Host Header Attacks
+## 📌 <a id="host-header-attacks"></a>Host Header Attacks
 
 ### 1. Cabeceras alternativas de override de Host
 
@@ -687,7 +687,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 HTTP Request Smuggling
+## 📌 <a id="http-request-smuggling"></a>HTTP Request Smuggling
 
 > ⚠️ **Precaución:** Puede afectar a peticiones de otros usuarios reales. Extremar la precaución en entornos productivos.
 
@@ -707,7 +707,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 Deserialización Insegura
+## 📌 <a id="deserialización-insegura"></a>Deserialización Insegura
 
 > 💡 **Nota:** La deserialización insegura no ocurre solo en cookies — verificar también en parámetros GET/POST, cabeceras HTTP, APIs y ficheros subidos.
 
@@ -747,7 +747,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 NoSQL Injection
+## 📌 <a id="nosql-injection"></a>NoSQL Injection
 
 ### 1. Identificación del motor NoSQL
 
@@ -779,7 +779,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 Command Injection
+## 📌 <a id="command-injection"></a>Command Injection
 
 ### 1. Identificación de puntos de entrada
 
@@ -828,7 +828,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 Path Traversal
+## 📌 <a id="path-traversal"></a>Path Traversal
 
 ### 1. Identificación de puntos de entrada
 
@@ -909,7 +909,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 Prototype Pollution
+## 📌 <a id="prototype-pollution"></a>Prototype Pollution
 
 > 💡 **Nota:** El impacto depende de encontrar gadgets — fragmentos de código que usen propiedades del prototipo contaminado para ejecutar acciones sensibles.
 
@@ -954,7 +954,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 SSRF
+## 📌 <a id="ssrf"></a>SSRF
 
 ### 1. Identificación de puntos de entrada
 
@@ -1015,7 +1015,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 SSTI
+## 📌 <a id="ssti"></a>SSTI
 
 ### 1. Identificación de puntos de entrada
 
@@ -1060,7 +1060,7 @@ Buscar información pública sobre el target sin interactuar directamente con la
 
 
 
-## 📌 SQL Injection
+## 📌 <a id="sql-injection"></a>SQL Injection
 
 > **Nota:** La detección está cubierta por **Acunetix** y la explotación por **sqlmap**. Esta sección se centra en detección manual y casos con puntos ciegos para las herramientas automáticas.
 
@@ -1128,7 +1128,7 @@ sqlmap -u "https://target.com/item?id=1" --random-agent --level=5 --risk=3 --bat
 
 
 
-## 📌 Transmisión Segura
+## 📌 <a id="transmisión-segura"></a>Transmisión Segura
 
 ### 1. Análisis de la configuración SSL/TLS
 
@@ -1150,7 +1150,7 @@ sqlmap -u "https://target.com/item?id=1" --random-agent --level=5 --risk=3 --bat
 
 
 
-## 📌 XXE
+## 📌 <a id="xxe"></a>XXE
 
 ### 1. Identificación de puntos de entrada
 
@@ -1277,7 +1277,7 @@ sqlmap -u "https://target.com/item?id=1" --random-agent --level=5 --risk=3 --bat
 
 
 
-## 📌 Web Cache Poisoning
+## 📌 <a id="web-cache-poisoning"></a>Web Cache Poisoning
 
 ### 1. Detección del sistema de caché
 
