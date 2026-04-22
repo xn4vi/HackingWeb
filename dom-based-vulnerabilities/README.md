@@ -1,16 +1,10 @@
----
-icon: folder-open
----
-
-# DOM-Based vulnerabilities
-
-## 🔍 DOM-Based Vulnerabilities
+# 🔍 DOM-Based Vulnerabilities
 
 Las vulnerabilidades basadas en DOM ocurren cuando JavaScript del lado cliente procesa datos no confiables de forma insegura, modificando el DOM de maneras que ejecutan código controlado por el atacante.
 
 ***
 
-### 📥 Sources (controladas por el atacante):
+## 📥 Sources (controladas por el atacante):
 
 * `window.location` (parámetros URL, hash, pathname)
 * `document.referrer`
@@ -20,7 +14,7 @@ Las vulnerabilidades basadas en DOM ocurren cuando JavaScript del lado cliente p
 
 ***
 
-### 🪝 Sinks (funciones peligrosas):
+## 🪝 Sinks (funciones peligrosas):
 
 * `innerHTML`, `outerHTML`
 * `document.write()`
@@ -30,7 +24,7 @@ Las vulnerabilidades basadas en DOM ocurren cuando JavaScript del lado cliente p
 
 ***
 
-### ⚠️ Tipos comunes:
+## ⚠️ Tipos comunes:
 
 * DOM XSS mediante web messaging
 * Open redirection a través de parámetros URL
@@ -39,7 +33,7 @@ Las vulnerabilidades basadas en DOM ocurren cuando JavaScript del lado cliente p
 
 ***
 
-### 🛡️ Mitigación:
+## 🛡️ Mitigación:
 
 * Validar y sanear toda entrada no confiable
 * Usar `textContent` en lugar de `innerHTML`
