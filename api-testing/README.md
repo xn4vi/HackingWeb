@@ -22,7 +22,7 @@ Las APIs son objetivos especialmente atractivos porque:
 
 ## 🔌 Tipos de APIs
 
-### 🌍 REST APIs:
+### REST APIs:
 
 ```http
 GET /api/users/123
@@ -37,7 +37,7 @@ PATCH /api/users/123
 * Formato JSON o XML
 * Stateless por diseño
 
-### 🧬 GraphQL APIs:
+### GraphQL APIs:
 
 ```graphql
 query {
@@ -56,7 +56,7 @@ query {
 * Introspection revela el esquema
 * Control de acceso complejo
 
-### 📜 SOAP APIs:
+### SOAP APIs:
 
 ```xml
 <soap:Envelope>
@@ -73,7 +73,7 @@ query {
 * Seguridad integrada (WS-Security)
 * Legacy pero común
 
-### 🔄 WebSocket APIs:
+### WebSocket APIs:
 
 ```javascript
 ws://api.example.com/socket
@@ -87,7 +87,7 @@ ws://api.example.com/socket
 
 ## 🕵️‍♂️ Técnicas de descubrimiento de APIs
 
-### 📄 Descubrimiento de documentación:
+### Descubrimiento de documentación:
 
 ```
 /api
@@ -104,7 +104,7 @@ ws://api.example.com/socket
 /.well-known/openapi.json
 ```
 
-### 🧑‍💻 Analizar código cliente:
+### Analizar código cliente:
 
 ```javascript
 // Buscar llamadas API en JS
@@ -112,14 +112,14 @@ fetch('/api/users/' + userId)
 axios.post('/api/products', data)
 ```
 
-### 🌐 Enumeración de métodos HTTP:
+### Enumeración de métodos HTTP:
 
 ```http
 OPTIONS /api/users HTTP/1.1
 # Devuelve: Allow: GET, POST, PUT, DELETE, PATCH
 ```
 
-### 🔄 Cambiar métodos:
+### Cambiar métodos:
 
 ```http
 # Original
@@ -132,7 +132,7 @@ DELETE /api/users/123
 PATCH /api/users/123
 ```
 
-### 🔢 Descubrimiento de versiones:
+### Descubrimiento de versiones:
 
 ```
 /api/v1/users
@@ -141,7 +141,7 @@ PATCH /api/users/123
 /v1/api/users
 ```
 
-### 💥 Fuzzing de parámetros:
+### Fuzzing de parámetros:
 
 ```
 /api/users?id=123
@@ -155,7 +155,7 @@ PATCH /api/users/123
 
 ## 🚨 Vulnerabilidades comunes en APIs
 
-### 🧨 Broken Object Level Authorization (BOLA):
+### Broken Object Level Authorization (BOLA):
 
 ```http
 # Usuario A accede a datos de usuario B
@@ -163,13 +163,13 @@ GET /api/users/123
 GET /api/users/456
 ```
 
-### 🔺 Broken Function Level Authorization:
+### Broken Function Level Authorization:
 
 ```http
 DELETE /api/admin/users/123
 ```
 
-### 💣 Mass Assignment:
+### Mass Assignment:
 
 ```json
 PATCH /api/users/123
@@ -180,7 +180,7 @@ PATCH /api/users/123
 }
 ```
 
-### 📂 Excessive Data Exposure:
+### Excessive Data Exposure:
 
 ```json
 {
@@ -193,14 +193,14 @@ PATCH /api/users/123
 }
 ```
 
-### ⏱️ Falta de Rate Limiting:
+### Falta de Rate Limiting:
 
 ```javascript
 for i in range(10000):
     requests.post('/api/login', data=credentials)
 ```
 
-### ⚙️ Security Misconfiguration:
+### Security Misconfiguration:
 
 ```
 /api/debug
@@ -213,7 +213,7 @@ Access-Control-Allow-Origin: *
 
 ## 🧬 Server-Side Parameter Pollution
 
-### 🧪 Query String Pollution:
+### Query String Pollution:
 
 ```
 username=admin
@@ -228,7 +228,7 @@ username=admin%26role=admin%23
 /internal/api?username=admin&role=admin#&role=user
 ```
 
-### 🌐 REST URL Pollution:
+### REST URL Pollution:
 
 ```
 # Normal
@@ -238,7 +238,7 @@ username=admin%26role=admin%23
 username=../../v1/users/admin/field/passwordResetToken%23
 ```
 
-### ✂️ Truncation Attacks:
+### Truncation Attacks:
 
 ```
 parameter=value%23ignored
@@ -250,7 +250,7 @@ parameter=value%0Aignored
 
 ## 💣 Vulnerabilidades de Mass Assignment
 
-### 🧠 Entendiendo Mass Assignment:
+### Entendiendo Mass Assignment:
 
 ```javascript
 app.patch('/api/users/:id', (req, res) => {
@@ -267,14 +267,14 @@ app.patch('/api/users/:id', (req, res) => {
 }
 ```
 
-### 🔍 Cómo encontrarlo:
+### Cómo encontrarlo:
 
 1. Observar respuestas de la API
 2. Añadir campos extra
 3. Probar campos privilegiados
 4. Verificar si se actualizan
 
-### 🎯 Campos comunes:
+### Campos comunes:
 
 * role
 * admin
@@ -288,20 +288,20 @@ app.patch('/api/users/:id', (req, res) => {
 
 ## 🔐 Autenticación y autorización en APIs
 
-### 🚫 Bypass de autenticación:
+### Bypass de autenticación:
 
 ```
 /api/internal/users
 ```
 
-### 🔓 Bypass de autorización:
+### Bypass de autorización:
 
 ```http
 GET /api/orders/123
 GET /api/orders/124
 ```
 
-### 🎟️ Manipulación de tokens:
+### Manipulación de tokens:
 
 ```json
 {
@@ -366,7 +366,7 @@ X-API-Key: 123456
 
 ## 🛠️ Herramientas para API Testing
 
-### 🔍 Descubrimiento:
+### Descubrimiento:
 
 * Swagger UI
 * Postman
@@ -374,21 +374,21 @@ X-API-Key: 123456
 * OWASP ZAP
 * Amass, ffuf
 
-### 🧑‍💻 Manual:
+### Manual:
 
 * Burp Repeater
 * Postman
 * cURL
 * HTTPie
 
-### 🤖 Automatizado:
+### Automatizado:
 
 * Burp Scanner
 * OWASP ZAP Active Scan
 * REST-Attacker
 * APIFuzzer
 
-### 🎯 Especializadas:
+### Especializadas:
 
 * Arjun
 * Kiterunner
@@ -399,29 +399,29 @@ X-API-Key: 123456
 
 ## 🌍 Impacto en el mundo real
 
-### 📡 T-Mobile (2023):
+### T-Mobile (2023):
 
 * Vulnerabilidad API
 * 37 millones afectados
 * BOLA
 
-### 🚴 Peloton (2021):
+### Peloton (2021):
 
 * Datos privados expuestos
 * Sin autenticación
 * Excessive data exposure
 
-### 💸 Venmo (2018):
+### Venmo (2018):
 
 * Historial de transacciones público
 * Information disclosure
 
-### 📱 Facebook (2019):
+### Facebook (2019):
 
 * Instagram expuso contraseñas
 * Mass assignment
 
-### 🎯 Bug Bounties:
+### Bug Bounties:
 
 * IDOR muy común
 * Mass assignment
@@ -432,7 +432,7 @@ X-API-Key: 123456
 
 ## 🛡️ Estrategias de defensa
 
-### 🔐 Diseño seguro:
+### Diseño seguro:
 
 ```javascript
 const allowedFields = ['email', 'name'];
@@ -456,28 +456,28 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 ```
 
-### 🛑 Autenticación y autorización:
+### Autenticación y autorización:
 
 * OAuth 2.0, JWT
 * Validar tokens siempre
 * RBAC
 * No confiar en el cliente
 
-### 🧪 Validación de entrada:
+### Validación de entrada:
 
 * Whitelist
 * Validar tipos
 * Sanitizar
 * Queries parametrizadas
 
-### 📤 Filtrado de salida:
+### Filtrado de salida:
 
 * Solo datos necesarios
 * Basado en permisos
 * No exponer IDs internos
 * Sanitizar errores
 
-### 📡 Cabeceras de seguridad:
+### Cabeceras de seguridad:
 
 ```http
 Content-Type: application/json
@@ -486,7 +486,7 @@ X-Frame-Options: DENY
 Strict-Transport-Security: max-age=31536000
 ```
 
-### 🚪 API Gateway:
+### API Gateway:
 
 * Autenticación centralizada
 * Rate limiting
@@ -497,28 +497,28 @@ Strict-Transport-Security: max-age=31536000
 
 ## ✅ Buenas prácticas de seguridad en APIs
 
-### 🧠 Fase de diseño:
+### Fase de diseño:
 
 * Threat modeling
 * Least privilege
 * Security by design
 * Revisiones
 
-### 🧑‍💻 Desarrollo:
+### Desarrollo:
 
 * Frameworks seguros
 * Validación
 * Tests de seguridad
 * Code review
 
-### 🚀 Despliegue:
+### Despliegue:
 
 * Desactivar debug
 * Eliminar endpoints de test
 * Manejo de errores
 * Monitorización
 
-### 🔄 Mantenimiento:
+### Mantenimiento:
 
 * Auditorías
 * Pentesting
