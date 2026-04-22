@@ -1,16 +1,10 @@
----
-icon: folder-open
----
-
-# Clickjacking
-
-## 🎭 Clickjacking
+# 🎭 Clickjacking
 
 Clickjacking (UI redressing) engaña a los usuarios para que hagan clic en algo diferente de lo que perciben, superponiendo elementos invisibles u opacos sobre componentes legítimos de la interfaz.
 
 ***
 
-### ⚙️ Cómo funciona:
+## ⚙️ Cómo funciona:
 
 * El atacante carga el sitio objetivo en un iframe transparente
 * Coloca contenido señuelo (botones, texto) en coordenadas exactas sobre los botones reales
@@ -18,7 +12,7 @@ Clickjacking (UI redressing) engaña a los usuarios para que hagan clic en algo 
 
 ***
 
-### 💣 Técnicas comunes:
+## 💣 Técnicas comunes:
 
 * Superposición básica de iframe con posicionamiento CSS
 * Prellenado de parámetros de formularios mediante URL
@@ -28,7 +22,7 @@ Clickjacking (UI redressing) engaña a los usuarios para que hagan clic en algo 
 
 ***
 
-### 🛡️ Mitigación:
+## 🛡️ Mitigación:
 
 * Cabecera `X-Frame-Options: DENY`
 * `Content-Security-Policy: frame-ancestors 'none'`
