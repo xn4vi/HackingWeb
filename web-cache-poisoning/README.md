@@ -1,7 +1,3 @@
----
-icon: folder-open
----
-
 # Web cache poisoning
 
 ## 🔍 ¿Qué es Web Cache Poisoning?
@@ -13,7 +9,7 @@ Web Cache Poisoning es un ataque en el que un atacante explota el comportamiento
 * Conseguir que la respuesta envenenada se almacene en la caché
 * Los usuarios posteriores que soliciten el mismo recurso reciben la respuesta cacheada envenenada
 
-#### 🗝️ Concepto clave - Cache Keys:
+### 🗝️ Concepto clave - Cache Keys:
 
 Una **cache key** es el conjunto de componentes de la petición que se utilizan para determinar si una respuesta cacheada coincide con una nueva petición.
 
@@ -28,16 +24,16 @@ Componentes que **NO están en la cache key (unkeyed inputs)** pueden aun así i
 
 Esta diferencia entre lo que afecta a la respuesta y lo que determina la caché es donde está la vulnerabilidad.
 
-#### 🔄 Diferencia con Cache Deception:
+### 🔄 Diferencia con Cache Deception:
 
 * **Cache Deception**: Engaña a la caché para almacenar datos privados de la víctima
 * **Cache Poisoning**: Inyecta contenido malicioso en la caché que se sirve a todos los usuarios
 
 ***
 
-### ⚙️ Cómo funciona Web Cache Poisoning
+## ⚙️ Cómo funciona Web Cache Poisoning
 
-#### 🔄 Flujo básico:
+###  Flujo básico:
 
 1. El atacante identifica una entrada no incluida en la cache key (por ejemplo, `X-Forwarded-Host`)
 2. El servidor usa esa entrada para generar la respuesta
@@ -47,7 +43,7 @@ Esta diferencia entre lo que afecta a la respuesta y lo que determina la caché 
 6. La caché devuelve la respuesta envenenada
 7. El navegador de la víctima ejecuta JavaScript malicioso
 
-#### 📌 El desajuste:
+###  El desajuste:
 
 ```
 Cache key:        GET / Host: vulnerable.com
@@ -59,9 +55,9 @@ Resultado:        Todos los usuarios cargan JS del atacante
 
 ***
 
-### 🗝️ Cache keys y unkeyed inputs
+## 🗝️ Cache keys y unkeyed inputs
 
-#### 📌 Componentes típicos de la cache key:
+###  Componentes típicos de la cache key:
 
 ✅ **Incluidos:**
 
@@ -84,7 +80,7 @@ Resultado:        Todos los usuarios cargan JS del atacante
 
 ***
 
-#### 🔎 Cómo encontrarlos:
+###  Cómo encontrarlos:
 
 ➡️ **Manual:**
 
@@ -100,9 +96,9 @@ Resultado:        Todos los usuarios cargan JS del atacante
 
 ***
 
-### 🎯 Tipos de Cache Poisoning
+## 🎯 Tipos de Cache Poisoning
 
-#### 📨 Basado en headers:
+###  Basado en headers:
 
 ```http
 X-Forwarded-Host: attacker.com
@@ -114,19 +110,19 @@ Respuesta:
 <script src="https://attacker.com/tracking.js"></script>
 ```
 
-#### 🍪 Basado en cookies:
+###  Basado en cookies:
 
 ```http
 Cookie: fehost="}</script><script>alert(1)</script>
 ```
 
-#### ❓ Basado en query string:
+###  Basado en query string:
 
 ```http
 GET /?'><script>alert(1)</script>
 ```
 
-#### 🔧 Basado en parámetros:
+###  Basado en parámetros:
 
 ```http
 utm_content='/><script>alert(1)</script>
@@ -134,16 +130,16 @@ utm_content='/><script>alert(1)</script>
 
 ***
 
-### ⚔️ Técnicas de explotación
+## ⚔️ Técnicas de explotación
 
-#### 📡 Headers unkeyed:
+###  Headers unkeyed:
 
 1. Encontrar header vulnerable
 2. Subir JS malicioso
 3. Envenenar caché
 4. Usuarios cargan JS
 
-#### 🔄 Múltiples headers:
+###  Múltiples headers:
 
 ```http
 X-Forwarded-Host: attacker.com
@@ -152,7 +148,7 @@ X-Forwarded-Scheme: http
 
 Resultado: redirección maliciosa
 
-#### 🕵️ Parameter Cloaking:
+###  Parameter Cloaking:
 
 ```
 /js/geolocate.js?callback=setCountryCookie&utm_content=1;callback=alert(1)
@@ -161,7 +157,7 @@ Resultado: redirección maliciosa
 * Cache interpreta uno
 * Server interpreta dos
 
-#### 🐘 Fat GET:
+###  Fat GET:
 
 ```http
 GET /js/geolocate.js
@@ -170,7 +166,7 @@ Content-Length: 18
 callback=alert(1)
 ```
 
-#### 📏 Normalización de URL:
+###  Normalización de URL:
 
 ```
 /random<script>alert(1)</script>
@@ -178,51 +174,51 @@ callback=alert(1)
 
 ***
 
-### 🛤️ Vectores de ataque
+## 🛤️ Vectores de ataque
 
-#### ❌ XSS vía script:
+###  XSS vía script:
 
 * Target: tracking.js
 * Ataque: header
 
-#### 🌐 DOM XSS:
+###  DOM XSS:
 
 ```json
 {"country":"<img src=1 onerror=alert(document.cookie) />"}
 ```
 
-#### 🔀 Redirección:
+###  Redirección:
 
 * X-Original-URL
 * X-Forwarded-Host
 
-#### 🧩 Fragmentos internos:
+###  Fragmentos internos:
 
 * Caché interna persiste
 
 ***
 
-### 💥 Cache Busters
+## 💥 Cache Busters
 
-#### ➡️ Query:
+###  Query:
 
 ```http
 ?cachebuster=abc123
 ```
 
-#### ➡️ Headers:
+###  Headers:
 
 ```http
 Origin: https://cachebuster123.com
 ```
 
-#### ➡️ Cookies:
+###  Cookies:
 
 ```http
 Cookie: cachebuster=abc123
 ```
 
-#### ➡️ User-Agent:
+###  User-Agent:
 
 ```http
 User-Agent: Mozilla cachebuster123
@@ -230,21 +226,21 @@ User-Agent: Mozilla cachebuster123
 
 ***
 
-### 🕵️ Métodos de detección
+## 🕵️ Métodos de detección
 
-#### 1️⃣ Detectar caché
+###  Detectar caché
 
 * X-Cache
 * Age
 * Cache-Control
 
-#### 2️⃣ Unkeyed inputs
+### Unkeyed inputs
 
 ```http
 X-Forwarded-Host: test123
 ```
 
-#### 3️⃣ Puntos de reflexión
+###  Puntos de reflexión
 
 * script
 * link
@@ -252,14 +248,14 @@ X-Forwarded-Host: test123
 * JS
 * redirect
 
-#### 4️⃣ Verificar
+###  Verificar
 
 1. Enviar payload
 2. Ver respuesta
 3. Repetir sin header
 4. Si persiste → vulnerable
 
-#### 🤖 Automatizado:
+###  Automatizado:
 
 ```python
 requests.get(...)
@@ -267,33 +263,33 @@ requests.get(...)
 
 ***
 
-### 🛡️ Defensa
+## 🛡️ Defensa
 
-#### 📉 Minimizar inputs:
+###  Minimizar inputs:
 
 ```
 proxy_cache_key "$scheme$request_method$host$request_uri";
 ```
 
-#### 🗑️ Eliminar headers:
+###  Eliminar headers:
 
 * X-Forwarded-Host
 * X-Original-URL
 
-#### 🔄 Cache-Control:
+###  Cache-Control:
 
 ```http
 Cache-Control: no-store
 ```
 
-#### ✅ Validación:
+###  Validación:
 
 ```python
 if forwarded_host not in allowed_hosts:
     forwarded_host = None
 ```
 
-#### ✍️ Encoding:
+###  Encoding:
 
 ```html
 <script src="/tracking.js"></script>
@@ -301,24 +297,24 @@ if forwarded_host not in allowed_hosts:
 
 ***
 
-### 🚀 Técnicas avanzadas
+## 🚀 Técnicas avanzadas
 
-#### 🔐 Cache key injection:
+###  Cache key injection:
 
 ```http
 Origin: x\r\nContent-Length...
 ```
 
-#### 🧱 Fragmentación interna:
+###  Fragmentación interna:
 
 * Persistencia interna
 
-#### 🔗 Encadenamiento:
+###  Encadenamiento:
 
 1. Redirect
 2. Host
 3. DOM XSS
 
-#### 🎯 Ataques dirigidos:
+###  Ataques dirigidos:
 
 * User-Agent específico
