@@ -1,7 +1,3 @@
----
-icon: folder-open
----
-
 # Web cache deception
 
 ## 🧠 ¿Qué es Web Cache Deception?
@@ -12,16 +8,16 @@ Web Cache Deception es una vulnerabilidad en la que un atacante engaña a un sis
 * **Decisión del servidor de origen**: El servidor de origen ignora el componente manipulado de la ruta y devuelve la página sensible real
 * **Resultado**: Los datos privados del usuario se cachean y pasan a ser accesibles para el atacante
 
-#### 🎯 Diferencia clave respecto a Cache Poisoning:
+### 🎯 Diferencia clave respecto a Cache Poisoning:
 
 * **Cache Poisoning**: El atacante envenena la caché con contenido malicioso que las víctimas reciben
 * **Cache Deception**: El atacante engaña a la caché para almacenar datos privados de la víctima que luego puede consultar
 
 ***
 
-### ⚙️ Cómo funciona Web Cache Deception
+## ⚙️ Cómo funciona Web Cache Deception
 
-#### 🧩 Flujo básico del ataque:
+###  Flujo básico del ataque:
 
 1. El atacante identifica un endpoint sensible: `/my-account`
 2. El atacante crea una URL: `/my-account/nonexistent.js`
@@ -31,7 +27,7 @@ Web Cache Deception es una vulnerabilidad en la que un atacante engaña a un sis
 6. La respuesta se cachea con los datos privados de la víctima
 7. El atacante accede a la misma URL y lee los datos cacheados
 
-#### ⚠️ La discrepancia:
+### ⚠️ La discrepancia:
 
 * Interpretación de la caché: `/my-account/nonexistent.js` → archivo estático cacheable
 * Interpretación del servidor: `/my-account/nonexistent.js` → `/my-account` (página dinámica)
@@ -39,9 +35,9 @@ Web Cache Deception es una vulnerabilidad en la que un atacante engaña a un sis
 
 ***
 
-### 🔀 Diferencias en el procesamiento de rutas
+## 🔀 Diferencias en el procesamiento de rutas
 
-#### 📂 Path mapping
+### Path mapping
 
 ```
 /my-account           → No cachear (dinámico)
@@ -53,7 +49,7 @@ Web Cache Deception es una vulnerabilidad en la que un atacante engaña a un sis
 /my-account/file.js   → Sigue sirviendo el panel del usuario (file.js no existe)
 ```
 
-#### 🔗 Delimitadores de ruta:
+### Delimitadores de ruta:
 
 ```
 /my-account;file.js
@@ -66,7 +62,7 @@ Web Cache Deception es una vulnerabilidad en la que un atacante engaña a un sis
 * La caché puede usar `;` o `?` como delimitadores y eliminar lo que sigue
 * El servidor puede tratar toda la cadena como ruta
 
-#### 🧭 Path Traversal:
+### Path Traversal:
 
 ```
 /resources/../my-account → /my-account (no cachear)
@@ -77,7 +73,7 @@ Web Cache Deception es una vulnerabilidad en la que un atacante engaña a un sis
                             → El servidor normaliza a /my-account (sirve la cuenta)
 ```
 
-#### 🔄 Diferencias de normalización
+### Diferencias de normalización
 
 ➡️ **Normalización del servidor de origen:**
 
@@ -97,9 +93,9 @@ Origin ve: /my-account%23%2f..%2fresources → /my-account
 
 ***
 
-### 📦 Reglas comunes de caché
+## 📦 Reglas comunes de caché
 
-#### 📄 Cacheo por extensión:
+### Cacheo por extensión:
 
 ✅ **Cacheados:**
 
@@ -111,7 +107,7 @@ Origin ve: /my-account%23%2f..%2fresources → /my-account
 * .html, .php, .asp, .jsp
 * (sin extensión)
 
-#### 📁 Cacheo por directorio:
+### Cacheo por directorio:
 
 ✅ **Cacheados:**
 
@@ -126,7 +122,7 @@ Origin ve: /my-account%23%2f..%2fresources → /my-account
 * /account/\*
 * /admin/\*
 
-#### 🎯 Reglas de coincidencia exacta:
+### Reglas de coincidencia exacta:
 
 * /robots.txt
 * /sitemap.xml
@@ -135,9 +131,9 @@ Origin ve: /my-account%23%2f..%2fresources → /my-account
 
 ***
 
-### 💣 Técnicas de explotación
+## 💣 Técnicas de explotación
 
-#### 🧩 Path Mapping:
+### Path Mapping:
 
 ```
 /my-account/fake.js
@@ -151,7 +147,7 @@ Pasos:
 4. Enviar a la víctima
 5. Acceder a la versión cacheada
 
-#### 🔗 Delimitadores:
+### Delimitadores:
 
 ```
 /my-account;fake.js
@@ -162,7 +158,7 @@ Pasos:
 /my-account%23fake.js
 ```
 
-#### 📁 Path Traversal:
+### Path Traversal:
 
 ```
 /resources/../my-account
@@ -170,14 +166,14 @@ Pasos:
 /resources/..%2fmy-account?key=123
 ```
 
-#### 🔄 Normalización:
+### Normalización:
 
 ```
 /my-account%2f..%2fresources/file.css
 /my-account%23%2f..%2fresources
 ```
 
-#### 🎯 Coincidencia exacta:
+### Coincidencia exacta:
 
 ```
 /my-account;%2f..%2frobots.txt
@@ -189,35 +185,35 @@ Pasos:
 
 ***
 
-### 🎯 Vectores de ataque
+## 🎯 Vectores de ataque
 
-#### 🔑 Robo de API key:
+### Robo de API key:
 
 * Target: `/my-account`
 * Ataque: `/my-account/x.js` o `/my-account;x.js`
 * Resultado: API key cacheada
 
-#### 🔐 Robo de CSRF:
+### Robo de CSRF:
 
 * Target: `/profile`
 * Ataque: `/profile?cache.js`
 * Resultado: token robado
 
-#### 👤 Información personal:
+### Información personal:
 
 * Target: `/dashboard`
 * Ataque: `/dashboard/static.css`
 
-#### 🎟️ Tokens de sesión:
+### Tokens de sesión:
 
 * Target: `/settings`
 * Ataque: `/settings;key.js`
 
 ***
 
-### 🔍 Métodos de detección
+## 🔍 Métodos de detección
 
-#### 🧑‍💻 Manual
+### Manual
 
 **➡️ Paso 1: Identificar endpoints sensibles**
 
@@ -255,7 +251,7 @@ Headers:
 * /resources/..%2fmy-account
 * /static/../my-account?file.js
 
-#### 🤖 Automatizado
+### Automatizado
 
 ```python
 import requests
@@ -281,7 +277,7 @@ def test_cache_deception(url, endpoint):
 
 ***
 
-### 💥 Impacto real
+## 💥 Impacto real
 
 * PayPal (2018): exposición de cuentas
 * CloudFlare: filtración de datos
@@ -290,9 +286,9 @@ def test_cache_deception(url, endpoint):
 
 ***
 
-### 🛡️ Defensa
+## 🛡️ Defensa
 
-#### 🔒 Reglas estrictas:
+### Reglas estrictas:
 
 ```nginx
 location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf)$ {
@@ -306,13 +302,13 @@ location /my-account {
 }
 ```
 
-#### 🧪 Validación de URL:
+### Validación de URL:
 
 ```javascript
 if (path.includes('..')) return 400;
 ```
 
-#### 📡 Headers:
+### 📡 Headers:
 
 ```http
 Cache-Control: no-store, no-cache, must-revalidate, private
@@ -324,19 +320,19 @@ Expires: 0
 Vary: Cookie, Authorization
 ```
 
-#### 🔄 Normalización:
+### Normalización:
 
 ```python
 normalized = os.path.normpath(decoded)
 ```
 
-#### 🔑 Cache key:
+### Cache key:
 
 ```
 cache_key = url + cookie + authorization_header
 ```
 
-#### 🧱 Defensa en profundidad:
+### Defensa en profundidad:
 
 1. No cachear contenido autenticado
 2. Headers correctos
@@ -346,16 +342,16 @@ cache_key = url + cookie + authorization_header
 
 ***
 
-### 🧪 Metodología de testeo
+## 🧪 Metodología de testeo
 
-#### 🔍 Discovery:
+### Discovery:
 
 1. Identificar CDN
 2. Mapear endpoints
 3. Entender reglas
 4. Testear parsing
 
-#### 💣 Explotación:
+### Explotación:
 
 1. Elegir endpoint
 2. Añadir extensión
@@ -365,7 +361,7 @@ cache_key = url + cookie + authorization_header
 6. Simular víctima
 7. Confirmar acceso
 
-#### 🔁 Automatización:
+### Automatización:
 
 ```bash
 curl -I "https://target.com${endpoint}/fake${ext}"
@@ -375,7 +371,7 @@ curl -I "https://target.com${endpoint}/fake${ext}"
 curl -I "https://target.com/my-account${delim}fake.js"
 ```
 
-#### ✅ Verificación:
+### Verificación:
 
 1. Enviar request
 2. Esperar cache
@@ -385,9 +381,9 @@ curl -I "https://target.com/my-account${delim}fake.js"
 
 ***
 
-### 🚀 Técnicas avanzadas
+## 🚀 Técnicas avanzadas
 
-#### 🧬 Manipulación de cache key:
+### Manipulación de cache key:
 
 ```
 /my-account/victim1.js
@@ -395,14 +391,14 @@ curl -I "https://target.com/my-account${delim}fake.js"
 /my-account/1638360000.js
 ```
 
-#### 🔁 Ataques multi-step:
+### Ataques multi-step:
 
 1. Robar CSRF
 2. Cambiar email
 3. Reset password
 4. Takeover
 
-#### 💥 Encadenamiento con XSS:
+### Encadenamiento con XSS:
 
 ```html
 <script src="/my-account;evil.js"></script>
@@ -410,16 +406,16 @@ curl -I "https://target.com/my-account${delim}fake.js"
 
 ***
 
-### 🛠️ Herramientas y recursos
+## 🛠️ Herramientas y recursos
 
-#### 💣 Herramientas:
+### Herramientas:
 
 * Burp Suite
 * Param Miner
 * curl
 * Web Cache Scanner
 
-#### 📡 Headers importantes:
+### Headers importantes:
 
 * X-Cache
 * X-Cache-Status
@@ -429,7 +425,7 @@ curl -I "https://target.com/my-account${delim}fake.js"
 * CF-Cache-Status
 * X-Akamai-Cache-Status
 
-#### 📚 Wordlists útiles:
+### Wordlists útiles:
 
 * Delimitadores: ; ? # %3B %3F %23
 * Extensiones: .js .css .jpg .png .gif
