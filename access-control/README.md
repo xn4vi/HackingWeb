@@ -12,19 +12,19 @@ Access control (también llamado autorización) es la aplicación de restriccion
 
 ## 🚨 Vulnerabilidades comunes de Access Control
 
-### Escalada de privilegios vertical:
+### ⬆️ Escalada de privilegios vertical:
 
 * Usuarios normales accediendo a funcionalidad de admin
 * Bypass de comprobaciones de roles para obtener privilegios elevados
 * Manipulación de identificadores de rol en las peticiones
 
-### Escalada de privilegios horizontal:
+### ↔️ Escalada de privilegios horizontal:
 
 * Acceder a datos de otros usuarios modificando identificadores
 * Insecure Direct Object References (IDOR)
 * IDs de usuario predecibles o fáciles de adivinar
 
-### Bypass dependiente del contexto:
+### 🔄 Bypass dependiente del contexto:
 
 * Acceder a recursos fuera de secuencia
 * Saltarse pasos requeridos en workflows
@@ -34,7 +34,7 @@ Access control (también llamado autorización) es la aplicación de restriccion
 
 ## 🧩 Patrones de Broken Access Control
 
-### Controles en el lado cliente:
+### 🖥️ Controles en el lado cliente:
 
 ```http
 // Vulnerable: Rol admin almacenado en cookie
@@ -47,7 +47,7 @@ Cookie: Admin=true
 {"email": "user@example.com", "roleid": 2}
 ```
 
-### Control de acceso basado en parámetros:
+### ⚙️ Control de acceso basado en parámetros:
 
 ```http
 // Vulnerable: ID de usuario en URL
@@ -60,7 +60,7 @@ Cookie: Admin=true
 /myaccount?id=456
 ```
 
-### Funcionalidad sin protección:
+### 🚪 Funcionalidad sin protección:
 
 ```http
 // Vulnerable: Panel admin con URL predecible
@@ -72,7 +72,7 @@ Cookie: Admin=true
 Disallow: /admin
 ```
 
-### Mala configuración de la plataforma:
+### ⚠️ Mala configuración de la plataforma:
 
 ```http
 // Vulnerable: Diferente control según método HTTP
@@ -88,31 +88,31 @@ Referer: https://example.com/admin
 
 ## 🧠 Tipos de vulnerabilidades de Access Control
 
-### Broken Object Level Authorization (BOLA/IDOR):
+### 🔗 Broken Object Level Authorization (BOLA/IDOR):
 
 * Vulnerabilidad más común en APIs
 * Referencia directa a objetos sin comprobación de autorización
 * Ejemplo: `/api/users/123/transactions` accesible por cualquier usuario autenticado
 
-### Broken Function Level Authorization:
+### 🔧 Broken Function Level Authorization:
 
 * Falta de controles a nivel de función
 * Usuarios acceden a funciones de otros roles
 * Ejemplo: usuario normal llamando endpoints de admin
 
-### Missing Access Control:
+### ❌ Missing Access Control:
 
 * Funcionalidad sin checks de autorización
 * Basado únicamente en oscuridad (URLs no predecibles)
 * Ejemplo: panel admin en `/admin-xyz123` sin autenticación
 
-### Fallos en procesos multi-step:
+### 📋 Fallos en procesos multi-step:
 
 * Control solo en algunos pasos
 * Pasos finales accesibles directamente
 * Ejemplo: paso 1 validado, paso 2 bypass
 
-### Control basado en cabeceras:
+### 📨 Control basado en cabeceras:
 
 * Autorización basada en headers HTTP
 * Los headers pueden ser manipulados
@@ -122,7 +122,7 @@ Referer: https://example.com/admin
 
 ## 💣 Técnicas de explotación
 
-### Manipulación de parámetros:
+### 🖱️ Manipulación de parámetros:
 
 ```http
 # IDOR básico
@@ -135,7 +135,7 @@ Referer: https://example.com/admin
 /document/1 → /document/2
 ```
 
-### Manipulación de cookies/sesión:
+### 🍪 Manipulación de cookies/sesión:
 
 ```http
 # Manipulación de rol
@@ -146,7 +146,7 @@ roleid=1 → roleid=2
 {"role": "user"} → {"role": "admin"}
 ```
 
-### Manipulación de métodos HTTP:
+### 📡 Manipulación de métodos HTTP:
 
 ```http
 # Petición original bloqueada
@@ -157,7 +157,7 @@ GET /admin/upgrade?username=victim HTTP/1.1
 PUT /admin/upgrade HTTP/1.1
 ```
 
-### Inyección de cabeceras:
+### 💉 Inyección de cabeceras:
 
 ```http
 # Bypass con X-Original-URL
@@ -171,7 +171,7 @@ X-Forwarded-For: 127.0.0.1
 Referer: https://example.com/admin
 ```
 
-### Bypass de multi-step:
+### ⏭️ Bypass de multi-step:
 
 ```http
 # Saltar al paso final
@@ -183,7 +183,7 @@ username=victim&confirmed=true
 
 ## 🔍 Cómo encontrar fallos de Access Control
 
-### Técnicas manuales:
+### 🤚 Técnicas manuales:
 
 * Mapear niveles de privilegio: identificar roles y accesos
 * Testear acceso horizontal: acceder a recursos de otros usuarios
@@ -194,7 +194,7 @@ username=victim&confirmed=true
 * Testear cabeceras: X-Original-URL, Referer, X-Forwarded-For
 * Acceso directo: saltar pasos intermedios
 
-### Testing automatizado:
+### 🤖 Testing automatizado:
 
 * Burp Suite Autorize
 * OWASP ZAP access control testing
@@ -204,25 +204,25 @@ username=victim&confirmed=true
 
 ## 💥 Impacto de las vulnerabilidades de Access Control
 
-### Data breach:
+### 💾 Data breach:
 
 * Acceso a información sensible
 * Exposición de datos financieros, PII, historiales médicos
 * Violaciones de cumplimiento (GDPR, HIPAA)
 
-### Escalada de privilegios:
+### 📈 Escalada de privilegios:
 
 * Usuario normal obtiene acceso admin
 * Toma completa de la aplicación
 * Capacidad de modificar/eliminar cualquier dato
 
-### Abuso de lógica de negocio:
+### 🏢 Abuso de lógica de negocio:
 
 * Transacciones no autorizadas
 * Account takeover
 * Daño reputacional
 
-### Movimiento lateral:
+### 🔀 Movimiento lateral:
 
 * Acceso a cuentas de otros usuarios
 * Extracción masiva de datos
@@ -254,14 +254,14 @@ username=victim&confirmed=true
 
 ## 🛡️ Estrategias de mitigación
 
-### Defense in Depth:
+### 🛡️ Defense in Depth:
 
 * Nunca confiar en controles del cliente
 * Implementar checks en cada request
 * Lógica de autorización centralizada
 * Enfoque "deny by default"
 
-### Principios de diseño seguro:
+### ✏️ Principios de diseño seguro:
 
 ```python
 # Mal: confiar en el cliente
@@ -275,14 +275,14 @@ if has_permission(user, 'admin_access'):
     allow_access()
 ```
 
-### Checks de autorización adecuados:
+### ✅ Checks de autorización adecuados:
 
 * Verificar identidad en cada request
 * Comprobar permisos sobre recursos específicos
 * Validar que el usuario es dueño del recurso
 * No exponer IDs internos directamente
 
-### Referencias indirectas:
+### 🔗 Referencias indirectas:
 
 ```python
 # Mal
@@ -292,13 +292,13 @@ if has_permission(user, 'admin_access'):
 /api/document/my-document-slug
 ```
 
-### Principio de mínimo privilegio:
+### 🔑 Principio de mínimo privilegio:
 
 * Permisos mínimos necesarios
 * Privilegios elevados temporales
 * Auditorías periódicas
 
-### Rate limiting y monitorización:
+### 📊 Rate limiting y monitorización:
 
 * Detectar enumeración
 * Alertar sobre escaladas de privilegio
@@ -308,7 +308,7 @@ if has_permission(user, 'admin_access'):
 
 ## 🧪 Metodología de testing
 
-### Enfoque paso a paso:
+### 👣 Enfoque paso a paso:
 
 * Reconocimiento: mapear funcionalidades y roles
 * Autenticación: probar distintos usuarios
@@ -319,7 +319,7 @@ if has_permission(user, 'admin_access'):
 * Testing de cabeceras
 * Testing de workflows
 
-### Casos comunes:
+### 📝 Casos comunes:
 
 * ¿Puede el usuario A acceder al perfil del usuario B?
 * ¿Puede un usuario normal acceder al panel admin?
