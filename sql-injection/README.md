@@ -1,7 +1,3 @@
----
-icon: folder-open
----
-
 # SQL Injection
 
 ## 🔍 ¿Qué es SQL Injection? (SQLI)
@@ -12,7 +8,7 @@ Los atacantes pueden utilizar esta técnica para ejecutar consultas SQL malicios
 
 ***
 
-### 🕵️ Cómo detectar vulnerabilidades de SQL injection
+## 🕵️ Cómo detectar vulnerabilidades de SQL injection
 
 Puedes detectar una SQL injection manualmente usando un conjunto sistemático de pruebas contra cada punto de entrada de la aplicación. Para hacerlo, normalmente enviarías:
 
@@ -27,7 +23,7 @@ Puedes detectar una SQL injection manualmente usando un conjunto sistemático de
 
 ***
 
-### 📤 Revelando información no accesible
+## 📤 Revelando información no accesible
 
 Imagina una tienda online que muestra productos en diferentes categorías. Cuando el usuario hace click en la categoría **Gifts**, su navegador hace una petición a la URL:
 
@@ -82,7 +78,7 @@ La consulta modificada lo que hace es mostrar todos los productos cuando la `cat
 
 ***
 
-### 🔑 Bypass de autentificación
+## 🔑 Bypass de autentificación
 
 Imagina una aplicación que permite a los usuarios loguearse con un usuario y contraseña. Por ejemplo, un usuario introduce el usuario `test` y la contraseña `qwerty`. La aplicación valida las credenciales a través de esta consulta SQL:
 
@@ -104,7 +100,7 @@ La consulta devuelve los datos del `usuario` con nombre `administrador` y el ata
 
 ***
 
-### 🔗 Ataques UNION
+## 🔗 Ataques UNION
 
 Cuando una aplicación es vulnerable a SQL injection y los resultados de la consulta se devuelven dentro de las respuestas de la aplicación, puedes usar la palabra clave `UNION` para obtener datos de otras tablas dentro de la base de datos. Esto se conoce comúnmente como un ataque de SQL injection mediante UNION.
 
@@ -128,11 +124,11 @@ Para llevar a cabo un ataque UNION de inyección SQL, el ataque debe cumplir eso
 
 ***
 
-### 📏 Determinando el número de columnas requeridas
+## 📏 Determinando el número de columnas requeridas
 
 Cuando se realiza un ataque UNION de SQL injection, hay dos métodos eficaces para determinar cuántas columnas se devuelven desde la consulta original.
 
-#### 📊 Método 1 - ORDER BY
+### 📊 Método 1 - ORDER BY
 
 Un método consiste en inyectar una serie de cláusulas `ORDER BY` e incrementar el índice de columna especificado hasta que se produzca un error. Por ejemplo, si el punto de inyección es una cadena entre comillas dentro de la cláusula `WHERE` de la consulta original, se enviaría:
 
@@ -155,7 +151,7 @@ La aplicación podría devolver el error de la base de datos en su respuesta HTT
 
 > En otros casos, podría simplemente no devolver ningún resultado. En cualquier caso, siempre que se pueda detectar alguna diferencia en la respuesta, se puede deducir cuántas columnas se devuelven desde la consulta.
 
-#### 🔀 Método 2 - UNION SELECT
+### 🔀 Método 2 - UNION SELECT
 
 El segundo método consiste en enviar una serie de payloads `UNION SELECT` que especifican un número diferente de valores nulos:
 
@@ -168,17 +164,15 @@ etc.
 
 Si el número de valores nulos no coincide con el número de columnas, la base de datos devuelve un error, como por ejemplo:
 
-{% code overflow="wrap" %}
 ```
 All queries combined using a UNION, INTERSECT or EXCEPT operator must have an equal number of expressions in their target lists.
 ```
-{% endcode %}
 
 Utilizamos `NULL` porque los tipos de datos de cada columna deben ser compatibles entre la consulta original y la inyectada.
 
 > `NULL` es convertible a todos los tipos de datos comunes, por lo que maximiza las posibilidades de que el payload tenga éxito cuando el recuento de columnas sea correcto.
 
-#### 🛠️ Sintaxis específica de la base de datos
+### 🛠️ Sintaxis específica de la base de datos
 
 En Oracle, todas las consultas `SELECT` deben utilizar la palabra clave `FROM` y especificar una tabla válida. Oracle cuenta con una tabla integrada llamada `dual` que puede utilizarse para este fin. Por lo tanto, las consultas en Oracle deberían tener el siguiente aspecto:
 
@@ -192,7 +186,7 @@ Para obtener más detalles sobre la sintaxis específica de cada base de datos, 
 
 ***
 
-### 🎯 Encontrando columnas con un tipo de datos útil
+## 🎯 Encontrando columnas con un tipo de datos útil
 
 Un ataque UNION permite recuperar resultados de una consulta inyectada. Los datos interesantes normalmente están en formato `string`. Esto significa, que debemos encontrar 1 o más columnas cuyo tipo de datos sea compatible con string.
 
@@ -217,7 +211,7 @@ Si no ocurre ningún error y la respuesta de la aplicación incluye contenido ad
 
 ***
 
-### 💰 Usando un ataque UNION para recuperar datos interesantes
+## 💰 Usando un ataque UNION para recuperar datos interesantes
 
 Una vez detectadas el número de columnas y qué columnas pueden contener datos en formato string, el siguiente paso es extraer datos interesantes.
 
@@ -239,14 +233,14 @@ Para llevar a cabo este ataque, es necesario saber que existe una tabla llamada 
 
 ***
 
-### 📚 Examinando la base de datos
+## 📚 Examinando la base de datos
 
 Para explotar las vulnerabilidades de SQL injection, suele ser necesario encontrar información sobre la base de datos. Esto incluye:
 
 * El tipo y la versión del software de la base de datos.
 * Las tablas y columnas que contiene la base de datos.
 
-#### 🧪 Consultar el tipo y la versión de la base de datos
+### 🧪 Consultar el tipo y la versión de la base de datos
 
 Es posible identificar tanto el tipo como la versión de la base de datos inyectando consultas específicas para ver si alguna funciona.
 
@@ -273,7 +267,7 @@ Copyright (c) Microsoft Corporation
 Standard Edition (64-bit) on Windows Server 2016 Standard 10.0 <X64> (Build 14393: ) (Hypervisor)
 ```
 
-#### 📋 Listando el contenido de la base de datos
+### 📋 Listando el contenido de la base de datos
 
 La mayoría de las bases de datos (excepto Oracle) tienen un conjunto de vistas denominado esquema de información. Este proporciona información sobre la base de datos.
 
@@ -311,13 +305,13 @@ Este output nos devuelve el nombre de las columnas y el tipo de dato de cada una
 
 ***
 
-### 🌫️ Blind SQL Injection
+## 🌫️ Blind SQL Injection
 
 Una blind SQL injection se produce cuando una aplicación es vulnerable a la SQL injection, pero sus respuestas HTTP no contienen los resultados de la consulta SQL relevante ni los detalles de ningún error de la base de datos.
 
 > Muchas técnicas, como los ataques `UNION`, no son eficaces con las vulnerabilidades de blind SQL injection. Esto se debe a que dependen de la posibilidad de ver los resultados de la consulta inyectada en las respuestas de la aplicación.
 
-#### 📟 Blind SQL injection con respuestas condicionales
+### 📟 Blind SQL injection con respuestas condicionales
 
 En este ejemplo, la aplicación utiliza cookies de seguimiento para recopilar datos. Las solicitudes a la aplicación incluyen un encabezado de cookie como este:
 
@@ -355,11 +349,9 @@ Imaginemos que tenemos una tabla `Users` con las columnas `Username` y `Password
 
 Para esto utilizaremos la siguiente consulta:
 
-{% code fullWidth="false" %}
 ```
 xyz' AND SUBSTRING((SELECT Password FROM Users WHERE Username = 'Administrator'), 1, 1) > 'm
 ```
-{% endcode %}
 
 Esto nos devuelve el mensaje `Bienvenido de nuevo`, indicándonos que la condición inyectada es true, lo que nos verifica que el primer carácter es mayor que una `m`.
 
@@ -381,14 +373,14 @@ Podemos continuar con este proceso hasta que consigamos determinar por completo 
 
 ***
 
-### ❌ SQL injection basada en errores
+## ❌ SQL injection basada en errores
 
 Una SQL injection basada en errores se refiere a los casos en los que se pueden utilizar mensajes de error para extraer datos incluso en contextos ciegos. Las posibilidades dependen de la configuración de la base de datos y de los tipos de errores que se puedan provocar:
 
 * Es posible inducir a la aplicación a que devuelva una respuesta de error específica basada en el resultado de una expresión booleana. Podemos aprovechar esto de la misma manera que las respuestas condicionales que vimos en la sección anterior. Para obtener más información, consultar la sección Aprovechamiento de una blind SQL injection mediante la activación de errores condicionales.
 * Es posible que pueda provocar mensajes de error que muestren los datos devueltos por la consulta. Esto convierte efectivamente las vulnerabilidades de blind SQL injection en visibles. Para obtener más información, consulte Extrayendo datos confidenciales a través de mensajes de error SQL detallados.
 
-#### ⚠️ Aprovechamiento de una blind SQL injection mediante la activación de errores condicionales.
+### ⚠️ Aprovechamiento de una blind SQL injection mediante la activación de errores condicionales.
 
 Algunas aplicaciones realizan consultas SQL, pero su comportamiento no cambia, independientemente de si la consulta devuelve datos. Lo que podríamos conseguir es inducir a la aplicación a que devuelva una respuesta diferente dependiendo de si se produce un error SQL.
 
@@ -416,17 +408,15 @@ xyz' AND (SELECT CASE WHEN (Username = 'Administrator' AND SUBSTRING(Password, 1
 
 > Hay diferentes formas de provocar errores condicionales, y cada tipo de base de datos funciona mejor con una técnica diferente. Para obtener más información, consulta la hoja de referencia sobre inyección SQL.
 
-#### 📛 Extrayendo datos confidenciales a través de mensajes de error SQL detallados
+### 📛 Extrayendo datos confidenciales a través de mensajes de error SQL detallados
 
 La configuración incorrecta de las bases de datos a veces da lugar a mensajes de error muy detallados.
 
 Estos pueden proporcionar información que puede ser útil para un atacante. Por ejemplo, el siguiente mensaje de error, que aparece después de inyectar una comilla simple en un parámetro `id`:
 
-{% code overflow="wrap" %}
 ```
 Unterminated string literal started at position 52 in SQL SELECT * FROM tracking WHERE id = '''. Expected char
 ```
-{% endcode %}
 
 Esto muestra la consulta completa que la aplicación ha construido utilizando nuestra entrada. Podemos ver que, en este caso, estamos inyectando en una cadena entre comillas simples dentro de una instrucción `WHERE`.
 
@@ -448,7 +438,7 @@ ERROR: invalid input syntax for type integer: "Example data"
 
 ***
 
-### ⏱️ SQL Injection basadas en tiempo
+## ⏱️ SQL Injection basadas en tiempo
 
 Una SQL Injection basada en tiempo es un tipo de ataque de blind SQL Injection que se basa en los retrasos de la base de datos para inferir si determinadas consultas devuelven verdadero o falso.&#x20;
 
@@ -482,7 +472,7 @@ Con esta técnica, podemos recuperar datos probando un carácter cada vez:
 
 ***
 
-### 📡 Out of Band (OAST) SQL Injection
+## 📡 Out of Band (OAST) SQL Injection
 
 Una Out-of-Band SQL Injection (OOB SQLi) se produce cuando un atacante utiliza canales de comunicación alternativos para extraer datos de una base de datos.&#x20;
 
@@ -518,7 +508,7 @@ S3cure.cwcsgt05ikji0n1f2qlzn5118sek29.burpcollaborator.net
 
 ***
 
-### 🌐 SQL Injection en otros contextos
+## 🌐 SQL Injection en otros contextos
 
 Se puede realizar ataques de SQL Injection utilizando cualquier entrada controlable que la aplicación procese como una consulta SQL. Por ejemplo, algunos sitios web aceptan entradas en formato JSON o XML y las utilizan para consultar la base de datos.
 
