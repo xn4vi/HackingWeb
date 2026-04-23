@@ -1,10 +1,6 @@
----
-icon: folder-open
----
-
 # Prototype pollution
 
-### 1️⃣ ¿Qué es Prototype Pollution?
+## 1️⃣ ¿Qué es Prototype Pollution?
 
 **Prototype Pollution** es una vulnerabilidad de JavaScript que permite a un atacante **añadir/modificar propiedades** en prototipos (por ejemplo `Object.prototype`, `Array.prototype`, etc.).\
 Como **la mayoría de objetos heredan** de esos prototipos, la propiedad “contaminada” puede acabar **afectando a casi todo el runtime**, alterando lógica de seguridad, configuración, renderizado, etc.
@@ -13,7 +9,7 @@ Como **la mayoría de objetos heredan** de esos prototipos, la propiedad “cont
 
 ***
 
-### 2️⃣ ¿Por qué esto es peligroso?
+## 2️⃣ ¿Por qué esto es peligroso?
 
 En JavaScript, cuando haces:
 
@@ -38,9 +34,9 @@ Si logras meter `isAdmin=true` en `Object.prototype`, entonces:
 
 ***
 
-### 3️⃣ Prototipos e herencia en JavaScript (base necesaria)
+## 3️⃣ Prototipos e herencia en JavaScript (base necesaria)
 
-#### 📌 3.1 ¿Qué es un objeto?
+### 📌 3.1 ¿Qué es un objeto?
 
 Colección de pares **clave:valor** (propiedades). Puede contener funciones (métodos).
 
@@ -50,7 +46,7 @@ user.username
 user["isAdmin"]
 ```
 
-#### 📌 3.2 ¿Qué es un prototipo?
+### 📌 3.2 ¿Qué es un prototipo?
 
 Todo objeto está enlazado a otro objeto: su **prototype**.
 
@@ -63,7 +59,7 @@ Object.getPrototypeOf([])      // Array.prototype
 Object.getPrototypeOf(1)       // Number.prototype
 ```
 
-#### 📌 3.3 Prototype chain
+### 📌 3.3 Prototype chain
 
 El prototipo de un objeto es otro objeto que a su vez tiene prototipo… hasta llegar a:
 
@@ -72,7 +68,7 @@ El prototipo de un objeto es otro objeto que a su vez tiene prototipo… hasta l
 
 ***
 
-### 4️⃣ ¿Cómo funciona Prototype Pollution?
+## 4️⃣ ¿Cómo funciona Prototype Pollution?
 
 El patrón típico es:
 
@@ -98,7 +94,7 @@ console.log({}.isAdmin);
 
 ***
 
-### 5️⃣ ¿Cómo surgen estas vulnerabilidades?
+## 5️⃣ ¿Cómo surgen estas vulnerabilidades?
 
 Casi siempre por **merge recursivo** o “auto-binding” sin sanitizar claves.\
 Cosas típicas que lo disparan:
@@ -112,11 +108,11 @@ Cosas típicas que lo disparan:
 
 ***
 
-### 6️⃣ Componentes de una explotación real
+## 6️⃣ Componentes de una explotación real
 
 Para pasar de “pollution” a “impacto” suelen hacer falta tres piezas:
 
-#### 📌 6.1 Fuente (source)
+### 📌 6.1 Fuente (source)
 
 Alguna entrada que te permita meter propiedades arbitrarias en el merge:
 
@@ -126,7 +122,7 @@ Alguna entrada que te permita meter propiedades arbitrarias en el merge:
 * storage (localStorage/sessionStorage) si luego se mergea
 * formularios → convertidos a objeto por alguna lib
 
-#### 📌 6.2 Sink
+### 📌 6.2 Sink
 
 Algo peligroso que, si controlas una propiedad “indirecta”, te da impacto:
 
@@ -136,7 +132,7 @@ Algo peligroso que, si controlas una propiedad “indirecta”, te da impacto:
 * en servidor: ejecución comandos/procesos (child\_process)
 * bypasses lógicos: flags, roles, toggles, config
 
-#### 📌 6.3 Gadget
+### 📌 6.3 Gadget
 
 La **propiedad concreta** que:
 
@@ -153,9 +149,9 @@ Si `config.transport_url` no existe como propiedad propia y tú contaminas `Obje
 
 ***
 
-### 7️⃣ Fuentes comunes: URL y JSON
+## 7️⃣ Fuentes comunes: URL y JSON
 
-#### 📌 7.1 Prototype pollution vía URL (query string)
+### 📌 7.1 Prototype pollution vía URL (query string)
 
 Payload conceptual:
 
@@ -173,7 +169,7 @@ terminas contaminando el prototipo.
 
 📌 En la práctica, “evilProperty” rara vez sirve; se busca contaminar **propiedades que la app/stack usa** (flags, config, etc.).
 
-#### 📌 7.2 Prototype pollution vía JSON
+### 📌 7.2 Prototype pollution vía JSON
 
 Payload:
 
@@ -185,9 +181,9 @@ Payload:
 
 ***
 
-### 8️⃣ Sinks y gadgets: convertirlo en impacto
+## 8️⃣ Sinks y gadgets: convertirlo en impacto
 
-#### 📌 8.1 Ejemplo clásico: cargar JS desde dominio del atacante
+### 📌 8.1 Ejemplo clásico: cargar JS desde dominio del atacante
 
 Si existe un flujo tipo:
 
@@ -206,15 +202,15 @@ Y `config.transport_url` no está definido, basta con:
 
 Incluso se han visto payloads tipo `data:` para “embeber” XSS en la URL (según contexto y defensas).
 
-#### 📌 8.2 “Gadget hunting” (manual)
+### 📌 8.2 “Gadget hunting” (manual)
 
 Tú ya lo tienes bien planteado: instrumentas accesos a propiedades con getters que hagan `console.trace()` para ver dónde se leen y si llegan a un sink.
 
 ***
 
-### 9️⃣ Client-side Prototype Pollution
+## 9️⃣ Client-side Prototype Pollution
 
-#### 📌 9.1 Encontrar fuentes manualmente
+### 📌 9.1 Encontrar fuentes manualmente
 
 Proceso típico:
 
@@ -225,7 +221,7 @@ Proceso típico:
    * `Object.prototype.foo`
 3. si no funciona, prueba variantes (dot/brackets) y otras rutas de parseo.
 
-#### 📌 9.2 Con herramientas
+### 📌 9.2 Con herramientas
 
 DOM Invader (Burp Browser) acelera muchísimo:
 
@@ -235,7 +231,7 @@ DOM Invader (Burp Browser) acelera muchísimo:
 
 ***
 
-### 🔟 Pollution vía constructor (bypass de “bloquear **proto**”)
+## 🔟 Pollution vía constructor (bypass de “bloquear **proto**”)
 
 Bloquear `__proto__` es una mitigación común pero **no suficiente**.
 
@@ -253,7 +249,7 @@ Por eso aparecen payloads que apuntan a:
 
 ***
 
-### 1️⃣1️⃣ Bypass de sanitización defectuosa de claves
+## 1️⃣1️⃣ Bypass de sanitización defectuosa de claves
 
 Muchos filtros hacen “replace” una vez y se quedan tranquilos.\
 La ofuscación tipo:
@@ -266,7 +262,7 @@ puede convertirse en `__proto__` tras una eliminación parcial si no se repite n
 
 ***
 
-### 1️⃣2️⃣ Prototype Pollution en librerías externas
+## 1️⃣2️⃣ Prototype Pollution en librerías externas
 
 Muy habitual porque:
 
@@ -278,9 +274,9 @@ Aquí DOM Invader y escáneres específicos ayudan muchísimo.
 
 ***
 
-### 1️⃣3️⃣ Prototype Pollution via APIs del navegador (gadgets “sorpresa”)
+## 1️⃣3️⃣ Prototype Pollution via APIs del navegador (gadgets “sorpresa”)
 
-#### 📌 13.1  fetch() como gadget indirecto
+### 📌 13.1  fetch() como gadget indirecto
 
 `fetch(url, options)` acepta un objeto `options`.\
 Si la app crea `{method:"GET"}` y deja `headers` indefinido, y tú contaminas:
@@ -293,22 +289,22 @@ Luego, si la respuesta se usa para construir HTML con `innerHTML`, puedes encade
 
 📌 Importante: aquí la “magia” es que estás controlando **opciones heredadas** que el dev no esperaba.
 
-#### 📌 13.2 Object.defineProperty() como vector de bypass
+### 📌 13.2 Object.defineProperty() como vector de bypass
 
 Si el descriptor no define `value`, pero hereda `value` del prototipo contaminado, puedes colar el valor igualmente.
 
 ***
 
-### 1️⃣4️⃣ Server-side Prototype Pollution (Node.js)
+## 1️⃣4️⃣ Server-side Prototype Pollution (Node.js)
 
-#### 📌 14.1  Por qué es más difícil que client-side
+### 📌 14.1  Por qué es más difícil que client-side
 
 * no ves runtime / no DevTools
 * no sabes sinks fácilmente
 * riesgo de **DoS** y contaminación persistente durante vida del proceso Node
 * difícil “resetear” el estado contaminado
 
-#### 📌 14.2 Detección por reflexión (for...in)
+### 📌 14.2 Detección por reflexión (for...in)
 
 `for...in` itera propiedades enumerables **incluidas heredadas**, así que una propiedad contaminada puede “aparecer” en respuestas JSON si el servidor serializa objetos iterados.
 
@@ -324,7 +320,7 @@ envías:
 
 y si en respuesta ves `"foo":"bar"` sin ser propiedad propia → señal fuerte.
 
-#### 📌 14.3 Detección sin reflexión: cambios de comportamiento (no destructivo)
+### 📌 14.3 Detección sin reflexión: cambios de comportamiento (no destructivo)
 
 Técnicas típicas (muy útiles en caja negra):
 
@@ -334,7 +330,7 @@ Técnicas típicas (muy útiles en caja negra):
 
 Estas técnicas son valiosas porque dan un “bit” observable sin romper todo.
 
-#### 📌 14.4 De pollution a RCE
+### 📌 14.4 De pollution a RCE
 
 En Node, si alcanzas gadgets que influyen:
 
@@ -345,9 +341,9 @@ En Node, si alcanzas gadgets que influyen:
 
 ***
 
-### 1️⃣5️⃣ Prevención y hardening
+## 1️⃣5️⃣ Prevención y hardening
 
-#### 📌 15.1 Sanitización de claves (mejor allowlist)
+### 📌 15.1 Sanitización de claves (mejor allowlist)
 
 * Mejor: **allowlist** de claves permitidas al hacer merge
 * Si usas blocklist: filtra **recursivamente** y cubre:
@@ -358,14 +354,14 @@ En Node, si alcanzas gadgets que influyen:
 
 📌 Blocklist = parche rápido, pero históricamente bypassable.
 
-#### 📌 15.2 Bloquear modificación de prototipos
+### 📌 15.2 Bloquear modificación de prototipos
 
 * `Object.freeze(Object.prototype)` corta muchas vías
 * `Object.seal()` es menos estricto (permite cambios en valores existentes)
 
 ⚠️ Ojo: puede romper librerías que “monkey-patchean” prototipos (mala práctica, pero existe).
 
-#### 📌 15.3 Evitar herencia donde no hace falta
+### 📌 15.3 Evitar herencia donde no hace falta
 
 Crear objetos sin prototipo:
 
@@ -375,6 +371,6 @@ const obj = Object.create(null);
 
 Así no hereda nada de `Object.prototype`.
 
-#### 📌 15.4 Estructuras más seguras para “options”
+### 📌 15.4 Estructuras más seguras para “options”
 
 Usar `Map` / `Set` y APIs como `.get()` / `.has()` que operan sobre entradas propias (y evitan lecturas accidentales por herencia).
