@@ -1,7 +1,3 @@
----
-icon: folder-open
----
-
 # Cross-site request forgery (CSRF)
 
 ## 🔍 ¿Qué es CSRF?
@@ -16,7 +12,7 @@ Funciona porque:
 * El navegador de la víctima la envía
 * El servidor la procesa como legítima
 
-#### 🎯 Impacto
+### 🎯 Impacto
 
 * Cambio de contraseña o email
 * Transferencias de dinero
@@ -27,9 +23,9 @@ Funciona porque:
 
 ***
 
-### ⚡ Cómo funciona un ataque CSRF
+## ⚡ Cómo funciona un ataque CSRF
 
-#### 🔄 Flujo básico
+### 🔄 Flujo básico
 
 ```html
 <form action="https://victim-bank.com/transfer" method="POST">
@@ -48,9 +44,9 @@ Cuando la víctima visita la web del atacante:
 
 ***
 
-### 🛡️ Mecanismos de defensa
+## 🛡️ Mecanismos de defensa
 
-#### 🔑 Tokens CSRF
+### 🔑 Tokens CSRF
 
 ```html
 <input name="csrf" value="a8b7c6d5e4f3g2h1">
@@ -59,7 +55,7 @@ Cuando la víctima visita la web del atacante:
 * Token único por sesión
 * Validado en el servidor
 
-#### 🍪 Cookies SameSite
+### 🍪 Cookies SameSite
 
 ```http
 Set-Cookie: session=abc123; SameSite=Strict
@@ -71,12 +67,12 @@ Set-Cookie: session=abc123; SameSite=None; Secure
 * **Lax**: solo en navegación GET principal
 * **None**: siempre (requiere Secure)
 
-#### 📍 Validación de Referer
+### 📍 Validación de Referer
 
 * Comprobar que el dominio coincide
 * Bloquear si es externo
 
-#### 🛠️ Cabeceras personalizadas
+### 🛠️ Cabeceras personalizadas
 
 ```javascript
 fetch('/api/action', {
@@ -88,9 +84,9 @@ Los navegadores no incluyen headers personalizados en requests simples.
 
 ***
 
-### 🚪 Técnicas de bypass
+## 🚪 Técnicas de bypass
 
-#### ❌ Fallos en validación de token
+### ❌ Fallos en validación de token
 
 ➡️ **Sin validación**
 
@@ -107,14 +103,14 @@ email=attacker@evil.com
 
 * Se puede inyectar mediante CRLF
 
-#### 🔄 Bypass por método HTTP
+### 🔄 Bypass por método HTTP
 
 ```http
 POST /change-email   (requiere token)
 GET /change-email    (no requiere)
 ```
 
-#### 🍪 Bypass SameSite
+### 🍪 Bypass SameSite
 
 ➡️ **Method override**
 
@@ -138,7 +134,7 @@ GET /redirect?url=/change-email?email=evil@evil.com
 * Permite saltarse SameSite=Strict
 * Ej: `cms.victim.com` → ataque a `victim.com`
 
-#### 🌐 Bypass Referer
+### 🌐 Bypass Referer
 
 ➡️ **Eliminar Referer**
 
@@ -154,9 +150,9 @@ Referer: https://evil.com/?victim.com
 
 ***
 
-### 📋 Metodología de testeo
+## 📋 Metodología de testeo
 
-#### 1️⃣ Identificar acciones críticas
+### 1️⃣ Identificar acciones críticas
 
 * Cambio de contraseña
 * Cambio de email
@@ -164,7 +160,7 @@ Referer: https://evil.com/?victim.com
 * Configuración
 * Eliminación de datos
 
-#### 2️⃣ Testear protecciones
+### 2️⃣ Testear protecciones
 
 1. Eliminar token
 2. Reutilizar token
@@ -172,7 +168,7 @@ Referer: https://evil.com/?victim.com
 4. Cambiar POST → GET
 5. Eliminar Referer
 
-#### 3️⃣ Testear SameSite
+### 3️⃣ Testear SameSite
 
 * Ver atributo en cookies
 * Probar method override
@@ -180,7 +176,7 @@ Referer: https://evil.com/?victim.com
 * Revisar OAuth
 * Buscar XSS en subdominios
 
-#### 4️⃣ Crear exploit
+### 4️⃣ Crear exploit
 
 1. HTML con formulario malicioso
 2. Auto-submit con JS
@@ -189,34 +185,34 @@ Referer: https://evil.com/?victim.com
 
 ***
 
-### ✅ Buenas prácticas de defensa
+## ✅ Buenas prácticas de defensa
 
-#### 🔑 Usar tokens CSRF
+### 🔑 Usar tokens CSRF
 
 ```python
 if request.form['csrf_token'] != session['csrf_token']:
     abort(403)
 ```
 
-#### 🍪 Usar SameSite
+### 🍪 Usar SameSite
 
 ```http
 Set-Cookie: session=abc; SameSite=Strict; Secure
 ```
 
-#### 📍 Validar Origin / Referer
+### 📍 Validar Origin / Referer
 
 ```python
 if request.headers.get('Origin') not in allowed_origins:
     abort(403)
 ```
 
-#### 🔄 Double Submit Cookies
+### 🔄 Double Submit Cookies
 
 * Token en cookie y en formulario
 * El servidor compara ambos
 
-#### 🛡️ Protecciones del framework
+### 🛡️ Protecciones del framework
 
 ```beancount
 {% csrf_token %}
