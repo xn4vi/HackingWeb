@@ -11,7 +11,7 @@ A diferencia de vulnerabilidades técnicas (SQLi, XSS), estas se basan en **supo
 ## ⚠️ Por qué son peligrosas
 
 * Difíciles de detectar (no las encuentran herramientas automáticas)
-* Difíciles de prevenir (el código puede estar “bien” técnicamente)
+* Difíciles de prevenir (el código puede estar "bien" técnicamente)
 * Dependientes del contexto
 * Alto impacto (financiero, acceso indebido, manipulación de datos)
 * Frecuentemente ignoradas
@@ -48,7 +48,7 @@ A diferencia de vulnerabilidades técnicas (SQLi, XSS), estas se basan en **supo
 * Precios negativos por overflow
 * Límites superados
 
-### ⚡Race conditions
+### ⚡ Race conditions
 
 * Peticiones simultáneas
 * Doble gasto
@@ -90,33 +90,33 @@ A diferencia de vulnerabilidades técnicas (SQLi, XSS), estas se basan en **supo
 
 ## 🔎 Metodología de detección
 
-###  Entender la aplicación
+### 🗺️ Entender la aplicación
 
 * Mapear flujos
 * Identificar supuestos
 * Documentar validaciones
 
-### Probar límites
+### 📏 Probar límites
 
 * Valores mínimos/máximos
 * Negativos
 * Cero
 * Valores grandes
 
-### Manipular flujos
+### 🔀 Manipular flujos
 
 * Saltar pasos
 * Cambiar orden
 * Repetir acciones
 
-### Manipular parámetros
+### 🛠️ Manipular parámetros
 
 * Precio
 * Cantidad
 * IDs
 * Roles
 
-### Testear estados
+### 🔁 Testear estados
 
 * Iniciar en pasos intermedios
 * Usar tokens antiguos
@@ -158,27 +158,27 @@ Ataque: ir directo a `/confirm`.
 
 ## ⚔️ Técnicas de explotación
 
-###  Integer overflow
+### 💥 Integer overflow
 
 * Forzar valores extremos
 * Convertir precios en negativos
 
-### Coupon stacking
+### 🎟️ Coupon stacking
 
 * Combinar cupones
 * Automatizar
 
-### Bypass de workflow
+### ⏭️ Bypass de workflow
 
 * Saltar validaciones
 * Acceso directo a endpoints
 
-### Abuso criptográfico
+### 🔐 Abuso criptográfico
 
 * Uso de errores como oracle
 * Modificación de tokens
 
-### Problemas de parsing
+### 🔣 Problemas de parsing
 
 * Emails mal interpretados
 * Encoding extraño
@@ -212,38 +212,38 @@ Ataque: ir directo a `/confirm`.
 
 ## 🛡️ Mitigación
 
-### Validación en servidor
+### 🖥️ Validación en servidor
 
 * No confiar en el cliente
 * Recalcular todo
 
-### Control de estado
+### 🔁 Control de estado
 
 * Validar cada paso
 * No permitir saltos
 
-### Testing
+### 🧪 Testing
 
 * Revisiones manuales
 * Threat modeling
 * Edge cases
 
-### Restricciones de entrada
+### 🚧 Restricciones de entrada
 
 * Límites claros
 * Tipos adecuados
 
-### Atomicidad
+### ⚛️ Atomicidad
 
 * Transacciones
 * Locks
 
-### Mínimo privilegio
+### 🔒 Mínimo privilegio
 
 * Permisos restrictivos
 * Verificación constante
 
-### Defensa en profundidad
+### 🛡️ Defensa en profundidad
 
 * Logs
 * Rate limiting
