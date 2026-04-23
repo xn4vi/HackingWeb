@@ -1,7 +1,3 @@
----
-icon: folder-open
----
-
 # Cross-site scripting (XSS)
 
 ## 🔍 ¿Qué es Cross-Site Scripting (XSS)?
@@ -10,35 +6,35 @@ XSS es una vulnerabilidad web que permite a los atacantes inyectar JavaScript ma
 
 ***
 
-### 🧪 Tipos de XSS
+## 🧪 Tipos de XSS
 
-#### 🔄 Reflected XSS:
+### 🔄 Reflected XSS:
 
 El payload se incluye en la URL o en la petición y se refleja en la respuesta.\
 Se activa cuando la víctima hace clic en un enlace manipulado.
 
-#### 💾 Stored XSS:
+### 💾 Stored XSS:
 
 El payload se guarda en el servidor (por ejemplo, en un comentario).\
 Se ejecuta automáticamente cuando cualquier usuario visita la página afectada.
 
-#### 🌐DOM-based XSS:
+### 🌐DOM-based XSS:
 
 La vulnerabilidad está en el JavaScript del lado cliente.\
 La entrada maliciosa fluye desde una fuente (como location.search) hacia un sink peligroso (como innerHTML o eval()).
 
 ***
 
-### 📥 Sources y Sinks comunes
+## 📥 Sources y Sinks comunes
 
-#### 🔗 Sources (entrada controlada por el atacante):
+### 🔗 Sources (entrada controlada por el atacante):
 
 * location.search
 * document.referrer
 * document.cookie
 * location.hash
 
-#### 🪝 Sinks (destinos donde se inyecta peligrosamente la entrada):
+### 🪝 Sinks (destinos donde se inyecta peligrosamente la entrada):
 
 * innerHTML
 * outerHTML
@@ -49,41 +45,41 @@ La entrada maliciosa fluye desde una fuente (como location.search) hacia un sink
 
 ***
 
-### 📍 Contextos de XSS (dónde cae la inyección)
+## 📍 Contextos de XSS (dónde cae la inyección)
 
-#### 🏷️ Contexto HTML:
+### 🏷️ Contexto HTML:
 
 La entrada se inserta entre etiquetas\
 Ejemplo: `<p>INPUT</p>`
 
-#### 🧩 Contexto de atributo:
+### 🧩 Contexto de atributo:
 
 Dentro de atributos HTML\
 Ejemplo: `<a href="INPUT">`
 
-#### ⚙️ Contexto JavaScript:
+### ⚙️ Contexto JavaScript:
 
 Dentro de `<script>` o JS inline\
 Ejemplo: `var msg = 'INPUT';`
 
-#### ⚡ Contexto de eventos:
+### ⚡ Contexto de eventos:
 
 En atributos como onclick, onerror\
 Ejemplo: `<img src=x onerror="INPUT">`
 
-#### 🔙 Contexto template literal:
+### 🔙 Contexto template literal:
 
 Dentro de backticks en JS\
 Ejemplo: `` `Hello ${INPUT}` ``
 
-#### 🛡️ Contexto con CSP:
+### 🛡️ Contexto con CSP:
 
 El entorno tiene Content Security Policy\
 Los payloads deben evadir restricciones (por ejemplo, usando imágenes o escapes de sandbox)
 
 ***
 
-### 💥 Impacto de XSS
+## 💥 Impacto de XSS
 
 * Robo de cookies, sesiones o credenciales
 * Secuestro de cuentas o suplantación
@@ -93,27 +89,27 @@ Los payloads deben evadir restricciones (por ejemplo, usando imágenes o escapes
 
 ***
 
-### 🛡️ Mitigaciones
+## 🛡️ Mitigaciones
 
-#### ✅ Validación de entrada:
+### ✅ Validación de entrada:
 
 * Filtrar la entrada según formato esperado
 
-#### 🔤 Output encoding:
+### 🔤 Output encoding:
 
 * Codificar datos antes de renderizarlos
 
-#### 🛠️ CSP:
+### 🛠️ CSP:
 
 * Usar Content Security Policy para limitar scripts
 
-#### 🧰 Frameworks seguros:
+### 🧰 Frameworks seguros:
 
 * Usar librerías con protección integrada (ej: React)
 
 ***
 
-### 🚪 Bypasses comunes
+## 🚪 Bypasses comunes
 
 * Uso de `<img>` o `<svg>` con onerror/onload
 * Romper atributos o strings JS con comillas
