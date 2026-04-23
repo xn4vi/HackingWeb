@@ -1,3 +1,7 @@
+<div style="border-left: 4px solid #e85d4a; background: #fff5f5; padding: 8px 16px; border-radius: 4px;">
+📖 <strong>Más recursos:</strong> <a href="https://github.com/tu-repo/...">Nombre del recurso</a>
+</div>
+
 # Checklist Web
 
 > Siempre que sea posible, utilizar al menos 2 cuentas durante las pruebas. Una con privilegios bajos y otra con privilegios de administración, para validar la escalada vertical. Para la escalada horizontal, usar 2 cuentas con el mismo rol.
