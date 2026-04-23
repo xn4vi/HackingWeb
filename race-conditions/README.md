@@ -1,10 +1,6 @@
----
-icon: folder-open
----
-
 # Race conditions
 
-### 🔍 ¿Qué son las Race Conditions?
+## 🔍 ¿Qué son las Race Conditions?
 
 Las **Race Conditions** ocurren cuando el resultado de un proceso depende del tiempo o del orden de los eventos, especialmente cuando múltiples hilos o procesos acceden a recursos compartidos sin la sincronización adecuada. En aplicaciones web, esto suele manifestarse cuando:
 
@@ -17,48 +13,48 @@ La característica clave es que la vulnerabilidad solo aparece cuando las operac
 
 ***
 
-### 🧬 Tipos de Race Conditions
+## 🧬 Tipos de Race Conditions
 
-#### ⚔️ Limit Overrun:
+### ⚔️ Limit Overrun:
 
 * Aplicar el mismo código de descuento múltiples veces simultáneamente
 * Superar límites de recursos (créditos, intentos, cuotas)
 * Saltarse restricciones de “uso único”
 
-#### 🚫 Rate Limit Bypass:
+### 🚫 Rate Limit Bypass:
 
 * Enviar múltiples intentos de login en paralelo
 * Evitar mecanismos de limitación
 * Saltarse temporizadores de bloqueo
 
-#### 🔄 Multi-Endpoint Races:
+### 🔄 Multi-Endpoint Races:
 
 * Explotar el timing entre diferentes endpoints
 * Añadir elementos durante el proceso de checkout
 * Cambios de estado a través de múltiples peticiones
 
-#### 📍 Single-Endpoint Races:
+### 📍 Single-Endpoint Races:
 
 * Múltiples solicitudes al mismo endpoint con datos distintos
 * Race conditions en verificación de email
 * Operaciones de actualización sin bloqueo suficiente
 
-#### ⏱️ Time-Sensitive Operations:
+### ⏱️ Time-Sensitive Operations:
 
 * Generación de tokens basada en timestamp
 * Tokens predecibles en ventanas de tiempo estrechas
 * Race conditions en creación de sesión
 
-#### 🧩 Partial Construction:
+### 🧩 Partial Construction:
 
 * Acceder a objetos antes de que se complete su inicialización
 * Explotar estados nulos o indefinidos
 
 ***
 
-### ⚡ Cómo funcionan las Race Conditions
+## ⚡ Cómo funcionan las Race Conditions
 
-#### 🔄 Patrón clásico Check-Then-Use:
+### 🔄 Patrón clásico Check-Then-Use:
 
 ```python
 if user.balance >= price:
@@ -67,14 +63,14 @@ if user.balance >= price:
     process_purchase()
 ```
 
-#### ❓ Qué ocurre:
+### ❓ Qué ocurre:
 
 * Request 1: Comprueba balance (OK)
 * Request 2: Comprueba balance (OK)
 * Request 1: Deduce balance
 * Request 2: Deduce balance → el balance se vuelve negativo
 
-#### ✅ Sincronización correcta:
+### ✅ Sincronización correcta:
 
 ```python
 with transaction_lock:
@@ -85,9 +81,9 @@ with transaction_lock:
 
 ***
 
-### 🎯 Patrones vulnerables comunes
+## 🎯 Patrones vulnerables comunes
 
-#### 💸 Aplicación de códigos de descuento:
+### 💸 Aplicación de códigos de descuento:
 
 Flujo normal:
 
@@ -102,7 +98,7 @@ Race condition:
 * Request 1: Aplica descuento
 * Request 2: Aplica descuento
 
-#### ⏳ Rate Limiting:
+### ⏳ Rate Limiting:
 
 Flujo normal:
 
@@ -114,28 +110,28 @@ Race:
 
 * Múltiples peticiones pasan el check antes del incremento
 
-#### 📧 Verificación de email:
+### 📧 Verificación de email:
 
 * Dos cambios simultáneos
 * Tokens inconsistentes
 
 ***
 
-### 🛠️ Técnicas de explotación
+## 🛠️ Técnicas de explotación
 
-#### 📦 Single-Packet Attack (HTTP/2):
+### 📦 Single-Packet Attack (HTTP/2):
 
 * Enviar todas las peticiones en un solo paquete TCP
 * Llegan simultáneamente
 
-#### 🧰 Burp Suite:
+### 🧰 Burp Suite:
 
 1. Crear grupo de requests
 2. Enviar en paralelo
 3. Activar HTTP/2
 4. concurrentConnections=1
 
-#### ⚡ Turbo Intruder:
+### ⚡ Turbo Intruder:
 
 ```python
 engine = RequestEngine(...)
@@ -143,7 +139,7 @@ engine.queue(...)
 engine.openGate('race')
 ```
 
-#### 🚀 Optimización:
+### 🚀 Optimización:
 
 * Minimizar latencia
 * Usar conexiones rápidas
@@ -151,15 +147,15 @@ engine.openGate('race')
 
 ***
 
-### 🔎 Métodos de detección
+## 🔎 Métodos de detección
 
-#### ⚠️ Señales:
+### ⚠️ Señales:
 
 * Operaciones de una sola ejecución
 * Tokens de un solo uso
 * Sistemas de balance
 
-#### 🧠 Enfoque:
+### 🧠 Enfoque:
 
 1. Identificar operaciones críticas
 2. Enviar múltiples requests
@@ -168,7 +164,7 @@ engine.openGate('race')
    * Se reutilizan códigos
    * Ocurren efectos múltiples
 
-#### 🤖 Automatización:
+### 🤖 Automatización:
 
 * Burp Repeater
 * Turbo Intruder
@@ -176,51 +172,51 @@ engine.openGate('race')
 
 ***
 
-### 🌐 Escenarios reales
+## 🌐 Escenarios reales
 
-#### 🛒 E-commerce:
+### 🛒 E-commerce:
 
 * Aplicar cupones múltiples veces
 * Comprar sin saldo suficiente
 
-#### 🔑 Autenticación:
+### 🔑 Autenticación:
 
 * Bypass de intentos de login
 * Fuerza bruta en paralelo
 
-#### 💰 Sistemas financieros:
+### 💰 Sistemas financieros:
 
 * Doble gasto
 * Manipulación de saldo
 
-#### 📝 Registro:
+### 📝 Registro:
 
 * Saltar verificación
 * Crear cuentas sin validación
 
 ***
 
-### 💥 Impacto
+## 💥 Impacto
 
-#### ☠️ Crítico:
+### ☠️ Crítico:
 
 * Pérdida financiera
 * Bypass de autenticación
 * Toma de cuentas
 
-#### 🔥 Alto:
+### 🔥 Alto:
 
 * Bypass de rate limiting
 * Transacciones no autorizadas
 
-#### ⚠️ Medio:
+### ⚠️ Medio:
 
 * Reutilización de códigos
 * Disrupción de flujos
 
 ***
 
-### 📖 Ejemplos reales
+## 📖 Ejemplos reales
 
 * Starbucks: generación infinita de dinero
 * E-commerce: cupones duplicados
@@ -229,37 +225,37 @@ engine.openGate('race')
 
 ***
 
-### 🛡️ Mecanismos de defensa
+## 🛡️ Mecanismos de defensa
 
-#### 🗄️ Base de datos:
+### 🗄️ Base de datos:
 
 ```sql
 SELECT * FROM accounts FOR UPDATE;
 ```
 
-#### 📱 Aplicación:
+### 📱 Aplicación:
 
 ```python
 select_for_update()
 ```
 
-#### 🔒 Locking optimista:
+### 🔒 Locking optimista:
 
 * Uso de versiones
 * Detección de cambios concurrentes
 
-#### 📊 Gestión de estado:
+### 📊 Gestión de estado:
 
 * Operaciones atómicas
 * Evitar check-then-use
 
-#### 🛑 Rate limiting:
+### 🛑 Rate limiting:
 
 ```python
 redis.incr()
 ```
 
-#### 🔑 Tokens:
+### 🔑 Tokens:
 
 * Aleatorios
 * Alta entropía
@@ -267,9 +263,9 @@ redis.incr()
 
 ***
 
-### 📋 Metodología de testeo
+## 📋 Metodología de testeo
 
-#### 🎯 Paso a paso:
+### 🎯 Paso a paso:
 
 1. Identificar:
    * Balance
@@ -286,7 +282,7 @@ redis.incr()
    * Tokens reutilizados
    * Estado inconsistente
 
-#### ❌ Problemas comunes:
+### ❌ Problemas comunes:
 
 * Pocas requests
 * No usar HTTP/2
@@ -294,21 +290,21 @@ redis.incr()
 
 ***
 
-### 🚀 Explotación avanzada
+## 🚀 Explotación avanzada
 
-#### 🔗 Multi-stage:
+### 🔗 Multi-stage:
 
 * Encadenar múltiples races
 
-#### 🧱 Construcción parcial:
+### 🧱 Construcción parcial:
 
 * Acceder antes de inicialización
 
-#### ⏰ Predicción temporal:
+### ⏰ Predicción temporal:
 
 * Tokens basados en tiempo
 
-#### ⚔️ Encadenamiento:
+### ⚔️ Encadenamiento:
 
 * Race + IDOR
 * Race + CSRF
@@ -316,20 +312,20 @@ redis.incr()
 
 ***
 
-### 🧰 Herramientas y recursos
+## 🧰 Herramientas y recursos
 
-#### 🛠️ Burp Suite:
+### 🛠️ Burp Suite:
 
 * Turbo Intruder
 * HTTP/2
 
-#### 📜 Scripts:
+### 📜 Scripts:
 
 ```python
 asyncio + aiohttp
 ```
 
-#### 📊 Análisis:
+### 📊 Análisis:
 
 * Comparación de tiempos
 * Logs
