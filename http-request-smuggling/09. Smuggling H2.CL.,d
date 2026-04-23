@@ -1,21 +1,15 @@
----
-icon: file
----
+# 📥 Smuggling H2.CL
 
-# 9. Smuggling H2.CL
-
-## 📥 Smuggling H2.CL
-
-### 📄 Descripción del laboratorio
+## 📄 Descripción del laboratorio
 
 Este laboratorio es vulnerable a **HTTP request smuggling** porque el servidor front-end degrada las solicitudes **HTTP/2 a HTTP/1.1** incluso cuando presentan una longitud ambigua.
 
 El objetivo es realizar un ataque **H2.CL (HTTP/2 → Content-Length)** para provocar que el navegador de la víctima cargue y ejecute un archivo JavaScript malicioso desde el **exploit server**, ejecutando `alert(document.cookie)`.\
 El usuario víctima accede a la **home cada 10 segundos**.
 
-***
 
-### 📚 Teoría
+
+## 📚 Teoría
 
 En este laboratorio explotamos un ataque de **request smuggling H2.CL**, manipulando la cabecera **Content-Length** en una petición HTTP/2 degradada.
 
@@ -25,9 +19,9 @@ Mediante el **envenenamiento de la cola de respuestas**, conseguimos que la peti
 
 El ataque depende del **timing**, ya que es necesario que la petición smuggleada coincida con el acceso periódico del usuario víctima.
 
-***
 
-### 📝 Práctica
+
+## 📝 Práctica
 
 El objetivo es que a la víctima se le muestre un **alert con su cookie de sesión**. La víctima accede a la página principal cada **10 segundos**.
 
