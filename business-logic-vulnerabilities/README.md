@@ -1,7 +1,3 @@
----
-icon: folder-open
----
-
 # Business logic vulnerabilities
 
 ## 🔍 ¿Qué son las vulnerabilidades de lógica de negocio?
@@ -12,7 +8,7 @@ A diferencia de vulnerabilidades técnicas (SQLi, XSS), estas se basan en **supo
 
 ***
 
-### ⚠️ Por qué son peligrosas
+## ⚠️ Por qué son peligrosas
 
 * Difíciles de detectar (no las encuentran herramientas automáticas)
 * Difíciles de prevenir (el código puede estar “bien” técnicamente)
@@ -22,42 +18,42 @@ A diferencia de vulnerabilidades técnicas (SQLi, XSS), estas se basan en **supo
 
 ***
 
-### 🎯 Tipos comunes de fallos
+## 🎯 Tipos comunes de fallos
 
-#### 👥 Confianza en el cliente
+### 👥 Confianza en el cliente
 
 * Manipulación de precios en formularios
 * Modificación de cantidades
 * Cambio de roles en cookies
 
-#### ✅ Validación insuficiente
+### ✅ Validación insuficiente
 
 * Cantidades negativas
 * Sin límites máximos
 * Estados inválidos
 
-#### 🔄 Flujos de estado defectuosos
+### 🔄 Flujos de estado defectuosos
 
 * Saltarse pasos obligatorios
 * Acceder a endpoints fuera de orden
 * Eliminar peticiones intermedias
 
-#### ⚖️ Controles inconsistentes
+### ⚖️ Controles inconsistentes
 
 * Validación distinta según endpoint
 * Autorizaciones incoherentes
 
-#### 📐 Overflow / Underflow
+### 📐 Overflow / Underflow
 
 * Precios negativos por overflow
 * Límites superados
 
-#### ⚡Race conditions
+### ⚡Race conditions
 
 * Peticiones simultáneas
 * Doble gasto
 
-#### 💰 Lógica de cupones
+### 💰 Lógica de cupones
 
 * Acumulación indebida
 * Reutilización
@@ -65,26 +61,26 @@ A diferencia de vulnerabilidades técnicas (SQLi, XSS), estas se basan en **supo
 
 ***
 
-### 📌 Ejemplos reales
+## 📌 Ejemplos reales
 
-#### 🛒 E-commerce
+### 🛒 E-commerce
 
 * Cambiar precios
 * Cantidades negativas → dinero
 * Overflow en carrito
 * Abuso de cupones
 
-#### 🔑 Control de acceso
+### 🔑 Control de acceso
 
 * Escalar a admin
 * Manipular parámetros
 
-#### 🔐 Autenticación
+### 🔐 Autenticación
 
 * Eliminar validaciones
 * Saltar pasos
 
-#### 💰 Sistemas financieros
+### 💰 Sistemas financieros
 
 * Errores de redondeo
 * Repetición de transacciones
@@ -92,44 +88,44 @@ A diferencia de vulnerabilidades técnicas (SQLi, XSS), estas se basan en **supo
 
 ***
 
-### 🔎 Metodología de detección
+## 🔎 Metodología de detección
 
-#### 🧠 Entender la aplicación
+###  Entender la aplicación
 
 * Mapear flujos
 * Identificar supuestos
 * Documentar validaciones
 
-#### 🧪 Probar límites
+### Probar límites
 
 * Valores mínimos/máximos
 * Negativos
 * Cero
 * Valores grandes
 
-#### 🔄 Manipular flujos
+### Manipular flujos
 
 * Saltar pasos
 * Cambiar orden
 * Repetir acciones
 
-#### 🛠️ Manipular parámetros
+### Manipular parámetros
 
 * Precio
 * Cantidad
 * IDs
 * Roles
 
-#### 📍 Testear estados
+### Testear estados
 
 * Iniciar en pasos intermedios
 * Usar tokens antiguos
 
 ***
 
-### 🧩 Patrones vulnerables
+## 🧩 Patrones vulnerables
 
-#### 👥 Confianza en cliente
+### 👥 Confianza en cliente
 
 ```json
 {
@@ -138,13 +134,13 @@ A diferencia de vulnerabilidades técnicas (SQLi, XSS), estas se basan en **supo
 }
 ```
 
-#### ✅ Validación insuficiente
+### ✅ Validación insuficiente
 
 ```javascript
 total = price * quantity  // Puede ser negativo
 ```
 
-#### 🔄 Falta de control de flujo
+### 🔄 Falta de control de flujo
 
 ```
 /checkout/select → /payment → /confirm
@@ -152,7 +148,7 @@ total = price * quantity  // Puede ser negativo
 
 Ataque: ir directo a `/confirm`.
 
-#### ⚖️ Validación inconsistente
+### ⚖️ Validación inconsistente
 
 * Registro restringido
 * Update sin restricciones
@@ -160,94 +156,94 @@ Ataque: ir directo a `/confirm`.
 
 ***
 
-### ⚔️ Técnicas de explotación
+## ⚔️ Técnicas de explotación
 
-#### 📐 Integer overflow
+###  Integer overflow
 
 * Forzar valores extremos
 * Convertir precios en negativos
 
-#### 🎟️ Coupon stacking
+### Coupon stacking
 
 * Combinar cupones
 * Automatizar
 
-#### 🔄 Bypass de workflow
+### Bypass de workflow
 
 * Saltar validaciones
 * Acceso directo a endpoints
 
-#### 🔐 Abuso criptográfico
+### Abuso criptográfico
 
 * Uso de errores como oracle
 * Modificación de tokens
 
-#### 📝 Problemas de parsing
+### Problemas de parsing
 
 * Emails mal interpretados
 * Encoding extraño
 
 ***
 
-### 💥 Impacto
+## 💥 Impacto
 
-#### 💰 Financiero
+### 💰 Financiero
 
 * Pérdidas económicas
 * Fraude
 * Abuso de descuentos
 
-#### 🔑 Control de acceso
+### 🔑 Control de acceso
 
 * Acceso admin
 * Escalada de privilegios
 
-#### 📊 Integridad de datos
+### 📊 Integridad de datos
 
 * Manipulación de inventario
 * Fraude en pedidos
 
-#### 📉 Reputación
+### 📉 Reputación
 
 * Pérdida de confianza
 * Problemas legales
 
 ***
 
-### 🛡️ Mitigación
+## 🛡️ Mitigación
 
-#### ✅ Validación en servidor
+### Validación en servidor
 
 * No confiar en el cliente
 * Recalcular todo
 
-#### 🔄 Control de estado
+### Control de estado
 
 * Validar cada paso
 * No permitir saltos
 
-#### 🧪 Testing
+### Testing
 
 * Revisiones manuales
 * Threat modeling
 * Edge cases
 
-#### 🚫 Restricciones de entrada
+### Restricciones de entrada
 
 * Límites claros
 * Tipos adecuados
 
-#### ⚛️ Atomicidad
+### Atomicidad
 
 * Transacciones
 * Locks
 
-#### 🔒 Mínimo privilegio
+### Mínimo privilegio
 
 * Permisos restrictivos
 * Verificación constante
 
-#### 🛡️ Defensa en profundidad
+### Defensa en profundidad
 
 * Logs
 * Rate limiting
@@ -255,7 +251,7 @@ Ataque: ir directo a `/confirm`.
 
 ***
 
-### 📖 Casos reales
+## 📖 Casos reales
 
 * Steam (2015): cantidades negativas → crédito
 * Amazon (2014): manipulación de precios
