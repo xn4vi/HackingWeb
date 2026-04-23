@@ -1,7 +1,3 @@
----
-icon: folder-open
----
-
 # OAuth authentication
 
 ## 🔑 ¿Qué es la autenticación OAuth?
@@ -12,7 +8,7 @@ Sin embargo, muchos desarrolladores empezaron a usarlo para login: solicitan el 
 
 Posteriormente se creó **OpenID Connect (OIDC)** sobre OAuth para estandarizar la autenticación, añadiendo ID Tokens y scopes uniformes.
 
-#### 🔍 Actores principales:
+### 🔍 Actores principales:
 
 * **Cliente (Client Application)**: la web donde inicias sesión
 * **Proveedor OAuth / Authorization Server**: quien te autentica (ej. Google)
@@ -20,9 +16,9 @@ Posteriormente se creó **OpenID Connect (OIDC)** sobre OAuth para estandarizar 
 
 ***
 
-### 🔄 Tipos de Grant en OAuth
+## 🔄 Tipos de Grant en OAuth
 
-#### 📜 Authorization Code Grant (aplicaciones backend)
+### 📜 Authorization Code Grant (aplicaciones backend)
 
 1. El navegador solicita login al proveedor OAuth (client\_id, redirect\_uri, scope)
 2. El usuario se autentica y da consentimiento
@@ -32,7 +28,7 @@ Posteriormente se creó **OpenID Connect (OIDC)** sobre OAuth para estandarizar 
 
 El token no pasa por el navegador. El `client_secret` autentica servidor a servidor.
 
-#### ⚡ Implicit Grant (aplicaciones SPA)
+### ⚡ Implicit Grant (aplicaciones SPA)
 
 1. El navegador solicita login (response\_type=token)
 2. El usuario se autentica
@@ -43,7 +39,7 @@ No hay `client_secret` ni canal seguro backend.
 
 ***
 
-### 📌 Parámetros clave de OAuth
+## 📌 Parámetros clave de OAuth
 
 ```http
 GET /authorize?client_id=12345
@@ -61,15 +57,15 @@ GET /authorize?client_id=12345
 
 ***
 
-### ⚠️ Clases de vulnerabilidades
+## ⚠️ Clases de vulnerabilidades
 
-#### 🔓 Bypass de autenticación (Implicit Flow)
+### 🔓 Bypass de autenticación (Implicit Flow)
 
 * El navegador envía datos del usuario al servidor
 * El servidor confía sin validar el token
 * El atacante modifica email/usuario → acceso como otra persona
 
-#### 🔄 CSRF por falta de `state`
+### 🔄 CSRF por falta de `state`
 
 * El atacante inicia flujo OAuth con su cuenta
 * Obtiene un `code`
@@ -77,13 +73,13 @@ GET /authorize?client_id=12345
 * La cuenta del atacante queda vinculada a la víctima
 * El atacante accede a la cuenta de la víctima
 
-#### 🕵️ Robo de Authorization Code (redirect\_uri)
+### 🕵️ Robo de Authorization Code (redirect\_uri)
 
 * El atacante cambia `redirect_uri`
 * Si no se valida correctamente, el `code` se envía al atacante
 * Usa ese código para autenticarse como la víctima
 
-#### 🌐 Robo de Access Token mediante Open Redirect
+### 🌐 Robo de Access Token mediante Open Redirect
 
 Aunque no se pueda cambiar el dominio:
 
@@ -94,7 +90,7 @@ redirect_uri=/oauth-callback/../post/next?path=https://evil.com
 * Se abusa de open redirect
 * El token termina en el servidor del atacante
 
-#### 📤 Robo de token mediante Proxy Page
+### 📤 Robo de token mediante Proxy Page
 
 * Se encuentra una página que filtra la URL (ej. con postMessage)
 * Se usa como `redirect_uri`
@@ -106,7 +102,7 @@ Ejemplo:
 parent.postMessage({data: window.location.href}, '*')
 ```
 
-#### 🌐 SSRF mediante registro dinámico (OIDC)
+### 🌐 SSRF mediante registro dinámico (OIDC)
 
 * OIDC permite registrar clientes vía `/registration`
 * Si no requiere autenticación → cualquiera puede registrarse
@@ -115,7 +111,7 @@ parent.postMessage({data: window.location.href}, '*')
 
 ***
 
-### 🔗 OpenID Connect (OIDC)
+## 🔗 OpenID Connect (OIDC)
 
 OIDC extiende OAuth con autenticación estandarizada:
 
@@ -126,7 +122,7 @@ OIDC extiende OAuth con autenticación estandarizada:
 
 ***
 
-### 🕵️ Checklist de reconocimiento
+## 🕵️ Checklist de reconocimiento
 
 1. Interceptar tráfico con Burp durante el login OAuth
 2. Buscar endpoints `/authorization` o `/auth`
@@ -139,27 +135,27 @@ OIDC extiende OAuth con autenticación estandarizada:
 
 ***
 
-### 🛡️ Buenas prácticas de defensa
+## 🛡️ Buenas prácticas de defensa
 
-#### ✅ Validar `redirect_uri`
+### ✅ Validar `redirect_uri`
 
 * Usar whitelist exacta
 * No permitir patrones, parámetros extra ni fragments
 * Validar tanto en autorización como en intercambio de token
 
-#### 🔐 Usar el parámetro `state`
+### 🔐 Usar el parámetro `state`
 
 * Generar valor único y no predecible
 * Asociarlo a la sesión del usuario
 * Validarlo en la respuesta
 
-#### 🔍 Verificar tokens en el servidor
+### 🔍 Verificar tokens en el servidor
 
 * No confiar en datos enviados por el navegador
 * Validar que el token corresponde al usuario
 * Preferir Authorization Code Flow frente a Implicit Flow
 
-#### 🛠️ Proteger el registro OpenID
+### 🛠️ Proteger el registro OpenID
 
 * Requerir autenticación para `/registration`
 * Validar todas las URLs (`logo_uri`, `jwks_uri`)
