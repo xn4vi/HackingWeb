@@ -189,7 +189,7 @@ retire --js --path /ruta/al/js
 
 ## 🔓 Access control
 
-> 📖 **[Más recursos sobre Access Control Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre Access Control Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/access-control)**
 
 ### 1. Acceso sin autenticación y tras cierre de sesión
 
@@ -260,7 +260,7 @@ retire --js --path /ruta/al/js
 
 ## 🔌 API Testing
 
-> 📖 **[Más recursos sobre APIs Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre APIs Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/api-testing)**
 
 ### 1. Documentación expuesta públicamente
 
@@ -319,7 +319,7 @@ retire --js --path /ruta/al/js
 
 ## 🔑 Autenticación
 
-> 📖 **[Más recursos sobre Autentication Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre Autentication Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/authentication)**
 
 ### 1. Enumeración de usuarios
 
@@ -420,7 +420,7 @@ email=victim@target.com
 
 ## 👆 Clickjacking
 
-> 📖 **[Más recursos sobre Clickjacking Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre Clickjacking Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/clickjacking)**
 
 ### 1. Verificar si la aplicación es vulnerable a Clickjacking
 
@@ -569,8 +569,6 @@ email=victim@target.com
 
 ## 🎯 Cabeceras de seguridad
 
-> 📖 **[Más recursos sobre Security Headers Vulnerabilities](https://github.com/tu-repo/...)**
-
 ### 1. Análisis general de cabeceras
 
 * [ ] Ejecutar [**shcheck**](https://github.com/santoru/shcheck) o [**SecurityHeaders.com**](https://securityheaders.com) para obtener una visión general del estado de las cabeceras de seguridad de la aplicación.
@@ -651,7 +649,7 @@ python shcheck.py https://target.com
 
 ## 🎭 CSRF
 
-> 📖 **[Más recursos sobre CSRF Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre CSRF Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/cross-site-request-forgery-csrf)**
 
 ### 1. Sin defensa
 
@@ -739,7 +737,7 @@ _method=GET&email=attacker@evil.com
 
 ## 💉 XSS
 
-> 📖 **[Más recursos sobre XSS Vulnerabilities](https://github.com/tu-repo/...)**
+> 📖 **[Más recursos sobre XSS Vulnerabilities](https://github.com/xn4vi/HackingWeb/tree/main/cross-site-scripting-xss)**
 
 
 ### Nota sobre detección automática
