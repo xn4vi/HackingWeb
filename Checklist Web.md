@@ -49,12 +49,6 @@ site:target.com "index of"
 * [ ] [**Wayback Machine**](https://web.archive.org) — recuperar versiones antiguas de la aplicación y endpoints históricos
 * [ ] [**Shodan**](https://www.shodan.io) — buscar información sobre el servidor: puertos abiertos, tecnologías, certificados
 * [ ] [**crt.sh**](https://crt.sh/?q=target.com) — consultar certificados SSL emitidos para el dominio
-* [ ] Usar **gau** o **waybackurls** para recuperar URLs históricas con parámetros que puedan ser interesantes:
-
-```bash
-gau target.com | grep "?"
-waybackurls target.com | grep "?"
-```
 
 
 ### 2. Detección de WAF
