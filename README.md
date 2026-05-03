@@ -29,7 +29,7 @@ Cada categoría incluye explicación teórica, payloads y resolución paso a pas
 | [💻 OS Command Injection](./os-command-injection/) | 5 | Inyección simple, blind con delays, redirección de salida y OOB |
 | [📄 XXE Injection](./xml-external-entity-xxe-injection/) | 9 | Entidades externas, blind OOB, exfiltración vía DTD y XInclude |
 | [🧩 SSTI — Template Injection](./server-side-template-injection-ssti/) | 6 | ERB, Tornado, Freemarker, lenguaje desconocido y sandbox escape |
-| [🗄️ NoSQL Injection](./nosql-injection/) | — | Bypass de auth y operator injection en MongoDB |
+| [🗄️ NoSQL Injection](./nosql-injection/) | 4 | Bypass de auth y operator injection en MongoDB |
 
 ---
 
@@ -39,8 +39,8 @@ Cada categoría incluye explicación teórica, payloads y resolución paso a pas
 |-----------|:----:|-------------|
 | [🔐 Authentication](./authentication/) | 13 | Bypass 2FA, enumeración, fuerza bruta y password reset poisoning |
 | [🔑 Access Control](./access-control/) | 11 | IDOR, bypass por URL/HTTP, filtración de contraseñas y escalación de privilegios |
-| [🪙 JWT Attacks](./jwt/) | — | Algoritmo none, firma débil, bypass de validación y ataques JWK |
-| [🔗 OAuth Authentication](./oauth-authentication/) | — | Robo de tokens, open redirect, CSRF en flujos y implicit grant |
+| [🪙 JWT Attacks](./jwt/) | 6 | Algoritmo none, firma débil, bypass de validación y ataques JWK |
+| [🔗 OAuth Authentication](./oauth-authentication/) | 6 | Robo de tokens, open redirect, CSRF en flujos y implicit grant |
 
 ---
 
@@ -50,7 +50,7 @@ Cada categoría incluye explicación teórica, payloads y resolución paso a pas
 |-----------|:----:|-------------|
 | [🌐 SSRF](./server-side-request-forgery-ssrf/) | 4 | Básico local/interno, blind OOB y bypass de filtros blacklist |
 | [📦 Insecure Deserialization](./insecure-deserialization/) | 9 | PHP, Java, gadget chains y explotación de métodos mágicos |
-| [📁 File Upload Vulnerabilities](./file-upload-vulnerabilities/) | — | Web shell, bypass content-type, path traversal en uploads |
+| [📁 File Upload Vulnerabilities](./file-upload-vulnerabilities/) | 6 | Web shell, bypass content-type, path traversal en uploads |
 | [🧠 Business Logic Vulnerabilities](./business-logic-vulnerabilities/) | 10 | Confianza en cliente, reglas rotas, máquinas de estado y dinero infinito |
 
 ---
@@ -72,7 +72,7 @@ Cada categoría incluye explicación teórica, payloads y resolución paso a pas
 | [🖱️ Clickjacking](./clickjacking/) | 4 | Con CSRF token, precargado, bypass anti-frame y multi-step |
 | [🔄 CSRF](./cross-site-request-forgery-csrf/) | 7 | Sin defensa, tokens duplicados, SameSite Lax y Referer bypass |
 | [🌍 CORS Misconfiguration](./cross-origin-resource-sharing-cors/) | 3 | Básico con credenciales, null origin y protocolo inseguro |
-| [🏠 HTTP Host Header Attacks](./http-host-header-attacks/) | — | Inyección en Host, password reset y bypass de autenticación |
+| [🏠 HTTP Host Header Attacks](./http-host-header-attacks/) | 6 | Inyección en Host, password reset y bypass de autenticación |
 | [🔗 DOM-Based Vulnerabilities](./dom-based-vulnerabilities/) | 4 | XSS via web messages, JSON.parse y open redirect en DOM |
 | [☣️ Prototype Pollution](./prototype-pollution/) | 3 | Client-side via APIs, XSS en DOM y vectores alternativos |
 | [🔌 WebSocket Attacks](./websockets/) | 3 | Manipulación de handshake, CSWSH y bypass de filtros XSS |
@@ -84,7 +84,7 @@ Cada categoría incluye explicación teórica, payloads y resolución paso a pas
 | Categoría | Labs | Descripción |
 |-----------|:----:|-------------|
 | [⚡ Race Conditions](./race-conditions/) | 5 | Bypass de rate limiting, límites de descuento y tokens de reset |
-| [🔷 GraphQL Vulnerabilities](./graphql-api-vulnerabilities/) | — | Introspección, bypass de auth, batching y SSRF via GraphQL |
+| [🔷 GraphQL Vulnerabilities](./graphql-api-vulnerabilities/) | 5 | Introspección, bypass de auth, batching y SSRF via GraphQL |
 | [🛠️ API Testing](./api-testing/) | 5 | Documentación expuesta, parameter pollution y mass assignment |
 | [🤖 Web LLM Attacks](./web-llm-attacks/) | 4 | Agencia excesiva, explotación de APIs y prompt injection |
 | [🔀 Path Traversal](./path-traversal/) | 6 | Simple, absoluto, doble codificación y null byte |
