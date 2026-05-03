@@ -1,4 +1,4 @@
-# Business logic vulnerabilities
+# 💰 Business logic vulnerabilities
 
 ## 🔍 ¿Qué son las vulnerabilidades de lógica de negocio?
 
