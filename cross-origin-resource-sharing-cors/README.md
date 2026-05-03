@@ -1,4 +1,4 @@
-# Cross-origin resource sharing (CORS)
+# 📡 Cross-origin resource sharing (CORS)
 
 ## 🔍 ¿Qué es CORS?
 
