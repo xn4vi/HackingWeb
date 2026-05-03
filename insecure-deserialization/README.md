@@ -1,4 +1,4 @@
-# Insecure deserialization
+# 🔓 Insecure deserialization
 
 ## 🔍 ¿Qué es Serialization y Deserialization?
 
