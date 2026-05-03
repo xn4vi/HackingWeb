@@ -1,4 +1,4 @@
-# Prototype pollution
+# 🧪 Prototype pollution
 
 ## 1️⃣ ¿Qué es Prototype Pollution?
 
