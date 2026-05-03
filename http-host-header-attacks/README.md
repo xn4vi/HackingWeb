@@ -1,6 +1,6 @@
-# HTTP Host header attacks
+# 🌐 HTTP Host header attacks
 
-## 🌐 ¿Qué son los ataques HTTP Host Header?
+## 🔍 ¿Qué son los ataques HTTP Host Header?
 
 Los ataques de **HTTP Host Header** explotan aplicaciones web que manejan el valor de la cabecera `Host` de forma insegura.
 
