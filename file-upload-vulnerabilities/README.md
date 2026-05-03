@@ -1,6 +1,6 @@
-# File upload vulnerabilities
+# 📤 File upload vulnerabilities
 
-## 📤 ¿Qué son las vulnerabilidades de File Upload?
+## 🔍 ¿Qué son las vulnerabilidades de File Upload?
 
 Las **vulnerabilidades de subida de archivos** ocurren cuando una aplicación permite subir archivos sin validar correctamente qué se está subiendo.
 
