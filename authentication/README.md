@@ -1,6 +1,6 @@
-# Authentication
+# 🔐 Authentication
 
-## 🔐 ¿Qué son las vulnerabilidades de autenticación?
+## 🔍 ¿Qué son las vulnerabilidades de autenticación?
 
 Las **vulnerabilidades de autenticación** son fallos de seguridad que permiten a un atacante:
 
