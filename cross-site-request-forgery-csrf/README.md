@@ -1,4 +1,4 @@
-# Cross-site request forgery (CSRF)
+# 🔒 Cross-site request forgery (CSRF)
 
 ## 🔍 ¿Qué es CSRF?
 
