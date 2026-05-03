@@ -1,6 +1,6 @@
-# GraphQL API vulnerabilities
+# 🧬 GraphQL API vulnerabilities
 
-## 🧬 ¿Qué es GraphQL?
+## 🔍 ¿Qué es GraphQL?
 
 **GraphQL** es un lenguaje de consultas para APIs desarrollado por Facebook en 2012 y liberado como open source en 2015.
 
