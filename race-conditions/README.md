@@ -1,4 +1,4 @@
-# Race conditions
+# 🚀 Race conditions
 
 ## 🔍 ¿Qué son las Race Conditions?
 
