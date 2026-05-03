@@ -1,4 +1,4 @@
-# XML external entity (XXE) injection
+# 🧾 XML external entity (XXE) injection
 
 ## 🔍 ¿Qué es XXE?
 
