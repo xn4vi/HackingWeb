@@ -1,6 +1,6 @@
 # 📤 API Testing
 
-## 🌐 ¿Qué es API Testing?
+## 🔍 ¿Qué es API Testing?
 
 API (Application Programming Interface) testing consiste en evaluar la seguridad, funcionalidad y fiabilidad de APIs. A diferencia del testing web tradicional que se centra en interfaces de usuario, el API testing examina:
 
