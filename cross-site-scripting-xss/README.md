@@ -1,4 +1,4 @@
-# Cross-site scripting (XSS)
+# 🌐 Cross-site scripting (XSS)
 
 ## 🔍 ¿Qué es Cross-Site Scripting (XSS)?
 
