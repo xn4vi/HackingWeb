@@ -1,6 +1,6 @@
-# OAuth authentication
+# 🔑 OAuth authentication
 
-## 🔑 ¿Qué es la autenticación OAuth?
+## 🔍 ¿Qué es la autenticación OAuth?
 
 OAuth 2.0 fue diseñado para **autorización**, es decir, permitir que una aplicación acceda a ciertos datos de otro servicio en tu nombre. No fue pensado para autenticación (probar quién eres).
 
@@ -8,7 +8,7 @@ Sin embargo, muchos desarrolladores empezaron a usarlo para login: solicitan el 
 
 Posteriormente se creó **OpenID Connect (OIDC)** sobre OAuth para estandarizar la autenticación, añadiendo ID Tokens y scopes uniformes.
 
-### 🔍 Actores principales:
+### 🎯 Actores principales:
 
 * **Cliente (Client Application)**: la web donde inicias sesión
 * **Proveedor OAuth / Authorization Server**: quien te autentica (ej. Google)
