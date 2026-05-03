@@ -1,6 +1,6 @@
 # 🌐 Web cache deception
 
-## 🧠 ¿Qué es Web Cache Deception?
+## 🔍 ¿Qué es Web Cache Deception?
 
 Web Cache Deception es una vulnerabilidad en la que un atacante engaña a un sistema de caché (CDN, proxy inverso o caché web) para que almacene contenido sensible y específico de un usuario, explotando diferencias en cómo la caché y el servidor de origen interpretan las URLs. El ataque funciona porque:
 
