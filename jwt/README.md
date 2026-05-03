@@ -1,6 +1,6 @@
-# JWT
+# 🔑 JWT
 
-## 🔑 ¿Qué es un JSON Web Token?
+## 🔍 ¿Qué es un JSON Web Token?
 
 Un JSON Web Token (JWT) es un formato de token compacto y seguro para URL que se utiliza para transmitir información (claims) entre partes. Consta de tres partes codificadas en Base64URL separadas por puntos:
 
