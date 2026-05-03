@@ -1,4 +1,4 @@
-# 🔌 API Testing
+# 📤 API Testing
 
 ## 🌐 ¿Qué es API Testing?
 
