@@ -1,4 +1,4 @@
-# SQL Injection
+# 💉 SQL Injection
 
 ## 🔍 ¿Qué es SQL Injection? (SQLI)
 
