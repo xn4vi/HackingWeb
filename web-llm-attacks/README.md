@@ -1,6 +1,6 @@
-# Web LLM attacks
+# 🤖 Web LLM attacks
 
-## 🤖 ¿Qué son los ataques Web LLM?
+## 🔍 ¿Qué son los ataques Web LLM?
 
 Los ataques contra **LLM en aplicaciones web** explotan la integración entre modelos de lenguaje (LLM) y aplicaciones.
 
