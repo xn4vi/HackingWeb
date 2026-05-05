@@ -98,6 +98,8 @@ x=x
 ```
  
 El frontend ignora TE y reenvía 3 bytes del body. El backend recibe un chunk inválido y responde con un **error de sincronización**. Esto confirma que el front no procesa TE pero el back sí.
+
+![](../images/2/smug1.png)
  
 #### ➡️ Paso 2 — Validar que el chunk `0` es correcto
  
@@ -115,6 +117,8 @@ Transfer-Encoding: chunked
 ```
  
 Esta petición responde **200 OK**.
+
+![](../images/2/smug2.png)
  
 Para confirmar que el backend realmente valida el chunked, cambiamos el `0` por `X`:
  
@@ -130,6 +134,8 @@ X
 ```
  
 El backend **rechaza** la petición porque `X` no es un cierre de chunk válido. Escenario confirmado.
+
+![](../images/2/smug3.png)
  
 #### ➡️ Paso 3 — Explotar el escenario
  
@@ -149,6 +155,8 @@ X-Ignore: x
 ```
  
 > Al enviar esta petición **dos veces seguidas**, la segunda solicitud llega al backend con el prefijo smugleado. El servidor procesa el `GET /error` como una nueva petición y responde **404**, confirmando la explotación.
+
+![](../images/2/smug4.png)
  
 ---
  
@@ -191,10 +199,14 @@ x=1
 El valor `9f` es el **tamaño en hexadecimal** del bloque que comienza en `POST /404` y termina en `x=1` (sin incluir el `0` final). El `0` al final marca el cierre del chunk para el frontend.
  
 > **Cómo calcular `9f`:** Selecciona el texto desde `POST /404 HTTP/1.1` hasta la última línea del body interno (`x=1`), cuenta los bytes y conviértelos a hexadecimal.
+
+![](../images/2/smug5.png)
  
 #### ➡️ Paso 2 — Calcular el Content-Length de la petición interna
  
 El `Content-Length` de la petición smugleada (`POST /404`) se calcula en base al body de esa petición interna (`x=1`). Puede ser igual o **mayor** que el tamaño real sin problema — eso hace que el backend espere más bytes, leyendo del buffer de la siguiente petición legítima.
+
+![](../images/2/smug6.png)
  
 #### ➡️ Paso 3 — Calcular el Content-Length global
  
@@ -221,6 +233,8 @@ x=1
  
 > **Frontend:** Lee chunked. El chunk `9f` contiene la petición smugleada. El `0` marca el fin → reenvía todo al backend.  
 > **Backend:** Lee CL=4. Solo procesa `9f\r\n`. El resto del body (el `POST /404…`) queda en el buffer y se antepone a la siguiente petición entrante.
+
+![](../images/2/smug7.png)
  
 ---
  
