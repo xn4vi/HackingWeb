@@ -109,7 +109,7 @@ Enviamos una petición bien formada con el cierre de chunk:
 POST / HTTP/1.1
 Host: <target>
 Content-Type: application/x-www-form-urlencoded
-Content-Length: 37
+Content-Length: 5
 Transfer-Encoding: chunked
  
 0
@@ -118,7 +118,8 @@ Transfer-Encoding: chunked
  
 Esta petición responde **200 OK**.
 
-![](../images/2/smug2.png)
+<img width="1434" height="244" alt="image" src="https://github.com/user-attachments/assets/1047148e-9ab0-4f82-b4da-77a584c48456" />
+<br>
  
 Para confirmar que el backend realmente valida el chunked, cambiamos el `0` por `X`:
  
@@ -126,7 +127,7 @@ Para confirmar que el backend realmente valida el chunked, cambiamos el `0` por 
 POST / HTTP/1.1
 Host: <target>
 Content-Type: application/x-www-form-urlencoded
-Content-Length: 37
+Content-Length: 5
 Transfer-Encoding: chunked
  
 X
@@ -135,7 +136,8 @@ X
  
 El backend **rechaza** la petición porque `X` no es un cierre de chunk válido. Escenario confirmado.
 
-![](../images/2/smug3.png)
+<img width="1237" height="217" alt="image" src="https://github.com/user-attachments/assets/681bcb77-e382-4eb0-958a-e24bc865b1cf" />
+
  
 #### ➡️ Paso 3 — Explotar el escenario
  
