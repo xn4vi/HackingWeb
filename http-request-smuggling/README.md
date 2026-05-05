@@ -10,7 +10,7 @@ HTTP request smuggling es una técnica que interfiere con cómo un sitio web pro
 
 El problema principal es el desacuerdo entre dos cabeceras que especifican la longitud del cuerpo de la petición:
 
-### Content-Length - especifica el tamaño del body en bytes:
+### 📏 Content-Length - especifica el tamaño del body en bytes:
 
 ```http
 POST / HTTP/1.1
@@ -19,7 +19,7 @@ Content-Length: 11
 hello=world
 ```
 
-### Transfer-Encoding: chunked - el body se envía en chunks:
+### 📦 Transfer-Encoding: chunked - el body se envía en chunks:
 
 ```http
 POST / HTTP/1.1
@@ -31,7 +31,7 @@ hello=world
 
 ```
 
-Cuando ambas cabeceras están presentes y el front-end y el back-end priorizan diferentes, se produce un desync.
+⚠️ Cuando ambas cabeceras están presentes y el front-end y el back-end priorizan diferentes, se produce un desync.
 
 
 ## 🔀 Escenarios CL.TE y TE.CL
@@ -83,7 +83,7 @@ x=1
  
 El objetivo es confirmar que el **frontend ignora TE** y el **backend sí lo procesa**.
  
-#### Paso 1 — Provocar un error de sincronización
+#### ➡️ Paso 1 — Provocar un error de sincronización
  
 Enviamos una petición con `Transfer-Encoding: chunked` pero con un body inválido para chunked (`x=x`):
  
@@ -99,7 +99,7 @@ x=x
  
 El frontend ignora TE y reenvía 3 bytes del body. El backend recibe un chunk inválido y responde con un **error de sincronización**. Esto confirma que el front no procesa TE pero el back sí.
  
-#### Paso 2 — Validar que el chunk `0` es correcto
+#### ➡️ Paso 2 — Validar que el chunk `0` es correcto
  
 Enviamos una petición bien formada con el cierre de chunk:
  
@@ -131,7 +131,7 @@ X
  
 El backend **rechaza** la petición porque `X` no es un cierre de chunk válido. Escenario confirmado.
  
-#### Paso 3 — Explotar el escenario
+#### ➡️ Paso 3 — Explotar el escenario
  
 Con el escenario confirmado, construimos el payload smugleado. El `Content-Length` global se mide **hasta el `0` de cierre del chunk** (inclusivo). El resto es la petición smugleada.
  
@@ -167,7 +167,7 @@ El frontend lee el body en modo chunked y para cuando encuentra el `0` de cierre
  
 La construcción requiere calcular tres valores con precisión.
  
-#### Paso 1 — Añadir el payload smugleado como chunk
+#### ➡️ Paso 1 — Añadir el payload smugleado como chunk
  
 ```http
 POST / HTTP/1.1
@@ -192,11 +192,11 @@ El valor `9f` es el **tamaño en hexadecimal** del bloque que comienza en `POST 
  
 > **Cómo calcular `9f`:** Selecciona el texto desde `POST /404 HTTP/1.1` hasta la última línea del body interno (`x=1`), cuenta los bytes y conviértelos a hexadecimal.
  
-#### Paso 2 — Calcular el Content-Length de la petición interna
+#### ➡️ Paso 2 — Calcular el Content-Length de la petición interna
  
 El `Content-Length` de la petición smugleada (`POST /404`) se calcula en base al body de esa petición interna (`x=1`). Puede ser igual o **mayor** que el tamaño real sin problema — eso hace que el backend espere más bytes, leyendo del buffer de la siguiente petición legítima.
  
-#### Paso 3 — Calcular el Content-Length global
+#### ➡️ Paso 3 — Calcular el Content-Length global
  
 El `Content-Length` de la petición externa solo debe cubrir el **número de línea del chunk** (es decir, el valor `9f` más el CRLF que lo sigue). En este ejemplo, eso equivale a **4 bytes**.
  
@@ -259,17 +259,17 @@ x=1
 
 HTTP/2 introduce nuevos vectores cuando los servidores hacen downgrade a HTTP/1.1:
 
-### H2.CL:
+### 🔹 H2.CL:
 
 * Front-end usa longitud de frame HTTP/2
 * Back-end usa Content-Length tras downgrade
 
-### H2.TE:
+### 🔹 H2.TE:
 
 * Front-end: longitud de frame HTTP/2
 * Back-end: `Transfer-Encoding: chunked` → desync
 
-### CRLF Injection:
+### 🔹 CRLF Injection:
 
 ```
 # Header HTTP/2
@@ -278,7 +278,7 @@ foo: bar\r\nTransfer-Encoding: chunked
 # HTTP/1.1 lo interpreta como dos headers
 ```
 
-### Request Tunnelling:
+### 🔹 Request Tunnelling:
 
 * Se hace smuggling usando peticiones HEAD
 * El front-end sobrelee y expone respuestas encapsuladas
@@ -287,7 +287,7 @@ foo: bar\r\nTransfer-Encoding: chunked
 
 ## 🌐 Variantes impulsadas por el navegador
 
-### CL.0:
+### 🔹 CL.0:
 
 ```http
 POST /resources/image.svg HTTP/1.1
@@ -298,13 +298,13 @@ Foo: x
 0
 ```
 
-### 0.CL:
+### 🔹 0.CL:
 
 * Front-end ignora Content-Length
 * Back-end lo procesa
 * Requiere un early response gadget
 
-### Client-Side Desync:
+### 🔹 Client-Side Desync:
 
 ```javascript
 fetch(url, {method:'POST', body:'smuggled request', mode:'cors'})
@@ -322,20 +322,20 @@ fetch(url, {method:'POST', body:'smuggled request', mode:'cors'})
 
 ## 🎯 Tipos de ataque
 
-### Response Queue Poisoning:
+### 💣 Response Queue Poisoning:
 
 * Se inyecta una petición completa
 * El back-end envía 2 respuestas
 * El front-end espera 1 → desincronización
 * Usuarios reciben respuestas incorrectas
 
-### Web Cache Poisoning:
+### 📦 Web Cache Poisoning:
 
 * Se inyecta redirección maliciosa
 * Se cachea para un recurso estático
 * Todos los usuarios reciben contenido malicioso
 
-### Web Cache Deception:
+### 🕵️ Web Cache Deception:
 
 * Se smugglea `GET /my-account`
 * Se usa la sesión de la víctima
