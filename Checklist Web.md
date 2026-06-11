@@ -342,6 +342,7 @@ retire --js --path /ruta/al/js
 ### 3. Restablecimiento y recuperación de contraseña
 
 * [ ] Evaluar si el proceso de restablecimiento de contraseña es **más débil** que el propio proceso de autenticación.
+* [ ] Probar 0-Click Account Takeover (probar si el reseteo de contraseña distingue entra mayúsculas y minúsculas en el email).
 * [ ] Probar la protección contra **ataques de fuerza bruta** en el formulario de reset.
 * [ ] Probar **Host Header Injection** en el email de reset: el enlace generado usa el header `Host`, que puede manipularse para apuntar a un servidor del atacante.
 
