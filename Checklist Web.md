@@ -1,7 +1,3 @@
----
-tags: [pentesting, web, checklist, cpts]
----
-
 # Checklist Web — Cobertura Completa (97 vulnerabilidades)
 
 > Siempre que sea posible, utilizar al menos 2 cuentas durante las pruebas. Una con privilegios bajos y otra con privilegios de administración, para validar la escalada vertical. Para la escalada horizontal, usar 2 cuentas con el mismo rol.
