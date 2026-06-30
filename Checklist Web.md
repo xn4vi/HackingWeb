@@ -35,7 +35,6 @@
 - [**Correo y generación de documentos**](#-correo-y-generación-de-documentos)
 - [**Tecnologías y configuraciones específicas**](#-tecnologías-y-configuraciones-específicas)
 - [**Denegación de servicio**](#-denegación-de-servicio)
-- [**Matriz de cobertura (97 vulnerabilidades)**](#️-matriz-de-cobertura-97-vulnerabilidades)
 
 *** 
 
