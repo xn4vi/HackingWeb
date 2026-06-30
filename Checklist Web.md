@@ -1,4 +1,8 @@
-# Checklist Web
+---
+tags: [pentesting, web, checklist, cpts]
+---
+
+# Checklist Web — Cobertura Completa (97 vulnerabilidades)
 
 > Siempre que sea posible, utilizar al menos 2 cuentas durante las pruebas. Una con privilegios bajos y otra con privilegios de administración, para validar la escalada vertical. Para la escalada horizontal, usar 2 cuentas con el mismo rol.
 
@@ -28,6 +32,14 @@
 - [**Transmisión Segura**](#-transmisión-segura)
 - [**XXE**](#-xxe)
 - [**Web Cache Poisoning**](#-web-cache-poisoning)
+- [**Inyecciones adicionales (XPath, LDAP, HTML, CRLF)**](#-inyecciones-adicionales)
+- [**OAuth**](#-oauth)
+- [**Open Redirect y Same Site Scripting**](#-open-redirect-y-same-site-scripting)
+- [**Lógica de negocio**](#-lógica-de-negocio)
+- [**Correo y generación de documentos**](#-correo-y-generación-de-documentos)
+- [**Tecnologías y configuraciones específicas**](#-tecnologías-y-configuraciones-específicas)
+- [**Denegación de servicio**](#-denegación-de-servicio)
+- [**Matriz de cobertura (97 vulnerabilidades)**](#️-matriz-de-cobertura-97-vulnerabilidades)
 
 *** 
 
@@ -179,6 +191,76 @@ retire --js --path /ruta/al/js
 
 * [ ] Verificar si existen source maps (`.js.map`) expuestos — revelan el código fuente original.
 
+
+### 11. Divulgación de información y exposición de recursos
+
+* [ ] **Divulgación de información** — revisar respuestas, comentarios HTML/JS y cabeceras en busca de datos sensibles (versiones, rutas internas, IPs privadas, correos, claves).
+* [ ] **Divulgación de información en logs** — buscar logs accesibles (`/logs/`, `error.log`, `debug.log`) o accesibles vía traversal; revisar tokens y trazas.
+* [ ] **Excepciones no controladas** — provocar errores (entradas inválidas, tipos inesperados, métodos raros) y comprobar si se devuelven stack traces, consultas SQL o nombres de framework.
+* [ ] **Divulgación de ruta completa (Full Path Disclosure)** — forzar errores con parámetros tipo array (`param[]=x`) o valores mal formados para filtrar rutas absolutas (`/var/www/...`, `C:\inetpub\...`).
+* [ ] **Metadatos en documentos** — descargar PDFs/DOCX/imágenes públicos y extraer metadatos (autores, software, rutas, usuarios):
+
+```bash
+exiftool documento.pdf
+for f in *.pdf *.docx; do exiftool "$f"; done
+```
+
+* [ ] **Ficheros con código fuente públicos** — buscar copias que sirvan código en claro: `.php~`, `.bak`, `.old`, `.inc`, `.swp`, `.save`, `index.php.txt`.
+* [ ] **Repositorio de código fuente público** — comprobar `.git/`, `.svn/`, `.hg/` y volcar el repo si está expuesto:
+
+```bash
+curl -s https://target.com/.git/HEAD          # 200 = expuesto
+git-dumper https://target.com/.git/ ./dump
+```
+
+* [ ] **Directory listing** — directorios sin `index` que listan su contenido ("Index of /"). Detectar con `feroxbuster`/`gobuster`.
+* [ ] **API KEY accesible públicamente** — buscar claves en JS, repos, `.env` o respuestas, y **validar su alcance/permisos** (no asumir que es inocua):
+
+```bash
+grep -rEi "(api[_-]?key|secret|token|aws_access)" ./js/
+# truffleHog / gitleaks sobre el repo expuesto
+```
+
+* [ ] **Bucket Amazon S3 accesible públicamente** — identificar buckets (`bucket.s3.amazonaws.com`, referencias en HTML/JS) y probar acceso anónimo:
+
+```bash
+aws s3 ls s3://nombre-bucket --no-sign-request
+aws s3 cp s3://nombre-bucket/archivo . --no-sign-request
+# Descubrimiento masivo: cloud_enum, s3scanner
+```
+
+
+### 12. Ficheros y directorios de ejemplo / configuración expuestos
+
+* [ ] **Archivo PHPInfo accesible** — `/phpinfo.php`, `/info.php`, `/test.php`. Revela versión PHP, rutas absolutas, `allow_url_fopen`, `open_basedir`, módulos y variables de entorno.
+* [ ] **Directorio de ejemplos de Apache Tomcat** — `/examples/`, `/examples/servlets/`, `/examples/jsp/`, `/docs/`, `/manager/html`, `/host-manager/html`. Probar `tomcat:tomcat`, `admin:admin`.
+* [ ] **Ficheros de documentación o ejemplo públicos** — `README`, `CHANGELOG`, `install.php`, `composer.json`, `package.json`, `/docs/`, `/examples/`.
+* [ ] **Ficheros de configuración Flash inseguros** — `/crossdomain.xml` y `/clientaccesspolicy.xml` con `allow-access-from domain="*"` (acceso cross-domain abierto).
+
+
+### 13. Componentes, integridad y servicios expuestos
+
+* [ ] **Componentes de la aplicación no actualizados** — librerías con CVEs conocidos. Correlacionar versiones (Wappalyzer) con CVEs:
+
+```bash
+retire --path ./js/
+nuclei -t technologies/ -u https://target.com
+```
+
+* [ ] **Contenido externo referenciado sin SRI** — scripts/CSS de CDNs externos sin atributo `integrity` (riesgo supply-chain):
+
+```bash
+grep -E '<script[^>]+src=["\x27]https?://' index.html | grep -v 'integrity='
+```
+
+* [ ] **Actuadores Spring Boot públicos** — endpoints de gestión sin autenticar; `/actuator/heapdump` puede contener credenciales en memoria:
+
+```
+/actuator   /actuator/env   /actuator/health   /actuator/heapdump   /actuator/mappings
+# Spring Boot 1.x: /env  /trace  /heapdump  /dump
+nuclei -t exposures/configs/springboot-*
+```
+
 ***
 
 ## 🔓 Access control
@@ -249,6 +331,13 @@ retire --js --path /ruta/al/js
 * [ ] Duplicar parámetros en la petición para explotar inconsistencias en cómo el servidor los procesa.
   * Ejemplo: `?id=123&id=456` — algunos frameworks usan el primer valor y otros el último.
 * [ ] Probar también en el body de peticiones POST y en cabeceras cuando sean procesadas por múltiples componentes.
+
+
+### 11. Usuario de servicio con excesivo privilegio
+
+* [ ] Revisar que las cuentas técnicas/de servicio tienen **solo los permisos necesarios** (mínimo privilegio).
+* [ ] En post-explotación, verificar con qué usuario corre la aplicación — no debería ejecutarse como `root` / `Administrator` / `NT AUTHORITY\SYSTEM`.
+* [ ] Comprobar si una cuenta de servicio puede acceder a funcionalidad de administración no prevista para su rol.
 
 ***
 
@@ -410,6 +499,27 @@ email=victim@target.com
 
 * [ ] Verificar que el formulario de login **transmite las credenciales siempre por HTTPS** — nunca en claro por HTTP.
 * [ ] Verificar que la contraseña no se transmite ni almacena en **logs, URLs o cabeceras** de la aplicación.
+
+
+### 9. Mecanismo de CAPTCHA inseguro
+
+* [ ] Verificar si el CAPTCHA es **reutilizable** (mismo valor válido en varias peticiones).
+* [ ] Comprobar si se valida **solo en cliente** o si se puede **omitir eliminando el parámetro** del CAPTCHA en la petición.
+* [ ] Verificar que la solución del CAPTCHA no se **filtra en la respuesta** (HTML oculto, cabecera, valor predecible).
+
+
+### 10. Recordatorio de usuario/contraseña y registro
+
+* [ ] **Recordatorio de usuario/contraseña inseguro** — funcionalidad "recordar usuario" que filtra usuarios válidos, o "pista de contraseña" que revela información.
+* [ ] **Registro de usuarios habilitado** — alta de cuentas abierta cuando no debería estarlo; usable además para enumerar usuarios por colisión de email/username.
+
+
+### 11. Atributos de seguridad del formulario y almacenamiento de contraseñas
+
+* [ ] **Input de tipo password con autocomplete habilitado** — campos `<input type="password">` sin `autocomplete="off"` / `new-password` (login y cambio de contraseña).
+* [ ] **Almacenamiento de contraseñas en texto plano** — indicio fuerte: el "olvidé mi contraseña" devuelve la contraseña **actual** en vez de un reset. Revisar también respuestas de API y campos que devuelvan la contraseña.
+* [ ] **Contraseñas en texto plano (cliente/tránsito)** — contraseñas en parámetros GET, en `localStorage` o en respuestas JSON.
+* [ ] **Almacenamiento de contraseñas en MD5** — si se obtiene la BBDD, hashes MD5 (32 hex, sin sal) son crackeables casi de inmediato (`hashcat -m 0`). Documentar como criptografía débil.
 
 ***
 
@@ -639,6 +749,22 @@ python shcheck.py https://target.com
 ### 10. Cache-Control en respuestas con datos sensibles
 
 * [ ] Verificar que las páginas autenticadas y las respuestas con datos sensibles incluyen cabeceras de caché restrictivas para evitar que el navegador o proxies intermedios almacenen información sensible.
+
+
+### 11. X-XSS-Protection
+
+* [ ] Verificar el valor de `X-XSS-Protection` (cabecera obsoleta). Documentar configuración insegura; el control efectivo hoy es la **CSP**.
+
+
+### 12. Métodos HTTP peligrosos
+
+* [ ] **Método OPTIONS habilitado** — `curl -i -X OPTIONS https://target.com`; revisar `Allow:` (superficie e información).
+* [ ] **Método TRACE habilitado (Cross-Site Tracing / XST)** — si refleja la petición, es vulnerable:
+
+```bash
+curl -i -X TRACE https://target.com
+nmap --script http-methods -p443 target.com
+```
 
 ***
 
@@ -1152,6 +1278,12 @@ Cookie: session=ATTACKER_CONTROLLED_VALUE
 * [ ] Verificar si el JWT contiene información sensible en el payload (no está cifrado, solo codificado en Base64).
 
 > 💡 **Herramienta:** [**jwt\_tool**](https://github.com/ticarpi/jwt_tool) y el plugin **JWT Editor** de Burp Suite automatizan los ataques sobre JWT.
+
+
+### 9. Almacenamiento local de información sensible
+
+* [ ] Inspeccionar **DevTools → Application → Storage** en busca de tokens/PII/credenciales en `localStorage`, `sessionStorage` o IndexedDB.
+* [ ] Los datos en `localStorage`/`sessionStorage` son accesibles desde JavaScript → robables vía XSS. Documentar cualquier secreto almacenado ahí.
 
 ***
 
@@ -2230,6 +2362,13 @@ testssl.sh --full https://target.com
 * [ ] Verificar que cualquier información sensible (datos personales, datos de pago, tokens de API) se entrega exclusivamente a través de HTTPS.
 * [ ] Comprobar que la aplicación no transmite información sensible en la URL como query parameter — las URLs pueden quedar registradas en logs de servidores, proxies y el historial del navegador.
 
+
+### 3. Configuración Flash / cross-domain
+
+* [ ] **Ficheros de configuración Flash inseguros** — revisar `/crossdomain.xml` y `/clientaccesspolicy.xml`; `allow-access-from domain="*"` permite acceso cross-domain sin restricción.
+
+> Nota: las **suites de cifrado inseguras** y el **tráfico HTTP sin cifrar** se cubren en los puntos 1 y 2 de esta sección.
+
 ***
 
 ## 📄 XXE
@@ -2557,3 +2696,154 @@ param=evil_payload_here
 ```
 
 * [ ] Si el servidor usa el valor del body y la caché clave solo por la URL, la respuesta envenenada quedará servida a todos los usuarios que soliciten esa URL.
+
+
+## ✳️ Inyecciones adicionales
+
+### 1. Inyección de XPath
+
+* [ ] Probar entradas que construyan consultas XPath (login XML, búsquedas sobre documentos XML):
+
+```
+' or '1'='1          ' or 1=1 or ''='
+# Blind (extracción carácter a carácter):
+substring(name(/*[1]),1,1)='X'
+```
+
+
+### 2. Inyección LDAP
+
+* [ ] Probar en formularios de login/búsqueda contra directorio LDAP:
+
+```
+*                       # comodín
+*)(uid=*))(|(uid=*      # bypass de filtro
+admin)(&))              # condición siempre verdadera
+```
+
+
+### 3. Inyección HTML
+
+* [ ] Comprobar input reflejado sin sanear que permita inyectar marcado aunque el JS esté filtrado: `<h1>`, `<img>`, `<a href>`, formularios falsos (phishing). Es el paso previo al XSS.
+
+
+### 4. Inyección CRLF
+
+* [ ] Inyectar `%0d%0a` en parámetros/cabeceras reflejados en la respuesta → header splitting, `Set-Cookie` arbitrario, redirecciones.
+* [ ] Relacionado con request smuggling — ver sección **HTTP Request Smuggling**.
+
+***
+
+## 🪙 OAuth
+
+* [ ] **OAuth client_secret público** — `client_secret` expuesto en el cliente/JS/repos (debe ser confidencial). → Ver `./oauth-authentication/`.
+* [ ] **OAuth grant_type password (ROPC)** — flujo *Resource Owner Password Credentials* habilitado: expone credenciales al cliente y elimina el consentimiento. → Ver `./oauth-authentication/01. Bypass de Login usando OAuth.md`.
+* [ ] Revisar también `redirect_uri` laxo, robo de tokens vía open redirect y CSRF en el flujo (resto de `./oauth-authentication/`).
+
+***
+
+## 🔗 Open Redirect y Same Site Scripting
+
+* [ ] **Open redirect** — parámetros tipo `?url=`, `?next=`, `?returnTo=`, `?redirect=`. Probar dominio externo, `//evil.com`, `https:evil.com`. → Ver `./dom-based-vulnerabilities/04. Open Redirect basada en DOM.md`.
+* [ ] **Same Site Scripting** — registro DNS `localhost.target.com → 127.0.0.1` (u similar) que permite ejecutar scripts en el contexto del dominio:
+
+```bash
+dig localhost.target.com +short      # ¿resuelve a 127.0.0.1?
+```
+
+***
+
+## 🧠 Lógica de negocio
+
+* [ ] **Lógica de negocio insegura** — manipular flujos, precios, cantidades, descuentos y máquinas de estado; saltarse pasos del workflow. → Ver `./business-logic-vulnerabilities/` (01–10).
+* [ ] **API con lógica de negocio insegura** — BOLA/BFLA, mass assignment, parameter pollution. → Ver `./api-testing/` (03, 04, 05).
+* [ ] **Condiciones de carrera** asociadas a la lógica (límites, descuentos, checkout). → Ver `./race-conditions/`.
+
+***
+
+## 📧 Correo y generación de documentos
+
+* [ ] **Envío de correos arbitrarios** — funcionalidad (contacto, invitaciones, reset) que permite destinatario/contenido arbitrarios, o **email header injection** (`%0aCc:`). Revisar SPF/DKIM/DMARC para spoofing:
+
+```bash
+dig TXT target.com | grep -i spf
+dig TXT _dmarc.target.com
+```
+
+* [ ] **Generación de documentos con datos arbitrarios** — PDFs/Excel/DOCX a partir de input no saneado → SSRF/XSS en motores HTML-a-PDF (wkhtmltopdf, Headless Chrome), **inyección de fórmulas CSV** (`=cmd|...`), o inclusión de datos arbitrarios.
+
+***
+
+## 🧰 Tecnologías y configuraciones específicas
+
+### 1. WordPress
+
+* [ ] **API wp-json activa** — enumeración de usuarios vía REST API:
+
+```bash
+curl -s https://target.com/wp-json/wp/v2/users | jq '.[].slug'
+curl -s "https://target.com/?rest_route=/wp/v2/users"
+```
+
+* [ ] **Interfaz XMLRPC pública** — `/xmlrpc.php` permite `system.multicall` (amplificación de fuerza bruta) y `pingback.ping` (SSRF/DDoS):
+
+```bash
+curl -s https://target.com/xmlrpc.php -d '<?xml version="1.0"?><methodCall><methodName>system.listMethods</methodName></methodCall>'
+```
+
+* [ ] **Denegación de servicio en wp-cron.php** — invocaciones repetidas a `/wp-cron.php` consumen recursos (solo con autorización). Documentar si está accesible sin `DISABLE_WP_CRON`.
+
+
+### 2. ASP.NET / IIS
+
+* [ ] **Parámetro __VIEWSTATE sin cifrado** — ViewState sin MAC/cifrado → deserialización (RCE):
+
+```bash
+viewgen --decode "BASE64..."        # o Blacklist3r / ysoserial.net
+# Revisar presencia de __VIEWSTATEGENERATOR y si EnableViewStateMac está deshabilitado
+```
+
+* [ ] **Microsoft IIS tilde character enumeration** — enumeración de nombres cortos 8.3 (`~1`):
+
+```bash
+# IIS-ShortName-Scanner: patrón GET /algo*~1*/.aspx → respuestas diferenciales
+```
+
+* [ ] **Corrupción de memoria en HTTP.sys (MS15-034 / CVE-2015-1635)** — IIS vulnerable a rango HTTP malicioso:
+
+```bash
+nmap -p443 --script http-vuln-cve2015-1635 target.com
+# Manual: cabecera  Range: bytes=0-18446744073709551615
+# "Requested Range Not Satisfiable" => probablemente vulnerable
+```
+
+
+### 3. Apache Tomcat / PHP
+
+* [ ] **Protocolo Apache JServ (AJP) habilitado** — puerto 8009 (Ghostcat, CVE-2020-1938) → lectura/inclusión de ficheros:
+
+```bash
+nmap -p 8009 --script ajp-methods target.com
+# Explotación: Ghostcat / ajpShooter
+```
+
+* [ ] **Directiva allow_url_fopen habilitada** — permite incluir URLs remotas (potencial RFI). Verificable en `phpinfo()`.
+* [ ] **Directiva open_basedir no habilitada** — sin restricción de rutas accesibles por PHP → mayor impacto de LFI/traversal. Verificable en `phpinfo()`.
+
+***
+
+## 🛑 Denegación de servicio
+
+> ⚠️ Ejecutar pruebas de DoS **solo con autorización explícita** y ventana acordada.
+
+* [ ] **Denegación de servicio** — identificar operaciones costosas amplificables (búsquedas pesadas, regex, exportaciones, endpoints sin paginación). Documentar el vector sin llevarlo a impacto real salvo permiso.
+* [ ] **Slow HTTP Denial of Service (Slowloris / Slow POST)** — conexiones lentas que agotan el pool de hilos:
+
+```bash
+slowhttptest -c 1000 -H -i 10 -r 200 -u https://target.com   # solo con permiso
+```
+
+* [ ] **Denegación de servicio en wp-cron.php** — ver sección WordPress.
+
+***
+
